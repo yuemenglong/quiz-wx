@@ -13,6 +13,10 @@ class http {
         return http.request("POST", path, data)
     }
 
+    static put<T>(path: string, data: Object): Promise<T> {
+        return http.request("PUT", path, data)
+    }
+
     static request<T>(method: string, path: string, data: Object): Promise<T> {
         return new Promise(function (resolve, reject) {
             wx.request({

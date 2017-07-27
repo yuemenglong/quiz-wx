@@ -6,12 +6,11 @@ import ActionType = require("../common/action-type")
 import {Action} from "../common/interface";
 import WxUser = require("../common/entity/wx-user");
 import _ = require("../libs/lodash/index");
+import QuizQuestion = require("../common/entity/quiz-question");
 
 
 function go(state, action) {
     switch (action.type) {
-        case ActionType.INIT:
-            return state;
         case ActionType.FETCH_WX_USER_SUCC:
             let wxUser = action.data;
             return _.defaults({wxUser}, state);
@@ -26,6 +25,15 @@ function go(state, action) {
             let quizs = state.user.quizs.concat([quiz]);
             user = _.defaults({quizs}, state.user);
             return _.defaults({user}, state);
+        case ActionType.FETCH_QUESTION_SUCC:
+            let question = action.data;
+            let questions = _.clone(state.questions);
+            questions[question.id] = question;
+            return _.defaults({questions}, state);
+        case ActionType.PUT_ANSWER_SUCC:
+            question = action.data as QuizQuestion;
+            quiz = state.user.quizs.find(q=>q.id ==question.quizId);
+
         default:
             return state;
     }

@@ -53,6 +53,24 @@ class ActionCreator {
             })
         }
     }
+
+    static fetchQuestion(id: number): Thunk {
+        return (dispatch: Dispatch, getState: GetState) => {
+            dispatch({type: ActionType.FETCH_QUESTION, data: null});
+            http.get(`/question/${id}`).then(question => {
+                dispatch({type: ActionType.FETCH_QUESTION_SUCC, data: question})
+            })
+        }
+    }
+
+    static putAnswer(qzId: number, qtId: number, answer: string): Thunk {
+        return (dispatch: Dispatch, getState: GetState) => {
+            dispatch({type: ActionType.PUT_ANSWER, data: null});
+            http.put(`/quiz/${qzId}/question/${qtId}`, {answer}).then(question => {
+                dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question})
+            })
+        }
+    }
 }
 
 module.exports = ActionCreator;

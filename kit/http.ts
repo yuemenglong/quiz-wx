@@ -2,22 +2,30 @@
  * Created by Administrator on 2017/7/27.
  */
 
+const HOST = "http://localhost:8888"
+
 class http {
-    static get(url: string, cb: (data: any) => void) {
-        http.request("GET", url, null, cb)
+    static get<T>(path: string): Promise<T> {
+        return http.request("GET", path, null)
     }
 
-    static post(url: string, data: Object, cb: (data: any) => void) {
-        http.request("POST", url, data, cb)
+    static post<T>(path: string, data: Object): Promise<T> {
+        return http.request("POST", path, data)
     }
 
-    static request(method: string, url: string, data: Object, cb: (data: any) => void) {
-        wx.request({
-            url: url,
-            method: method,
-            data: data || "",
-            header: {"Content-Type": "application/json"},
-            success: (res) => cb && cb(res)
-        });
+    static request<T>(method: string, path: string, data: Object): Promise<T> {
+        return new Promise(function (resolve, reject) {
+            wx.request({
+                url: HOST + path,
+                method: method,
+                data: data || "",
+                header: {"Content-Type": "application/json"},
+                success: (res)=>resolve(res.data),
+                error: reject,
+            });
+        })
     }
 }
+
+module.exports = http;
+export = http

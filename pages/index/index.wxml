@@ -2,4 +2,5 @@
 <view>
     <text>hello index</text>
     <text wx:if="{{wxUser!=null}}">{{wxUser.nickName}}</text>
+    <text wx:if="{{user!=null}}">{{user.id}}</text>
 </view>

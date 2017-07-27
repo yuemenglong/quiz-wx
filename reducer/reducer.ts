@@ -13,8 +13,11 @@ function go(state, action) {
         case ActionType.INIT:
             return state;
         case ActionType.FETCH_WX_USER_SUCC:
-            let wxUser = action.data as WxUser;
+            let wxUser = action.data;
             return _.defaults({wxUser}, state);
+        case ActionType.FETCH_USER_SUCC:
+            let user = action.data;
+            return _.defaults({user}, state);
         default:
             return state;
     }

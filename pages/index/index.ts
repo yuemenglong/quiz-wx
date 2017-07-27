@@ -12,16 +12,20 @@ const app = getApp() as App;
 
 Page({
     data: {
-        wxUser: null
+        wxUser: null,
+        user: null,
     },
     stateMapper: function (state: State) {
-        return {wxUser: state.wxUser}
+        return {
+            wxUser: state.wxUser,
+            user: state.user,
+        }
     },
     onUpdate: function (state) {
         console.log("Index Update", state)
     },
     onLoad: function () {
-        WxRedux.connect(this as Component, this.stateMapper);
+        WxRedux.connect(this, this.stateMapper);
         console.log("Page OnLoad");
     }
 });

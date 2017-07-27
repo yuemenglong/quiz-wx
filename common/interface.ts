@@ -15,7 +15,7 @@ export interface App {
 }
 
 export interface Store {
-    dispatch(action: any): void
+    dispatch(action: Action | Thunk | Promise<any>): void
     getState(): State
     subscribe(fn: () => void): () => void
 }

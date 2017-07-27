@@ -12,6 +12,10 @@ class kit {
             })
         })
     }
+
+    static navigateTo(url) {
+        wx.navigateTo({url})
+    }
 }
 
 module.exports = kit;

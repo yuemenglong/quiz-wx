@@ -3,12 +3,13 @@ import {App, Component} from "../../common/interface";
 import WxRedux = require("../../libs/wx-redux/index");
 import State = require("../../common/entity/state");
 import WxUser = require("../../common/entity/wx-user");
+import kit = require("../../kit/kit");
+import store = require("../../reducer/store");
+import ActionCreator = require("../../reducer/action-creator");
 
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27.
  */
-
-const app = getApp() as App;
 
 Page({
     data: {
@@ -24,11 +25,18 @@ Page({
     onUpdate: function (state) {
         console.log("Index Update", state)
     },
-    bindQuickStart:function(e){
+    bindQuickStart: function (e) {
         //1. 找到一个没有做完的quiz
-        let quiz = this.data.user.quizs.find(quiz=>{
-            return quiz.answered
-        })
+        let quiz = this.data.user.quizs.find(quiz => {
+            return quiz.answered != true || quiz.corrected != true
+        });
+        if (quiz != null) {
+            return kit.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+        }
+        //2. 没有则建立新quiz
+        store.dispatch(ActionCreator.newQuiz(quiz => {
+            return kit.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+        }))
     },
     onLoad: function () {
         WxRedux.connect(this, this.stateMapper);

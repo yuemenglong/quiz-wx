@@ -4,6 +4,7 @@ import kit = require("../kit/kit");
 import http = require("../kit/http");
 import WxUser = require("../common/entity/wx-user");
 import User = require("../common/entity/user");
+import Quiz = require("../common/entity/quiz");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -40,7 +41,16 @@ class ActionCreator {
                     return user;
                 })
             })
+        }
+    }
 
+    static newQuiz(cb: (quiz: Quiz) => void): Thunk {
+        return (dispatch: Dispatch, getState: GetState) => {
+            dispatch({type: ActionType.NEW_QUIZ, data: null});
+            let userId = getState().user.id;
+            http.post(`/quiz`, {userId}).then(quiz => {
+                dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
+            })
         }
     }
 }

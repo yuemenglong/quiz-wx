@@ -21,6 +21,11 @@ function go(state, action) {
         case ActionType.REGIST_USER_SUCC:
             user = action.data;
             return _.defaults({user}, action.data);
+        case ActionType.NEW_QUIZ_SUCC:
+            let quiz = action.data;
+            let quizs = state.user.quizs.concat([quiz]);
+            user = _.defaults({quizs}, state.user);
+            return _.defaults({user}, state);
         default:
             return state;
     }

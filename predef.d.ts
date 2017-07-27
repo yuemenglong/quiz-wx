@@ -10,5 +10,7 @@ declare let getApp: () => any;
 declare class wx {
     static getUserInfo(opt: Object)
 
+    static navigateTo(opt: Object)
+
     static request(opt: Object)
 }

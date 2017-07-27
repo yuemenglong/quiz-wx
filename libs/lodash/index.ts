@@ -4,11 +4,12 @@
 
 class _ {
     static defaults = require("./lodash.defaults/index");
+    static isEqual = require("./lodash.isEqual/index");
     static isPlainObject = require("./lodash.isPlainobject/index");
     static merge = require("./lodash.merge/index");
 }
 
 module.exports = _;
-export =_
+export = _
 
 

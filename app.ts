@@ -1,23 +1,13 @@
 import ActionType = require("./common/action-type");
-import {Action, Store, Thunk} from "./common/interface";
 import ActionCreator = require("./reducer/action-creator");
-let Redux = require("./libs/redux/index");
-let thunk = require("./libs/redux/redux-thunk").default;
-let promise = require("./libs/redux/redux-promise");
-let reducer = require("./reducer/reducer");
-let {createStore, applyMiddleware} = Redux;
+import store = require("./reducer/store");
 
-let store = createStore(reducer, {}, applyMiddleware(thunk, promise)) as Store;
 
 App({
     onLaunch: function () {
         console.log("App Launch");
-        if (!this.store.getState().wxUser) {
-            this.dispatch(ActionCreator.fetchWxUser())
+        if (!store.getState().wxUser) {
+            store.dispatch(ActionCreator.fetchWxUser())
         }
     },
-    dispatch: function (action: Action | Thunk) {
-        this.store.dispatch(action)
-    },
-    store: store,
 });

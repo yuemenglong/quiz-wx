@@ -17,7 +17,13 @@ export interface App {
 export interface Store {
     dispatch(action: any): void
     getState(): State
-    subscribe(fn: () => void): void
+    subscribe(fn: () => void): () => void
+}
+
+export interface Component {
+    data: Object
+    setData(Object): void
+    onUpdate(state: Object): void
 }
 
 export type GetState = () => State;

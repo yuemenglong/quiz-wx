@@ -3,7 +3,7 @@
  */
 
 import ActionType = require("../common/action-type")
-import Action = require("../common/action.js");
+import Action = require("../common/action");
 
 function reducer(state: Object, action: Action): Object {
     console.log(state, action);

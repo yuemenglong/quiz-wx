@@ -18,6 +18,9 @@ function go(state, action) {
         case ActionType.FETCH_USER_SUCC:
             let user = action.data;
             return _.defaults({user}, state);
+        case ActionType.REGIST_USER_SUCC:
+            user = action.data;
+            return _.defaults({user}, action.data);
         default:
             return state;
     }

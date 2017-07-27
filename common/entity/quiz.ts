@@ -10,7 +10,7 @@ class Quiz {
     createTime: Date;
     questions: Array<QuizQuestion>;
     count: number;
-    finished: Boolean;
+    answered: Boolean;
     corrected: Boolean;
     user: User;
     userId: number;

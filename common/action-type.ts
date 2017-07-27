@@ -8,7 +8,9 @@ class ActionType {
     static FETCH_WX_USER_SUCC = "FETCH_WX_USER_SUCC";
     static FETCH_USER = "FETCH_USER";
     static FETCH_USER_SUCC = "FETCH_USER_SUCC";
+    static REGIST_USER = "REGIST_USER";
+    static REGIST_USER_SUCC = "REGIST_USER_SUCC";
 }
 
-export =ActionType
-module.exports = ActionType
+module.exports = ActionType;
+export = ActionType

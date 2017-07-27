@@ -1,5 +1,5 @@
 <!--logs.wxml-->
-<view class="index">
-    <image wx:if="{{wxUser!=null}}" src="{{wxUser.avatarUrl}}"></image>
-    <button>快速开始</button>
+<view class="index" wx:if="{{wxUser!=null}}">
+    <image src="{{wxUser.avatarUrl}}"></image>
+    <button bindtap="bindQuickStart">快速开始</button>
 </view>

@@ -22,11 +22,21 @@ class ActionCreator {
                 })
             }).then(wxUser => {
                 if (getState().user != null) {
-                    return;
+                    return getState().user;
                 }
                 dispatch({type: ActionType.FETCH_USER, data: null});
                 return http.get<User>(`/user?wxId=${wxUser.nickName}`).then(user => {
                     dispatch({type: ActionType.FETCH_USER_SUCC, data: user});
+                    return user;
+                })
+            }).then(user => {
+                if (user != null) {
+                    return user;
+                }
+                dispatch({type: ActionType.REGIST_USER, data: null});
+                let wxId = getState().wxUser.nickName;
+                return http.post<User>(`/user`, {wxId: wxId}).then(user => {
+                    dispatch({type: ActionType.REGIST_USER_SUCC, data: user});
                     return user;
                 })
             })

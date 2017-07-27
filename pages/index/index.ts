@@ -24,6 +24,12 @@ Page({
     onUpdate: function (state) {
         console.log("Index Update", state)
     },
+    bindQuickStart:function(e){
+        //1. 找到一个没有做完的quiz
+        let quiz = this.data.user.quizs.find(quiz=>{
+            return quiz.answered
+        })
+    },
     onLoad: function () {
         WxRedux.connect(this, this.stateMapper);
         console.log("Page OnLoad");

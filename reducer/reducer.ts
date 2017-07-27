@@ -7,6 +7,7 @@ import {Action} from "../common/interface";
 import WxUser = require("../common/entity/wx-user");
 import _ = require("../libs/lodash/index");
 import QuizQuestion = require("../common/entity/quiz-question");
+import kit = require("../kit/kit");
 
 
 function go(state, action) {
@@ -31,9 +32,11 @@ function go(state, action) {
             questions[question.id] = question;
             return _.defaults({questions}, state);
         case ActionType.PUT_ANSWER_SUCC:
-            question = action.data as QuizQuestion;
-            quiz = state.user.quizs.find(q=>q.id ==question.quizId);
-
+            // question = action.data as QuizQuestion;
+            // quiz = state.user.quizs.find(q => q.id == question.quizId);
+            // questions = quiz.questions.map(qt => qt.id == question.id ? question : qt);
+            return kit.update(state, "user.quizs[id].questions[id]",
+                [question.quizId, question.id], question);
         default:
             return state;
     }

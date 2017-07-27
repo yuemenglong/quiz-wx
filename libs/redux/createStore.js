@@ -1,4 +1,4 @@
-import isPlainObject from '../lodash/isPlainObject'
+import isPlainObject from '../lodash/lodash.isPlainobject/index'
 import $$observable from '../symbol-observable/index'
 
 /**

@@ -1,5 +1,5 @@
 import { ActionTypes } from './createStore'
-import isPlainObject from '../lodash/isPlainObject'
+import isPlainObject from '../lodash/lodash.isPlainobject/index'
 import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key, action) {

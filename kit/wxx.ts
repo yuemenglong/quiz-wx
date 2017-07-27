@@ -3,7 +3,7 @@ import WxUser = require("../common/entity/wx-user");
  * Created by Administrator on 2017/7/27.
  */
 
-class kit {
+class wxx {
     static getUserInfo(): Promise<WxUser> {
         return new Promise(function (resolve, reject) {
             wx.getUserInfo({
@@ -18,5 +18,5 @@ class kit {
     }
 }
 
-module.exports = kit;
-export = kit
+module.exports = wxx;
+export = wxx

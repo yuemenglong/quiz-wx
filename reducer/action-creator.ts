@@ -1,6 +1,6 @@
 import {Thunk, Dispatch, GetState} from "../common/interface";
 import ActionType = require("../common/action-type");
-import kit = require("../kit/kit");
+import kit = require("../kit/wxx");
 import http = require("../kit/http");
 import WxUser = require("../common/entity/wx-user");
 import User = require("../common/entity/user");

@@ -4,13 +4,17 @@
 
 import ActionType = require("../common/action-type")
 import {Action} from "../common/interface";
+import WxUser = require("../common/entity/wx-user");
+import _ = require("../libs/lodash/index");
+
 
 function go(state, action) {
     switch (action.type) {
         case ActionType.INIT:
             return state;
         case ActionType.FETCH_WX_USER_SUCC:
-            return state;
+            let wxUser = action.data as WxUser;
+            return _.defaults({wxUser}, state);
         default:
             return state;
     }

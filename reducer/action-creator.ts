@@ -15,3 +15,6 @@ class ActionCreator {
         }
     }
 }
+
+module.exports = ActionCreator;
+export  = ActionCreator;

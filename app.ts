@@ -1,5 +1,6 @@
 import ActionType = require("./common/action-type");
 import {Action, Store, Thunk} from "./common/interface";
+import ActionCreator = require("./reducer/action-creator");
 let Redux = require("./libs/redux/index");
 let thunk = require("./libs/redux/redux-thunk").default;
 let reducer = require("./reducer/reducer");
@@ -11,7 +12,7 @@ App({
     onLaunch: function () {
         console.log("App Launch");
         if (!this.store.getState().wxUser) {
-
+            this.dispatch(ActionCreator.fetchWxUser())
         }
     },
     dispatch: function (action: Action | Thunk) {

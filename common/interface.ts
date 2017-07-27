@@ -21,5 +21,5 @@ export interface Store {
 }
 
 export type GetState = () => State;
-export type Dispatch = (action: Action | Thunk) => void;
+export type Dispatch = (action: Action | Thunk | Promise<any>) => void;
 export type Thunk = (dispatch: Dispatch, getState: GetState) => void;

@@ -23,7 +23,7 @@ function go(state, action) {
 function reducer(state: Object, action: Action): Object {
     console.log(state, action);
     let ret = go(state, action);
-    console.log(state);
+    console.log(ret);
     return ret
 }
 

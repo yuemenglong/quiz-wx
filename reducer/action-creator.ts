@@ -9,7 +9,7 @@ class ActionCreator {
     static fetchWxUser(): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
             dispatch({type: ActionType.FETCH_WX_USER, data: null});
-            kit.getUserInfo((wxUser) => {
+            kit.getUserInfo().then(wxUser => {
                 dispatch({type: ActionType.FETCH_WX_USER_SUCC, data: wxUser});
             })
         }

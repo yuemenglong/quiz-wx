@@ -4,9 +4,12 @@ import WxUser = require("../common/entity/wx-user");
  */
 
 class kit {
-    static getUserInfo(cb: (WxUser) => void) {
-        wx.getUserInfo({
-            success: res => cb && cb(res.userInfo)
+    static getUserInfo(): Promise<WxUser> {
+        return new Promise(function (resolve, reject) {
+            wx.getUserInfo({
+                success: res => resolve(res.userInfo),
+                error: err => reject(err),
+            })
         })
     }
 }

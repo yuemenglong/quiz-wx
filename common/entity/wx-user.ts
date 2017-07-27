@@ -4,6 +4,7 @@
 
 class WxUser {
     nickName: string;
+    avatarUrl: string;
 }
 
 module.exports = WxUser;

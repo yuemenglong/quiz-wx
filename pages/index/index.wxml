@@ -1,6 +1,5 @@
 <!--logs.wxml-->
-<view>
-    <text>hello index</text>
-    <text wx:if="{{wxUser!=null}}">{{wxUser.nickName}}</text>
-    <text wx:if="{{user!=null}}">{{user.id}}</text>
+<view class="index">
+    <image wx:if="{{wxUser!=null}}" src="{{wxUser.avatarUrl}}"></image>
+    <button>快速开始</button>
 </view>

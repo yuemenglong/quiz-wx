@@ -1,5 +1,5 @@
 import ActionType = require("../../common/action-type");
-import App = require("../../common/App");
+import App = require("../../common/app");
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27.
  */
@@ -7,9 +7,10 @@ import App = require("../../common/App");
 const app = getApp() as App;
 
 Page({
+    data:{},
     onLoad: function () {
-        console.log("Page OnLoad")
-        getApp().dispatch(ActionType.TEST, "hi")
+        console.log("Page OnLoad");
+        app.dispatch(ActionType.TEST, "hi");
     }
 });
 

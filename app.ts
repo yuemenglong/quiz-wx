@@ -1,10 +1,11 @@
+import ActionType = require("./common/action-type");
+import Store = require("./common/store");
 let Redux = require("./libs/redux/index");
 let thunk = require("./libs/redux/redux-thunk").default;
 let reducer = require("./reducer/index");
 let {createStore, applyMiddleware} = Redux;
-import ActionType = require("./common/action-type");
 
-let store = createStore(reducer, {}, applyMiddleware(thunk));
+let store = createStore(reducer, {}, applyMiddleware(thunk)) as Store;
 
 App({
     onLaunch: function () {

@@ -3,7 +3,8 @@
  */
 
 enum ActionType{
-    INIT, TEST
+    INIT, TEST,
+    FETCH_WX_USER, FETCH_WX_USER_SUCC,
 }
 
 export =ActionType

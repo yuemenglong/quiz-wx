@@ -6,8 +6,9 @@ var ActionType = require("../../common/action-type");
  */
 var app = getApp();
 Page({
+    data: {},
     onLoad: function () {
         console.log("Page OnLoad");
-        getApp().dispatch(ActionType.TEST, "hi");
+        app.dispatch(ActionType.TEST, "hi");
     }
 });

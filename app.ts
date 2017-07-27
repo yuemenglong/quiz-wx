@@ -3,10 +3,11 @@ import {Action, Store, Thunk} from "./common/interface";
 import ActionCreator = require("./reducer/action-creator");
 let Redux = require("./libs/redux/index");
 let thunk = require("./libs/redux/redux-thunk").default;
+let promise = require("./libs/redux/redux-promise");
 let reducer = require("./reducer/reducer");
 let {createStore, applyMiddleware} = Redux;
 
-let store = createStore(reducer, {}, applyMiddleware(thunk)) as Store;
+let store = createStore(reducer, {}, applyMiddleware(thunk, promise)) as Store;
 
 App({
     onLaunch: function () {

@@ -1,5 +1,5 @@
 import isPlainObject from '../lodash/lodash.isPlainobject/index'
-import $$observable from '../symbol-observable/index'
+import $$observable from '../third-party/symbol-observable/index'
 
 /**
  * These are private action types reserved by Redux.

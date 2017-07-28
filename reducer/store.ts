@@ -8,7 +8,7 @@ let {createStore, applyMiddleware} = Redux;
  * Created by <yuemenglong@126.com> on 2017/7/27.
  */
 
-const store = createStore(reducer, {}, applyMiddleware(thunk, promise)) as Store;
+const store = createStore(reducer, {questions: []}, applyMiddleware(thunk, promise)) as Store;
 
 module.exports = store;
 export =store;

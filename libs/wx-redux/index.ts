@@ -8,11 +8,14 @@ import _ = require("../lodash/index");
 
 class WxRedux {
     static connect(component: Component, stateMapper: (state: State) => Object) {
+        let currentData = component.data;
+
         function go() {
-            const data = stateMapper(store.getState());
-            if (!_.isEqual(component.data, data)) {
-                component.onUpdate && component.onUpdate(data);
-                component.setData(data);
+            let nextData = stateMapper(store.getState());
+            if (!_.isEqual(currentData, nextData)) {
+                currentData = nextData;
+                component.onUpdate && component.onUpdate(currentData);
+                component.setData(currentData);
             }
         }
 

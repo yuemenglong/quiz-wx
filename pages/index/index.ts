@@ -1,5 +1,4 @@
 import ActionType = require("../../common/action-type");
-import {App, Component} from "../../common/interface";
 import WxRedux = require("../../libs/wx-redux/index");
 import State = require("../../common/entity/state");
 import WxUser = require("../../common/entity/wx-user");

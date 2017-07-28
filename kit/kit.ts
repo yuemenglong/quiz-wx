@@ -7,6 +7,9 @@ class kit {
 
     static update(obj: Object, path: string, pathArgs: any[], value: any): Object {
         function go(obj: Object, paths: string[], pathArgs: any[], value: any): Object {
+            if (obj == null) {
+                throw Error("Can't Merge Obj If Is Null")
+            }
             let name = paths[0];
             let match = name.match(/(.+)\[(.*)]/);
             if (match && match[2].length > 0) {
@@ -15,7 +18,12 @@ class kit {
                 name = match[1];
                 let condName = match[2];
                 let condValue = pathArgs[0];
-                let idx = _.findIndex(obj[name], (item) => item[condName] == condValue);
+                let idx = null;
+                if (condName == "$idx") {
+                    idx = condValue
+                } else {
+                    idx = _.findIndex(obj[name], (item) => item[condName] == condValue);
+                }
                 let oldValue = obj[name][idx];
                 let newValue = null;
                 if (paths.length > 1) {
@@ -30,7 +38,12 @@ class kit {
                 return _.defaults(merge, obj);
             } else if (match && match[2].length == 0) {
                 // 数组追加
-                throw Error("Unimplement")
+                if (paths.length != 1)throw Error("Append Array Item Must At End Of Path");
+                let name = match[1];
+                let arr = obj[name].concat([value]);
+                let merge = {};
+                merge[name] = arr;
+                return _.defaults(merge, obj);
             } else {
                 // 对象替换
                 let oldValue = obj[name];

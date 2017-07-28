@@ -54,6 +54,15 @@ class ActionCreator {
         }
     }
 
+    static fetchQuiz(quizId): Thunk {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.FETCH_QUIZ, data: null});
+            http.get(`/quiz/${quizId}`).then(quiz => {
+                dispatch({type: ActionType.FETCH_QUIZ_SUCC, data: quiz});
+            })
+        })
+    }
+
     static fetchQuestion(id: number): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
             dispatch({type: ActionType.FETCH_QUESTION, data: null});

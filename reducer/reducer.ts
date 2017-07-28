@@ -26,17 +26,19 @@ function go(state, action) {
             let quizs = state.user.quizs.concat([quiz]);
             user = _.defaults({quizs}, state.user);
             return _.defaults({user}, state);
-        case ActionType.FETCH_QUESTION_SUCC:
+        case ActionType.FETCH_QUIZ_SUCC: {
+            let quiz = action.data;
+            return kit.update(state, "user.quizs[id]", [quiz.id], quiz);
+        }
+        case ActionType.FETCH_QUESTION_SUCC: {
             let question = action.data;
-            let questions = _.clone(state.questions);
-            questions[question.id] = question;
-            return _.defaults({questions}, state);
-        case ActionType.PUT_ANSWER_SUCC:
-            // question = action.data as QuizQuestion;
-            // quiz = state.user.quizs.find(q => q.id == question.quizId);
-            // questions = quiz.questions.map(qt => qt.id == question.id ? question : qt);
+            return kit.update(state, "questions[$idx]", [question.id], question)
+        }
+        case ActionType.PUT_ANSWER_SUCC: {
+            let question = action.data;
             return kit.update(state, "user.quizs[id].questions[id]",
                 [question.quizId, question.id], question);
+        }
         default:
             return state;
     }

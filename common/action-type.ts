@@ -18,6 +18,7 @@ class ActionType {
     static PUT_ANSWER_SUCC: any = "PUT_ANSWER_SUCC";
     static FETCH_QUIZ: any = "FETCH_QUIZ";
     static FETCH_QUIZ_SUCC: any = "FETCH_QUIZ_SUCC";
+    static MERGE_ANSWER: any = "MERGE_ANSWER";
 }
 
 module.exports = ActionType;

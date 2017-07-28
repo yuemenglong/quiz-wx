@@ -39,6 +39,11 @@ function go(state, action) {
             return kit.update(state, "user.quizs[id].questions[id]",
                 [question.quizId, question.id], question);
         }
+        case ActionType.MERGE_ANSWER: {
+            let {qzId, qtId, answer} = action.data;
+            return kit.update(state, "user.quizs[id].questions[id].answer",
+                [qzId, qtId], answer);
+        }
         default:
             return state;
     }
@@ -46,9 +51,9 @@ function go(state, action) {
 
 function reducer(state: Object, action: Action): Object {
     console.log(state, action);
-    let ret = go(state, action);
-    console.log(ret);
-    return ret
+    let next = go(state, action);
+    console.log(next);
+    return next
 }
 
 

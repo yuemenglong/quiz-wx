@@ -1,4 +1,4 @@
-import {Thunk, Dispatch, GetState} from "../common/interface";
+import {Thunk, Dispatch, GetState, Action} from "../common/interface";
 import ActionType = require("../common/action-type");
 import kit = require("../kit/wxx");
 import http = require("../kit/http");
@@ -79,6 +79,10 @@ class ActionCreator {
                 dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question})
             })
         }
+    }
+
+    static mergeAnswer(qzId: number, qtId: number, answer: string): Action {
+        return {type: ActionType.MERGE_ANSWER, data: {qzId, qtId, answer}}
     }
 }
 

@@ -1,7 +1,12 @@
 <view wx:if="{{question!=null&&question.info!=null}}">
-    <text>{{question.info.title}}</text>
+    <text>{{question.idx}}. {{question.info.title}}</text>
     <button data-answer="a" bindtap="bindAnswer">A:{{question.info.a}}</button>
     <button data-answer="b" bindtap="bindAnswer">B:{{question.info.b}}</button>
     <button data-answer="c" bindtap="bindAnswer">C:{{question.info.c}}</button>
     <button data-answer="d" bindtap="bindAnswer">D:{{question.info.d}}</button>
+    <text>{{question.answer}}</text>
+</view>
+<view wx:elif="{{finished==true}}">
+<text>已完成</text>
+<button bindtap="bindAgain">再来一次</button>
 </view>

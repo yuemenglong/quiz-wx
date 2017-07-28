@@ -23,7 +23,7 @@ export interface Store {
 export interface Component {
     data: Object
     setData(Object): void
-    onUpdate(state: Object): void
+    onUpdate(state: Object, dispatch: Dispatch): void
 }
 
 export type GetState = () => State;

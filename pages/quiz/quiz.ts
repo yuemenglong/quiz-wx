@@ -16,7 +16,7 @@ Page({
         quiz: null,
         question: null,
         mode: "normal",
-        finished: false,
+        answer: "",
     },
     isNormal: function () {
         return this.data.mode == "normal";
@@ -28,19 +28,28 @@ Page({
         return this.data.question.info.multi;
     },
     bindAnswer: function (e) {
+        console.log(this.data.answer);
         let answer = e.target.dataset.answer;
         if (!this.isMulti()) {
-            return store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer))
+            return this.submitAnswer(answer);
+        } else if (this.data.answer.indexOf(answer) >= 0) {
+            // 删掉答案
+            answer = this.data.answer.split("").filter(c => c != answer).join("");
+            this.setData({answer})
         } else {
-            let newAnswer = this.data.question.answer || "" + answer;
-            newAnswer = newAnswer.split("").sort().join("");
-            return store.dispatch(ActionCreator.mergeAnswer(this.data.quiz.id, this.data.question.id, newAnswer))
+            // 增加答案
+            answer = this.data.answer + answer;
+            answer = answer.split("").sort().join("");
+            this.setData({answer})
         }
+
     },
-    bindAgain: function () {
-        store.dispatch(ActionCreator.newQuiz(quiz => {
-            wxx.navigateTo(`/quiz?id=${quiz.id}`)
-        }))
+    bindSubmit: function () {
+        this.setData({answer: ""});
+        return this.submitAnswer(this.data.answer)
+    },
+    submitAnswer: function (answer) {
+        return store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer))
     },
     nextQuestion: function (quiz): QuizQuestion {
         if (this.isNormal()) {
@@ -50,7 +59,6 @@ Page({
         }
     },
     onUpdate: function (data, dispatch) {
-        console.log("Quiz On Update", data);
         let quiz = data.quiz;
         let question = data.question;
         if (quiz.questions.length == 0) {
@@ -59,19 +67,21 @@ Page({
         if (question && question.info == null) {
             dispatch(ActionCreator.fetchQuestion(question.infoId))
         }
+        let finished = quiz.questions.length > 0 && !question;
+        if (finished) {
+            wxx.navigateTo(`../result/result?id=${quiz.id}`)
+        }
     },
     onLoad: function (query) {
-        let that = this;
         const quizId = query.id;
         WxRedux.connect(this, (state: State) => {
             let quiz = state.user.quizs.filter(quiz => quiz.id == quizId)[0];
-            let question = that.nextQuestion(quiz);
+            let question = this.nextQuestion(quiz);
             if (question && !question.info) {
                 let info = state.questions[question.infoId];
                 question = _.defaults({info}, question);
             }
-            let finished = quiz.questions.length > 0 && !question;
-            return {quiz, question, finished}
+            return {quiz, question}
         })
     }
 });

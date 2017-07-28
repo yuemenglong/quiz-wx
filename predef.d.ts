@@ -12,5 +12,7 @@ declare class wx {
 
     static navigateTo(opt: Object)
 
+    static redirectTo(opt: Object)
+
     static request(opt: Object)
 }

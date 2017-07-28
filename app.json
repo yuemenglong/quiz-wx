@@ -1,7 +1,8 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/quiz/quiz"
+    "pages/quiz/quiz",
+    "pages/result/result"
   ],
   "window":{
     "backgroundTextStyle":"light",

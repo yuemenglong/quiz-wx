@@ -5,6 +5,7 @@ import WxUser = require("../../common/entity/wx-user");
 import kit = require("../../kit/wxx");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
+import wxx = require("../../kit/wxx");
 
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27.
@@ -30,11 +31,11 @@ Page({
             return quiz.answered != true || quiz.corrected != true
         });
         if (quiz != null) {
-            return kit.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+            return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
         }
         //2. 没有则建立新quiz
         store.dispatch(ActionCreator.newQuiz(quiz => {
-            return kit.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+            return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
         }))
     },
     onLoad: function () {

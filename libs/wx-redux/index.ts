@@ -8,14 +8,14 @@ import _ = require("../lodash/index");
 
 class WxRedux {
     static connect(component: Component, stateMapper: (state: State) => Object) {
-        let currentData = null;
         let currentGlobal = null;
-        let $setData = component.setData.bind(component);
-
-        component.setData = function (data) {
-            component.onUpdate && component.onUpdate(data, dispatch);
-            $setData(data)
-        };
+        let currentData = component.data;
+        // let $setData = component.setData.bind(component);
+        //
+        // component.setData = function (data) {
+        //     component.onUpdate && component.onUpdate(data, dispatch);
+        //     $setData(data)
+        // };
 
         function dispatch(action: Action | Thunk | Promise<any>) {
             setTimeout(() => store.dispatch(action), 0)
@@ -32,6 +32,7 @@ class WxRedux {
                 return;
             }
             currentData = nextData;
+            component.onUpdate && component.onUpdate(currentData, dispatch);
             component.setData(currentData);
         }
 

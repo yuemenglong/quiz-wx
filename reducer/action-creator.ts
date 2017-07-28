@@ -50,6 +50,7 @@ class ActionCreator {
             let userId = getState().user.id;
             http.post(`/quiz`, {userId}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
+                cb(quiz as Quiz);
             })
         }
     }
@@ -79,10 +80,6 @@ class ActionCreator {
                 dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question})
             })
         }
-    }
-
-    static mergeAnswer(qzId: number, qtId: number, answer: string): Action {
-        return {type: ActionType.MERGE_ANSWER, data: {qzId, qtId, answer}}
     }
 }
 

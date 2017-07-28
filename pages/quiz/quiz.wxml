@@ -4,9 +4,6 @@
     <button data-answer="b" bindtap="bindAnswer">B:{{question.info.b}}</button>
     <button data-answer="c" bindtap="bindAnswer">C:{{question.info.c}}</button>
     <button data-answer="d" bindtap="bindAnswer">D:{{question.info.d}}</button>
-    <text>{{question.answer}}</text>
-</view>
-<view wx:elif="{{finished==true}}">
-<text>已完成</text>
-<button bindtap="bindAgain">再来一次</button>
+    <text>{{answer}}</text>
+    <button wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>
 </view>

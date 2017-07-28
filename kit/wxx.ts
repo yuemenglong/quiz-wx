@@ -16,6 +16,10 @@ class wxx {
     static navigateTo(url) {
         wx.navigateTo({url})
     }
+
+    static redirectTo(url){
+        wx.redirectTo({url})
+    }
 }
 
 module.exports = wxx;

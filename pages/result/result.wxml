@@ -1,0 +1,4 @@
+<view>
+    <text>已完成</text>
+    <button bindtap="bindAgain">再来一次</button>
+</view>

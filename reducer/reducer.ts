@@ -20,7 +20,7 @@ function go(state, action) {
             return _.defaults({user}, state);
         case ActionType.REGIST_USER_SUCC:
             user = action.data;
-            return _.defaults({user}, action.data);
+            return _.defaults({user}, state);
         case ActionType.NEW_QUIZ_SUCC:
             let quiz = action.data;
             let quizs = state.user.quizs.concat([quiz]);

@@ -4,6 +4,8 @@ import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
 import Question = require("../../common/entity/question");
 import QuizQuestion = require("../../common/entity/quiz-question");
+import kit = require("../../kit/kit");
+import _ = require("../../libs/lodash/index");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -21,7 +23,7 @@ Page({
         return this.data.mode == "review";
     },
     bindAnswer: function (e) {
-        let answer = "a";
+        let answer = e.target.dataset.answer;
         store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer))
     },
     nextQuestion: function (quiz): QuizQuestion {
@@ -49,7 +51,8 @@ Page({
             let quiz = state.user.quizs.filter(quiz => quiz.id == quizId)[0];
             let question = that.nextQuestion(quiz);
             if (question && !question.info) {
-                question.info = state.questions[question.infoId]
+                let info = state.questions[question.infoId];
+                question = _.defaults({info}, question);
             }
             return {quiz, question}
         })

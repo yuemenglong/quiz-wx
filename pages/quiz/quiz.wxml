@@ -1,1 +1,7 @@
-<view>Quiz</view>
+<view wx:if="{{question!=null&&question.info!=null}}">
+    <text>{{question.info.title}}</text>
+    <button data-answer="a" bindtap="bindAnswer">{{question.info.a}}</button>
+    <button data-answer="b" bindtap="bindAnswer">{{question.info.b}}</button>
+    <button data-answer="c" bindtap="bindAnswer">{{question.info.c}}</button>
+    <button data-answer="d" bindtap="bindAnswer">{{question.info.d}}</button>
+</view>

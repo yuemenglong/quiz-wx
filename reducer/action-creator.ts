@@ -88,11 +88,10 @@ class ActionCreator {
 
     static changeAnswer(answer: string): Action {
         return {type: ActionType.CHANGE_ANSWER, data: answer}
-
     }
 
-    static initPage(quizId: number, mode: string): Action {
-        return {type: ActionType.INIT_QUIZ, data: {quizId, mode}}
+    static initPage(quizId: number, mode: string, idx:number): Action {
+        return {type: ActionType.INIT_QUIZ, data: {quizId, mode, idx}}
     }
 
     static initResult(quizId: number, mode: string): Action {

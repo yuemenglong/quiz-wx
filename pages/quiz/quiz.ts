@@ -78,7 +78,7 @@ Page({
     onLoad: function (query) {
         let quizId = query.id;
         let mode = query.mode || "normal";
-        store.dispatch(ActionCreator.initPage(quizId, mode));
+        store.dispatch(ActionCreator.initPage(quizId, mode, 0));
     },
     onShow: function () {
         WxRedux.connect(this, (state: State) => {

@@ -13,27 +13,37 @@ import wxx = require("../../kit/wxx");
 
 Page({
     data: {
+        quizId: null,
+        mode: null,
+
         quiz: null,
         fail: null,
         succ: null,
     },
-    bindAgain: function () {
+    bindNew: function () {
         store.dispatch(ActionCreator.newQuiz(quiz => {
             wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
         }))
     },
     bindReview: function () {
-        wxx.navigateTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=review`)
+        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=review`)
+    },
+    bindRedo: function () {
+        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=normal`)
     },
     onUpdate: function (data, dispatch) {
     },
     onLoad: function (query) {
-        const quizId = query.id;
+        let quizId = query.id;
+        let mode = query.mode;
+        store.dispatch(ActionCreator.initResult(quizId, mode))
+    },
+    onShow: function () {
         WxRedux.connect(this, (state: State) => {
-            let quiz = state.user.quizs.filter(quiz => quiz.id == quizId)[0];
+            let quiz = state.user.quizs.filter(quiz => quiz.id == state.result.quizId)[0];
             let fail = quiz.questions.filter(q => q.correct == false).length;
             let succ = quiz.questions.filter(q => q.correct == true).length;
-            return {quiz, fail, succ}
+            return _.merge({quiz, fail, succ}, state.result);
         })
     }
 });

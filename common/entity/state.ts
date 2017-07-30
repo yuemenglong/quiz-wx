@@ -6,8 +6,13 @@ import Question = require("./question");
  */
 
 class Page {
-    idx: number;
+    idx: number = 0;
     answer: string;
+    mode: string;
+    quizId: number;
+}
+
+class Result {
     mode: string;
     quizId: number;
 }
@@ -16,7 +21,9 @@ class State {
     user: User;
     wxUser: WxUser;
     questions: Question[] = [];
+
     page: Page = new Page;
+    result:Result = new Result;
 }
 
 module.exports = State;

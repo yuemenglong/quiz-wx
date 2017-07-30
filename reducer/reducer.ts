@@ -56,15 +56,18 @@ function go(state: State, action: Action) {
         case ActionType.INIT_QUIZ: {
             return kit.update(state, "page{}", [], action.data);
         }
+        case ActionType.INIT_RESULT: {
+            return kit.update(state, "result{}", [], action.data);
+        }
         default:
             return state;
     }
 }
 
 function reducer(state: State, action: Action): Object {
-    console.log(state, action);
+    console.log("Before", state, action);
     let next = go(state, action);
-    console.log(next);
+    console.log("After", next, action);
     return next
 }
 

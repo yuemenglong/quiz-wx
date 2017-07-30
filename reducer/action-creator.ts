@@ -94,6 +94,10 @@ class ActionCreator {
     static initPage(quizId: number, mode: string): Action {
         return {type: ActionType.INIT_QUIZ, data: {quizId, mode}}
     }
+
+    static initResult(quizId: number, mode: string): Action {
+        return {type: ActionType.INIT_RESULT, data: {quizId, mode}}
+    }
 }
 
 module.exports = ActionCreator;

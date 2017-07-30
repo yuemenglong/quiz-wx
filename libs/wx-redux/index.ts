@@ -10,7 +10,7 @@ function noop() {
 }
 
 class WxRedux {
-    static connect(component: Component, stateMapper: (state: State) => Object): Function {
+    static connect(component: Component, stateMapper: (state: State) => Object) {
         let currentGlobal = null;
         let currentData = component.data;
         // let $setData = component.setData.bind(component);
@@ -34,18 +34,26 @@ class WxRedux {
             if (_.isEqual(currentData, nextData)) {
                 return;
             }
+            console.log(nextData);
             currentData = nextData;
             component.onUpdate && component.onUpdate(currentData, dispatch);
             component.setData(currentData);
         }
 
         go();
+        console.log("Subscribe");
         let unSubscribe = store.subscribe(go);
         let $onHide = (component.onHide || noop).bind(component);
         component.onHide = () => {
-            console.log("onHide");
+            console.log("Unsubscribe");
             unSubscribe();
             $onHide();
+        }
+        let $onUnload = (component.onUnload || noop).bind(component);
+        component.onUnload = () => {
+            console.log("Unsubscribe");
+            unSubscribe();
+            $onUnload();
         }
     }
 }

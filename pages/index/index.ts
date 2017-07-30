@@ -22,9 +22,6 @@ Page({
             user: state.user,
         }
     },
-    onUpdate: function (state) {
-        console.log("Index Update", state)
-    },
     bindQuickStart: function (e) {
         //1. 找到一个没有做完的quiz
         let quiz = this.data.user.quizs.find(quiz => {
@@ -38,7 +35,7 @@ Page({
             return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
         }))
     },
-    onLoad: function () {
+    onShow: function () {
         WxRedux.connect(this, this.stateMapper);
     }
 });

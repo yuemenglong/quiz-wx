@@ -19,9 +19,10 @@ class ActionType {
     static FETCH_QUIZ: any = "FETCH_QUIZ";
     static FETCH_QUIZ_SUCC: any = "FETCH_QUIZ_SUCC";
     static MERGE_ANSWER: any = "MERGE_ANSWER";
-    static REVIEW_NEXT: any = "REVIEW_NETX";
+    static REVIEW_NEXT: any = "REVIEW_NEXT";
     static CHANGE_ANSWER: any = "CHANGE_ANSWER";
     static INIT_QUIZ: any = "INIT_QUIZ";
+    static INIT_RESULT: any = "INIT_RESULT";
 }
 
 module.exports = ActionType;

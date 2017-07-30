@@ -61,15 +61,7 @@ Page({
     submitAnswer: function (answer) {
         return store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer))
     },
-    nextQuestion: function (quiz: Quiz, mode: String): QuizQuestion {
-        if (mode == "normal") {
-            return quiz.questions.filter(qt => qt.answer == null)[0]
-        } else if (mode == "review") {
-            return quiz.questions.filter(qt => qt.correct == false && qt.idx > this.data.idx)[0]
-        }
-    },
     onUpdate: function (data, dispatch) {
-        console.log("Update", data);
         let quiz = data.quiz;
         let question = data.question;
         if (quiz.questions.length == 0) {
@@ -78,14 +70,9 @@ Page({
         if (question && question.info == null) {
             dispatch(ActionCreator.fetchQuestion(question.infoId))
         }
-        let finished = false;
-        if (data.mode == "normal") {
-            finished = quiz.questions.length > 0 && !question;
-        } else if (data.mode == "review") {
-            finished = quiz.questions.length > 0 && !question;
-        }
+        let finished = quiz.questions.length > 0 && !question;
         if (finished) {
-            wxx.navigateTo(`../result/result?id=${quiz.id}`)
+            wxx.redirectTo(`../result/result?id=${quiz.id}&mode=${data.mode}`)
         }
     },
     onLoad: function (query) {
@@ -96,7 +83,14 @@ Page({
     onShow: function () {
         WxRedux.connect(this, (state: State) => {
             let quiz = state.user.quizs.filter(quiz => quiz.id == state.page.quizId)[0];
-            let question = this.nextQuestion(quiz, state.page.mode);
+            let question = null;
+            if (state.page.mode == "normal") {
+                question = quiz.questions.filter(qt => qt.answer == null)[0]
+            } else if (state.page.mode == "review") {
+                question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.page.idx)[0]
+            } else if (state.page.mode == "redo") {
+                question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.page.idx)[0]
+            }
             if (question && !question.info) {
                 let info = state.questions[question.infoId];
                 question = _.defaults({info}, question);

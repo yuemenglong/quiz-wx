@@ -23,8 +23,10 @@ export interface Store {
 export interface Component {
     data: Object
     setData(Object): void
-    onShow():void
-    onHide():void
+    onShow(): void
+    onHide(): void
+    onLoad(query: Object): void
+    onUnload(): void
     onUpdate(state: Object, dispatch: Dispatch): void
 }
 

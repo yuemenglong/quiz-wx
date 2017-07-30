@@ -8,9 +8,10 @@ import WxUser = require("../common/entity/wx-user");
 import _ = require("../libs/lodash/index");
 import QuizQuestion = require("../common/entity/quiz-question");
 import kit = require("../kit/kit");
+import State = require("../common/entity/state");
 
 
-function go(state, action) {
+function go(state: State, action: Action) {
     switch (action.type) {
         case ActionType.FETCH_WX_USER_SUCC:
             let wxUser = action.data;
@@ -30,6 +31,10 @@ function go(state, action) {
             let quiz = action.data;
             return kit.update(state, "user.quizs[id]", [quiz.id], quiz);
         }
+        case ActionType.CHANGE_ANSWER: {
+            let answer = action.data;
+            return kit.update(state, "page.answer", [], answer);
+        }
         case ActionType.FETCH_QUESTION_SUCC: {
             let question = action.data;
             return kit.update(state, "questions[$idx]", [question.id], question)
@@ -44,12 +49,19 @@ function go(state, action) {
             return kit.update(state, "user.quizs[id].questions[id].answer",
                 [qzId, qtId], answer);
         }
+        case ActionType.REVIEW_NEXT: {
+            let idx = action.data;
+            return kit.update(state, "page.idx", [], idx);
+        }
+        case ActionType.INIT_QUIZ: {
+            return kit.update(state, "page{}", [], action.data);
+        }
         default:
             return state;
     }
 }
 
-function reducer(state: Object, action: Action): Object {
+function reducer(state: State, action: Action): Object {
     console.log(state, action);
     let next = go(state, action);
     console.log(next);

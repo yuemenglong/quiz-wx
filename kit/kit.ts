@@ -11,12 +11,13 @@ class kit {
                 throw Error("Can't Merge Obj If Is Null")
             }
             let name = paths[0];
-            let match = name.match(/(.+)\[(.*)]/);
-            if (match && match[2].length > 0) {
+            let matchArr = name.match(/(.+)\[(.*)]/);
+            let matchObj = name.match(/(.+){}/);
+            if (matchArr && matchArr[2].length > 0) {
                 // 数组替换
                 if (pathArgs.length == 0) throw  Error("Path Args Not Match");
-                name = match[1];
-                let condName = match[2];
+                name = matchArr[1];
+                let condName = matchArr[2];
                 let condValue = pathArgs[0];
                 let idx = null;
                 if (condName == "$idx") {
@@ -36,13 +37,26 @@ class kit {
                 let merge = {};
                 merge[name] = newArr;
                 return _.defaults(merge, obj);
-            } else if (match && match[2].length == 0) {
+            } else if (matchArr && matchArr[2].length == 0) {
                 // 数组追加
                 if (paths.length != 1)throw Error("Append Array Item Must At End Of Path");
-                let name = match[1];
+                let name = matchArr[1];
                 let arr = obj[name].concat([value]);
                 let merge = {};
                 merge[name] = arr;
+                return _.defaults(merge, obj);
+            } else if (matchObj) {
+                // 对象merge
+                let name = matchObj[1];
+                let oldValue = obj[name];
+                let newValue = null;
+                if (paths.length > 1) {
+                    throw Error("Merge Must At End")
+                } else {
+                    newValue = _.defaults({}, value, oldValue);
+                }
+                let merge = {};
+                merge[name] = newValue;
                 return _.defaults(merge, obj);
             } else {
                 // 对象替换

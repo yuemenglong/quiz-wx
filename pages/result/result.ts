@@ -14,11 +14,16 @@ import wxx = require("../../kit/wxx");
 Page({
     data: {
         quiz: null,
+        fail: null,
+        succ: null,
     },
     bindAgain: function () {
         store.dispatch(ActionCreator.newQuiz(quiz => {
             wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
         }))
+    },
+    bindReview: function () {
+        wxx.navigateTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=review`)
     },
     onUpdate: function (data, dispatch) {
     },
@@ -26,7 +31,9 @@ Page({
         const quizId = query.id;
         WxRedux.connect(this, (state: State) => {
             let quiz = state.user.quizs.filter(quiz => quiz.id == quizId)[0];
-            return {quiz}
+            let fail = quiz.questions.filter(q => q.correct == false).length;
+            let succ = quiz.questions.filter(q => q.correct == true).length;
+            return {quiz, fail, succ}
         })
     }
 });

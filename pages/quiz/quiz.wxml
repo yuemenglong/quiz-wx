@@ -1,9 +1,14 @@
 <view wx:if="{{question!=null&&question.info!=null}}">
+    <text wx:if="{{question.info.multi}}">多选题</text>
+    <text wx:else>单选题</text>
     <text>{{question.idx}}. {{question.info.title}}</text>
     <button data-answer="a" bindtap="bindAnswer">A:{{question.info.a}}</button>
     <button data-answer="b" bindtap="bindAnswer">B:{{question.info.b}}</button>
     <button data-answer="c" bindtap="bindAnswer">C:{{question.info.c}}</button>
     <button data-answer="d" bindtap="bindAnswer">D:{{question.info.d}}</button>
-    <text>{{answer}}</text>
-    <button wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>
+    <text class="row" wx:if="{{mode=='normal'}}">你的答案：{{answer}}</text>
+    <text class="row" wx:else="{{mode=='review'}}">你的答案：{{question.answer}}</text>
+    <text wx:if="{{mode=='review'}}"> 正确答案：{{question.info.answer}}</text>
+    <button wx:if="{{question.info.multi && mode=='normal'}}" bindtap="bindSubmit">确定</button>
+    <button wx:if="{{mode=='review'}}" bindtap="bindReviewNext">下一题</button>
 </view>

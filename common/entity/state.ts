@@ -5,10 +5,18 @@ import Question = require("./question");
  * Created by Administrator on 2017/7/27.
  */
 
+class Page {
+    idx: number;
+    answer: string;
+    mode: string;
+    quizId: number;
+}
+
 class State {
     user: User;
     wxUser: WxUser;
-    questions: Question[];
+    questions: Question[] = [];
+    page: Page = new Page;
 }
 
 module.exports = State;

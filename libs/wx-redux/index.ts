@@ -6,8 +6,11 @@ import _ = require("../lodash/index");
  * Created by Administrator on 2017/7/27.
  */
 
+function noop() {
+}
+
 class WxRedux {
-    static connect(component: Component, stateMapper: (state: State) => Object) {
+    static connect(component: Component, stateMapper: (state: State) => Object): Function {
         let currentGlobal = null;
         let currentData = component.data;
         // let $setData = component.setData.bind(component);
@@ -37,7 +40,13 @@ class WxRedux {
         }
 
         go();
-        store.subscribe(go);
+        let unSubscribe = store.subscribe(go);
+        let $onHide = (component.onHide || noop).bind(component);
+        component.onHide = () => {
+            console.log("onHide");
+            unSubscribe();
+            $onHide();
+        }
     }
 }
 

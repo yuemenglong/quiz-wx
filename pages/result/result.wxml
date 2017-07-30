@@ -1,4 +1,5 @@
 <view>
-    <text>已完成</text>
-    <button bindtap="bindAgain">再来一次</button>
+    <text>正确：{{succ}}， 错误：{{fail}}</text>
+    <button wx:if="{{fail!=0}}" bindtap="bindReview">查看做错题目</button>
+    <button wx:if="{{fail==0}}" bindtap="bindAgain">再来一次</button>
 </view>

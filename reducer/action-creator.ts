@@ -81,6 +81,19 @@ class ActionCreator {
             })
         }
     }
+
+    static reviewNext(idx: number): Action {
+        return {type: ActionType.REVIEW_NEXT, data: idx}
+    }
+
+    static changeAnswer(answer: string): Action {
+        return {type: ActionType.CHANGE_ANSWER, data: answer}
+
+    }
+
+    static initPage(quizId: number, mode: string): Action {
+        return {type: ActionType.INIT_QUIZ, data: {quizId, mode}}
+    }
 }
 
 module.exports = ActionCreator;

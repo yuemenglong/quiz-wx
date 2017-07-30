@@ -40,6 +40,5 @@ Page({
     },
     onLoad: function () {
         WxRedux.connect(this, this.stateMapper);
-        console.log("Page OnLoad");
     }
 });

@@ -47,7 +47,9 @@ Page({
             answer = answer.split("").sort().join("");
             this.changeAnswer(answer);
         }
-
+    },
+    bindSkip: function () {
+        return this.submitAnswer("")
     },
     bindSubmit: function () {
         return this.submitAnswer(this.data.answer)

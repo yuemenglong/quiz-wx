@@ -1,6 +1,6 @@
 <view>
     <text>正确：{{succ}}， 错误：{{fail}}</text>
     <button wx:if="{{fail!=0&&mode=='normal'}}" bindtap="bindReview">查看做错题目</button>
-    <button wx:if="{{fail==0&&mode=='normal'}}" bindtap="bindNew">再来一次</button>
+    <button wx:if="{{fail==0&&mode!='review'}}" bindtap="bindNew">再来一次</button>
     <button wx:if="{{mode=='review'}}" bindtap="bindRedo">重做错题</button>
 </view>

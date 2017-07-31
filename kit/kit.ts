@@ -40,7 +40,34 @@ class kit {
             let name = paths[0];
             let matchArr = name.match(/(.+)\[(.*)]/);
             let matchObj = name.match(/(.+){}/);
-            if (matchArr && matchArr[2].length > 0) {
+            let matchArrObj = name.match(/(.+)\[(.+)]{}/);
+            if (matchArrObj) {
+                // 数组对象merge
+                name = matchArrObj[1];
+                let condName = matchArrObj[2];
+                let condValue = pathArgs[0];
+                let idx = null;
+                if (condName == "$idx") {
+                    idx = condValue
+                } else {
+                    idx = _.findIndex(obj[name], (item) => item[condName] == condValue);
+                }
+                if (idx < 0) {
+                    throw Error("Can't Find Item In Array: " + paths + " -- " + condValue)
+                }
+                let oldValue = obj[name][idx];
+                let newValue = null;
+                if (paths.length > 1) {
+                    throw Error("Merge Must At End")
+                } else {
+                    newValue = _.defaults({}, value, oldValue);
+                }
+                let newArr = _.clone(obj[name]);
+                newArr[idx] = newValue;
+                let merge = {};
+                merge[name] = newArr;
+                return _.defaults(merge, obj);
+            } else if (matchArr && matchArr[2].length > 0) {
                 // 数组替换
                 if (pathArgs.length == 0) throw  Error("Path Args Not Match");
                 name = matchArr[1];

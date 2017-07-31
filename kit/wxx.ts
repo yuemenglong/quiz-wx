@@ -1,4 +1,5 @@
 import WxUser = require("../common/entity/wx-user");
+import debug = require("../libs/wx-redux/debug");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -14,11 +15,12 @@ class wxx {
     }
 
     static navigateTo(url) {
+        debug("Navigate:", url);
         wx.navigateTo({url})
     }
 
-    static redirectTo(url){
-        console.log
+    static redirectTo(url) {
+        debug("Redirect:", url);
         wx.redirectTo({url})
     }
 }

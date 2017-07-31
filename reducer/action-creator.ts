@@ -101,7 +101,7 @@ class ActionCreator {
     static putQuiz(id: number, answered: boolean, corrected: boolean): Thunk {
         return ((dispatch, getState) => {
             dispatch({type: ActionType.PUT_QUIZ, data: null});
-            http.put(`/quiz/${id}`, {answered, corrected}).then(quiz => {
+            http.put(`/quiz/${id}`, {id, answered, corrected}).then(quiz => {
                 dispatch({type: ActionType.PUT_QUIZ_SUCC, data: quiz})
             })
         })

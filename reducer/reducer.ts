@@ -65,7 +65,7 @@ function go(state: State, action: Action) {
         }
         case ActionType.PUT_QUIZ_SUCC: {
             let {id, corrected, answered} = action.data;
-            return kit.update(state, "user.quizs[id]", [id], {corrected, answered});
+            return kit.update(state, "user.quizs[id]{}", [id], {corrected, answered});
         }
         default:
             return state;

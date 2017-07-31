@@ -50,7 +50,6 @@ Page({
 
     },
     bindSubmit: function () {
-        this.setData({answer: ""});
         return this.submitAnswer(this.data.answer)
     },
     bindReviewNext: function () {

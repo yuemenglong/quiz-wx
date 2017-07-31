@@ -15,4 +15,8 @@ declare class wx {
     static redirectTo(opt: Object)
 
     static request(opt: Object)
+
+    static showModal(opt: Object)
+
+    static showToast(opt: Object)
 }

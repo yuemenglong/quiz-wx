@@ -9,6 +9,7 @@ import _ = require("../libs/lodash/index");
 import QuizQuestion = require("../common/entity/quiz-question");
 import kit = require("../kit/kit");
 import State = require("../common/entity/state");
+import debug = require("../libs/wx-redux/debug");
 
 
 function go(state: State, action: Action) {
@@ -73,9 +74,9 @@ function go(state: State, action: Action) {
 }
 
 function reducer(state: State, action: Action): Object {
-    console.log("Before", state, action);
+    debug("Before", state, action);
     let next = go(state, action);
-    console.log("After", next, action);
+    debug("After", next, action);
     return next
 }
 

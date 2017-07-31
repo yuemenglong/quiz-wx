@@ -1,8 +1,10 @@
+import wxx = require("./wxx");
 /**
  * Created by Administrator on 2017/7/27.
  */
 
-const HOST = "http://localhost:8888"
+const HOST = "http://211.159.173.48:8888";
+// const HOST = "http://localhost:8888";
 
 class http {
     static get<T>(path: string): Promise<T> {
@@ -24,8 +26,14 @@ class http {
                 method: method,
                 data: data || "",
                 header: {"Content-Type": "application/json"},
-                success: (res)=>resolve(res.data),
-                error: reject,
+                success: (res) => {
+                    resolve(res.data)
+                },
+                error: (err) => {
+                    wxx.showToast("fail");
+                    reject(err)
+                    // wxx.showToast(JSON.stringify(err))
+                },
             });
         })
     }

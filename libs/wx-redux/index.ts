@@ -2,6 +2,7 @@ import {Action, App, Component, Store, Thunk} from "../../common/interface";
 import State = require("../../common/entity/state");
 import store = require("../../reducer/store");
 import _ = require("../lodash/index");
+import debug = require("./debug");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -34,24 +35,24 @@ class WxRedux {
             if (_.isEqual(currentData, nextData)) {
                 return;
             }
-            console.log(nextData);
+            debug(nextData);
             currentData = nextData;
             component.onUpdate && component.onUpdate(currentData, dispatch);
             component.setData(currentData);
         }
 
         go();
-        console.log("Subscribe");
+        debug("Subscribe");
         let unSubscribe = store.subscribe(go);
         let $onHide = (component.onHide || noop).bind(component);
         component.onHide = () => {
-            console.log("Unsubscribe");
+            debug("Unsubscribe");
             unSubscribe();
             $onHide();
         };
         let $onUnload = (component.onUnload || noop).bind(component);
         component.onUnload = () => {
-            console.log("Unsubscribe");
+            debug("Unsubscribe");
             unSubscribe();
             $onUnload();
         }

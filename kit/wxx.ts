@@ -14,7 +14,7 @@ class wxx {
         })
     }
 
-    static navigateTo(url) {
+    static navigateTo(url: string) {
         debug("Navigate:", url);
         wx.navigateTo({url})
     }
@@ -22,6 +22,22 @@ class wxx {
     static redirectTo(url) {
         debug("Redirect:", url);
         wx.redirectTo({url})
+    }
+
+    static showToast(title: string, duration: number = 1000) {
+        wx.showToast({title, duration})
+    }
+
+    static showModal(title: string, content: string): Promise<boolean> {
+        return new Promise<boolean>(function (resolve, reject) {
+            wx.showModal({
+                title, content, success: (res) => {
+                    if (res.confirm) return resolve(true);
+                    else if (res.cancel) return resolve(false);
+                    else return reject(Error("Unreachable"))
+                }
+            })
+        })
     }
 }
 

@@ -18,6 +18,7 @@ class wxx {
     }
 
     static redirectTo(url){
+        console.log
         wx.redirectTo({url})
     }
 }

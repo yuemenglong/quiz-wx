@@ -13,20 +13,22 @@ import State = require("../common/entity/state");
 
 function go(state: State, action: Action) {
     switch (action.type) {
-        case ActionType.FETCH_WX_USER_SUCC:
+        case ActionType.FETCH_WX_USER_SUCC: {
             let wxUser = action.data;
             return _.defaults({wxUser}, state);
-        case ActionType.FETCH_USER_SUCC:
+        }
+        case ActionType.FETCH_USER_SUCC: {
             let user = action.data;
             return _.defaults({user}, state);
-        case ActionType.REGIST_USER_SUCC:
-            user = action.data;
+        }
+        case ActionType.REGIST_USER_SUCC: {
+            let user = action.data;
             return _.defaults({user}, state);
-        case ActionType.NEW_QUIZ_SUCC:
+        }
+        case ActionType.NEW_QUIZ_SUCC: {
             let quiz = action.data;
-            let quizs = state.user.quizs.concat([quiz]);
-            user = _.defaults({quizs}, state.user);
-            return _.defaults({user}, state);
+            return kit.update(state, "user.quizs[]", [], quiz)
+        }
         case ActionType.FETCH_QUIZ_SUCC: {
             let quiz = action.data;
             return kit.update(state, "user.quizs[id]", [quiz.id], quiz);
@@ -41,8 +43,10 @@ function go(state: State, action: Action) {
         }
         case ActionType.PUT_ANSWER_SUCC: {
             let question = action.data;
-            return kit.update(state, "user.quizs[id].questions[id]",
-                [question.quizId, question.id], question);
+            return kit.updates("user.quizs[id].questions[id]", [question.quizId, question.id], question)
+                .update("page.idx", [], question.idx)
+                .update("page.answer", [], "")
+                .call(state);
         }
         case ActionType.MERGE_ANSWER: {
             let {qzId, qtId, answer} = action.data;
@@ -58,6 +62,10 @@ function go(state: State, action: Action) {
         }
         case ActionType.INIT_RESULT: {
             return kit.update(state, "result{}", [], action.data);
+        }
+        case ActionType.PUT_QUIZ_SUCC: {
+            let {id, corrected, answered} = action.data;
+            return kit.update(state, "user.quizs[id]", [id], {corrected, answered});
         }
         default:
             return state;

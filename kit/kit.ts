@@ -3,6 +3,33 @@ import _ = require("../libs/lodash/index");
  * Created by yml on 2017/7/27.
  */
 
+class UpdateBuilder {
+    prev: UpdateBuilder = null;
+
+    path: string;
+    pathArgs: any[];
+    value: any;
+
+    constructor(path: string, pathArgs: any[], value: any) {
+        this.path = path;
+        this.pathArgs = pathArgs;
+        this.value = value;
+    }
+
+    update(path: string, pathArgs: any[], value: any): UpdateBuilder {
+        let builder = new UpdateBuilder(path, pathArgs, value);
+        builder.prev = this;
+        return builder;
+    }
+
+    call(obj: Object): Object {
+        if (this.prev) {
+            obj = this.prev.call(obj)
+        }
+        return kit.update(obj, this.path, this.pathArgs, this.value);
+    }
+}
+
 class kit {
 
     static update(obj: Object, path: string, pathArgs: any[], value: any): Object {
@@ -24,6 +51,9 @@ class kit {
                     idx = condValue
                 } else {
                     idx = _.findIndex(obj[name], (item) => item[condName] == condValue);
+                }
+                if (idx < 0) {
+                    throw Error("Can't Find Item In Array: " + paths + " -- " + condValue)
                 }
                 let oldValue = obj[name][idx];
                 let newValue = null;
@@ -74,6 +104,10 @@ class kit {
         }
 
         return go(obj, path.split("."), pathArgs, value)
+    }
+
+    static updates(path: string, pathArgs: any[], value: any): UpdateBuilder {
+        return new UpdateBuilder(path, pathArgs, value)
     }
 }
 

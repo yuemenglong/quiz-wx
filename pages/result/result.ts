@@ -29,7 +29,7 @@ Page({
         wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=review`)
     },
     bindRedo: function () {
-        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=normal`)
+        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=redo`)
     },
     onUpdate: function (data, dispatch) {
     },

@@ -7,7 +7,7 @@ import Question = require("./question");
 
 class Page {
     idx: number = 0;
-    answer: string;
+    answer: string = "";
     mode: string;
     quizId: number;
 }

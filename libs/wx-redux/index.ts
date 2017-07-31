@@ -48,7 +48,7 @@ class WxRedux {
             console.log("Unsubscribe");
             unSubscribe();
             $onHide();
-        }
+        };
         let $onUnload = (component.onUnload || noop).bind(component);
         component.onUnload = () => {
             console.log("Unsubscribe");

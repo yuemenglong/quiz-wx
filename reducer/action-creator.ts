@@ -90,12 +90,21 @@ class ActionCreator {
         return {type: ActionType.CHANGE_ANSWER, data: answer}
     }
 
-    static initPage(quizId: number, mode: string, idx:number): Action {
+    static initQuiz(quizId: number, mode: string, idx: number): Action {
         return {type: ActionType.INIT_QUIZ, data: {quizId, mode, idx}}
     }
 
     static initResult(quizId: number, mode: string): Action {
         return {type: ActionType.INIT_RESULT, data: {quizId, mode}}
+    }
+
+    static putQuiz(id: number, answered: boolean, corrected: boolean): Thunk {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.PUT_QUIZ, data: null});
+            http.put(`/quiz/${id}`, {answered, corrected}).then(quiz => {
+                dispatch({type: ActionType.PUT_QUIZ_SUCC, data: quiz})
+            })
+        })
     }
 }
 

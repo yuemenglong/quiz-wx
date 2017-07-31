@@ -14,6 +14,7 @@ import Quiz = require("../../common/entity/quiz");
 
 Page({
     data: {
+        quizId: null,
         quiz: null,
         question: null,
 
@@ -71,6 +72,11 @@ Page({
             dispatch(ActionCreator.fetchQuestion(question.infoId))
         }
         let finished = quiz.questions.length > 0 && !question;
+        if (finished && data.mode != "review") {
+            let answered = quiz.questions.every(q => q.answer != null);
+            let corrected = quiz.questions.every(q => q.corrected);
+            store.dispatch(ActionCreator.putQuiz(data.quizId, answered, corrected))
+        }
         if (finished) {
             wxx.redirectTo(`../result/result?id=${quiz.id}&mode=${data.mode}`)
         }
@@ -78,7 +84,7 @@ Page({
     onLoad: function (query) {
         let quizId = query.id;
         let mode = query.mode || "normal";
-        store.dispatch(ActionCreator.initPage(quizId, mode, 0));
+        store.dispatch(ActionCreator.initQuiz(quizId, mode, 0));
     },
     onShow: function () {
         WxRedux.connect(this, (state: State) => {

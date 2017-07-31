@@ -23,6 +23,8 @@ class ActionType {
     static CHANGE_ANSWER: any = "CHANGE_ANSWER";
     static INIT_QUIZ: any = "INIT_QUIZ";
     static INIT_RESULT: any = "INIT_RESULT";
+    static PUT_QUIZ: any = "PUT_QUIZ";
+    static PUT_QUIZ_SUCC: any = "PUT_QUIZ_SUCC";
 }
 
 module.exports = ActionType;

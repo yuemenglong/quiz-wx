@@ -6,9 +6,9 @@
     <button data-answer="b" bindtap="bindAnswer">B:{{question.info.b}}</button>
     <button data-answer="c" bindtap="bindAnswer">C:{{question.info.c}}</button>
     <button data-answer="d" bindtap="bindAnswer">D:{{question.info.d}}</button>
-    <text class="row" wx:if="{{mode=='normal'}}">你的答案：{{answer}}</text>
-    <text class="row" wx:else="{{mode=='review'}}">你的答案：{{question.answer}}</text>
+    <text class="row" wx:if="{{mode!='review'&&question.info.multi}}">已选择：{{answer}}</text>
+    <text class="row" wx:elif="{{mode=='review'}}">你的答案：{{question.answer}}</text>
     <text wx:if="{{mode=='review'}}"> 正确答案：{{question.info.answer}}</text>
-    <button wx:if="{{question.info.multi && mode=='normal'}}" bindtap="bindSubmit">确定</button>
+    <button wx:if="{{question.info.multi && mode!='review'}}" bindtap="bindSubmit">确定</button>
     <button wx:if="{{mode=='review'}}" bindtap="bindReviewNext">下一题</button>
 </view>

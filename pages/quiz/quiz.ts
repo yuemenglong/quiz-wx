@@ -75,7 +75,7 @@ Page({
         let finished = quiz.questions.length > 0 && !question;
         if (finished && data.mode != "review") {
             let answered = quiz.questions.every(q => q.answer != null);
-            let corrected = quiz.questions.every(q => q.corrected);
+            let corrected = quiz.questions.every(q => q.correct);
             store.dispatch(ActionCreator.putQuiz(data.quizId, answered, corrected))
         }
         if (finished) {

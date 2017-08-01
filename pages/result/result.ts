@@ -21,9 +21,14 @@ Page({
         succ: null,
     },
     bindNew: function () {
-        store.dispatch(ActionCreator.newQuiz(quiz => {
+        let quiz = store.getState().user.quizs.find(q => !q.answered || !q.corrected);
+        if (quiz) {
             wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
-        }))
+        } else {
+            store.dispatch(ActionCreator.newQuiz(quiz => {
+                wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
+            }))
+        }
     },
     bindReview: function () {
         wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=review`)

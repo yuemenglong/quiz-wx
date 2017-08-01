@@ -6,8 +6,8 @@
     <button data-answer="b" bindtap="bindAnswer">B:{{question.info.b}}</button>
     <button data-answer="c" bindtap="bindAnswer">C:{{question.info.c}}</button>
     <button data-answer="d" bindtap="bindAnswer">D:{{question.info.d}}</button>
-    <button wx:if="{{mode!='review'}}" bindtap="bindSkip">X:跳过</button>
-    <text class="row" wx:if="{{mode!='review'&&question.info.multi}}">已选择：{{answer}}</text>
+    <button wx:if="{{mode!='review'&&mode!='study'}}" bindtap="bindSkip">X:跳过</button>
+    <text class="row" wx:if="{{mode!='review'&&mode!='study'&&question.info.multi}}">已选择：{{answer}}</text>
     <text class="row" wx:elif="{{mode=='review'}}">你的答案：{{question.answer}}</text>
     <text wx:if="{{mode=='review'}}">正确答案：{{question.info.answer}}</text>
     <button wx:if="{{question.info.multi && mode!='review'}}" bindtap="bindSubmit">确定</button>

@@ -18,9 +18,9 @@ Page({
         quiz: null,
         question: null,
 
-        answer: null, // normal
+        answer: null, // answer
         idx: null, // review
-        mode: "normal",
+        mode: "answer",
 
         unConnect: null,
     },
@@ -84,14 +84,14 @@ Page({
     },
     onLoad: function (query) {
         let quizId = query.id;
-        let mode = query.mode || "normal";
+        let mode = query.mode || "answer";
         store.dispatch(ActionCreator.initQuiz(quizId, mode, 0));
     },
     onShow: function () {
         WxRedux.connect(this, (state: State) => {
             let quiz = state.user.quizs.filter(quiz => quiz.id == state.page.quizId)[0];
             let question = null;
-            if (state.page.mode == "normal") {
+            if (state.page.mode == "answer") {
                 question = quiz.questions.filter(qt => qt.answer == null)[0]
             } else if (state.page.mode == "review") {
                 question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.page.idx)[0]

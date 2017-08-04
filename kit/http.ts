@@ -1,4 +1,5 @@
 import wxx = require("./wxx");
+import debug = require("../libs/wx-redux/debug");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -21,18 +22,20 @@ class http {
 
     static request<T>(method: string, path: string, data: Object): Promise<T> {
         return new Promise(function (resolve, reject) {
+            let url = HOST + path;
             wx.request({
-                url: HOST + path,
+                url: url,
                 method: method,
                 data: data || "",
                 header: {"Content-Type": "application/json"},
                 success: (res) => {
+                    debug(`${method} ${url} Succ`, res);
                     resolve(res.data)
                 },
                 error: (err) => {
-                    wxx.showToast("fail");
+                    debug(`${method} ${url} Fail`, err);
+                    wxx.showToast("网络请求异常");
                     reject(err)
-                    // wxx.showToast(JSON.stringify(err))
                 },
             });
         })

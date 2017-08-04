@@ -7,7 +7,7 @@ import QuizQuestion = require("./quiz-question");
 
 class Quiz {
     id: number;
-    createTime: Date;
+    createTime: any;
     questions: Array<QuizQuestion>;
     count: number;
     answered: Boolean;

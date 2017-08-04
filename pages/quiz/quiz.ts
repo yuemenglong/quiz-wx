@@ -21,8 +21,6 @@ Page({
         answer: null, // answer
         idx: null, // review
         mode: "answer",
-
-        unConnect: null,
     },
     isReview: function () {
         return this.data.mode == "review";
@@ -56,6 +54,9 @@ Page({
     },
     bindReviewNext: function () {
         return store.dispatch(ActionCreator.reviewNext(this.data.question.idx));
+    },
+    bindDebug: function () {
+        return store.dispatch(ActionCreator.postDebugInfo());
     },
     changeAnswer: function (answer) {
         return store.dispatch(ActionCreator.changeAnswer(answer));

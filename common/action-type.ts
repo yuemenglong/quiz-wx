@@ -25,6 +25,8 @@ class ActionType {
     static INIT_RESULT: any = "INIT_RESULT";
     static PUT_QUIZ: any = "PUT_QUIZ";
     static PUT_QUIZ_SUCC: any = "PUT_QUIZ_SUCC";
+    static POST_DEBUG_INFO: any = "POST_DEBUG_INFO";
+    static POST_DEBUG_INFO_SUCC: any = "POST_DEBUG_INFO_SUCC";
 }
 
 module.exports = ActionType;

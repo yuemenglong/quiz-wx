@@ -13,3 +13,4 @@
     <button wx:if="{{question.info.multi && mode!='review'}}" bindtap="bindSubmit">确定</button>
     <button wx:if="{{mode=='review'}}" bindtap="bindReviewNext">下一题</button>
 </view>
+<button class="debug" bindtap="bindDebug">debug</button>

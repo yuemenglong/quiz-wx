@@ -106,6 +106,16 @@ class ActionCreator {
             })
         })
     }
+
+    static postDebugInfo(): Thunk {
+        return ((dispatch, getState) => {
+            let state = getState();
+            dispatch({type: ActionType.POST_DEBUG_INFO, data: state})
+            http.post(`/debug?userId=${state.user.id}`, state).then(() => {
+                dispatch({type: ActionType.POST_DEBUG_INFO_SUCC, data: null})
+            })
+        })
+    }
 }
 
 module.exports = ActionCreator;

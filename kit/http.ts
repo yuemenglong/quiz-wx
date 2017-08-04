@@ -3,8 +3,8 @@ import wxx = require("./wxx");
  * Created by Administrator on 2017/7/27.
  */
 
-// const HOST = "http://211.159.173.48:8888";
-const HOST = "http://localhost:8888";
+const HOST = "http://211.159.173.48:8888";
+// const HOST = "http://localhost:8888";
 
 class http {
     static get<T>(path: string): Promise<T> {

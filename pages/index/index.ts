@@ -35,6 +35,9 @@ Page({
             return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
         }))
     },
+    bindDebug: function () {
+        return store.dispatch(ActionCreator.postDebugInfo());
+    },
     onShow: function () {
         WxRedux.connect(this, this.stateMapper);
     }

@@ -3,3 +3,4 @@
     <image src="{{wxUser.avatarUrl}}"></image>
     <button bindtap="bindQuickStart">快速开始</button>
 </view>
+<button class="debug" bindtap="bindDebug">debug</button>

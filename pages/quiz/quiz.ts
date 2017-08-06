@@ -55,7 +55,7 @@ class QuizClass {
     nextOrResult() {
         let question = this.getQuestion();
         if (question == null) {
-            // result
+            wxx.redirectTo(`../result/result?id=${this.data.quizId}&mode=${this.data.mode}&type=${this.data.type}`)
         } else {
             this.ensureInfo(question);
         }

@@ -15,33 +15,55 @@ Page({
     data: {
         quizId: null,
         mode: null,
+        updating: false,
 
         quiz: null,
         fail: null,
         succ: null,
     },
-    bindNew: function () {
-        let quiz = store.getState().user.quizs.find(q => !q.answered || !q.corrected);
-        if (quiz) {
-            wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
-        } else {
-            store.dispatch(ActionCreator.newQuiz(quiz => {
+    bindCont: function () {
+        let type = this.data.type;
+        if (type == "study") {
+            //1. study type
+        } else if (type == "quiz") {
+            //2. quiz type
+            let quiz = store.getState().user.quizs.find(q => !q.answered || !q.corrected);
+            if (quiz) {
                 wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
-            }))
+            } else {
+                store.dispatch(ActionCreator.newQuiz(quiz => {
+                    wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
+                }))
+            }
         }
     },
     bindReview: function () {
-        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=review`)
+        let type = this.data.type;
+        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=review&type=${type}`)
     },
     bindRedo: function () {
-        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=redo`)
+        let type = this.data.type;
+        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=redo&type=${type}`)
+    },
+    bindAnswer: function () {
+        let type = this.data.type;
+        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}&mode=answer&type=${type}`)
     },
     onUpdate: function (data, dispatch) {
+        if (data.type == "study" && data.fail == 0 && data.updating == false) {
+            // 更新study
+            let studyIdx = data.quiz.questions.slice(-1)[0].id;
+            dispatch(ActionCreator.setResultData({updating: true}));
+            dispatch(ActionCreator.putStudy(studyIdx, () => {
+                dispatch(ActionCreator.setResultData({updating: false}));
+            }))
+        }
     },
     onLoad: function (query) {
         let quizId = query.id;
         let mode = query.mode;
-        store.dispatch(ActionCreator.initResult(quizId, mode))
+        let type = query.type;
+        store.dispatch(ActionCreator.setResultData({quizId, type, mode}))
     },
     onShow: function () {
         WxRedux.connect(this, (state: State) => {

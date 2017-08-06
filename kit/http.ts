@@ -4,8 +4,8 @@ import debug = require("../libs/wx-redux/debug");
  * Created by Administrator on 2017/7/27.
  */
 
-const HOST = "http://211.159.173.48:8888";
-// const HOST = "http://localhost:8888";
+// const HOST = "http://211.159.173.48:8888";
+const HOST = "http://localhost:8888";
 
 class http {
     static get<T>(path: string): Promise<T> {
@@ -21,8 +21,9 @@ class http {
     }
 
     static request<T>(method: string, path: string, data: Object): Promise<T> {
+        let url = HOST + path;
+        debug(`${method} ${url}`, data);
         return new Promise(function (resolve, reject) {
-            let url = HOST + path;
             wx.request({
                 url: url,
                 method: method,

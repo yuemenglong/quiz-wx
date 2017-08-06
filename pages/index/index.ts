@@ -35,6 +35,17 @@ Page({
             return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
         }))
     },
+    bindStudy: function (e) {
+        //1. 如果study里面有quiz，直接使用这个quiz进入study模式
+        let quiz = this.data.user.study.quiz;
+        if (quiz != null) {
+            return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}&mode=study&type=study`)
+        }
+        //2. 没有则创建study quiz，然后进入study模式
+        store.dispatch(ActionCreator.newStudyQuiz(quiz => {
+            return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}&mode=study&type=study`)
+        }))
+    },
     bindDebug: function () {
         return store.dispatch(ActionCreator.postDebugInfo());
     },

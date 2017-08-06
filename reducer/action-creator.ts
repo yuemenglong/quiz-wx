@@ -5,6 +5,7 @@ import http = require("../kit/http");
 import WxUser = require("../common/entity/wx-user");
 import User = require("../common/entity/user");
 import Quiz = require("../common/entity/quiz");
+import _ = require("../libs/lodash/index");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -82,20 +83,20 @@ class ActionCreator {
         }
     }
 
-    static reviewNext(idx: number): Action {
-        return {type: ActionType.REVIEW_NEXT, data: idx}
+    static gotoNext(idx: number): Action {
+        return {type: ActionType.GOTO_NEXT, data: idx}
     }
 
     static changeAnswer(answer: string): Action {
         return {type: ActionType.CHANGE_ANSWER, data: answer}
     }
 
-    static initQuiz(quizId: number, mode: string, idx: number): Action {
-        return {type: ActionType.INIT_QUIZ, data: {quizId, mode, idx}}
+    static initQuiz(quizId: number, type: string, mode: string, idx: number): Action {
+        return {type: ActionType.INIT_QUIZ, data: {quizId, type, mode, idx}}
     }
 
-    static initResult(quizId: number, mode: string): Action {
-        return {type: ActionType.INIT_RESULT, data: {quizId, mode}}
+    static setResultData(data): Action {
+        return {type: ActionType.INIT_RESULT, data}
     }
 
     static putQuiz(id: number, answered: boolean, corrected: boolean): Thunk {
@@ -113,6 +114,39 @@ class ActionCreator {
             dispatch({type: ActionType.POST_DEBUG_INFO, data: state})
             http.post(`/debug?userId=${state.user.id}`, state).then(() => {
                 dispatch({type: ActionType.POST_DEBUG_INFO_SUCC, data: null})
+            })
+        })
+    }
+
+    static newStudyQuiz(cb: (quiz) => any): Thunk {
+        return ((dispatch, getState) => {
+            let state = getState();
+            let userId = state.user.id;
+            let studyId = state.user.study.id;
+            let start = state.user.study.studyIdx + 1;
+            let end = state.user.study.studyIdx + 1;
+            let quiz = null;
+            dispatch({type: ActionType.NEW_QUIZ, data: null});
+            http.post(`/quiz?start=${start}&end=${end}`, {userId}).then(res => {
+                quiz = res as Quiz;
+                dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
+                dispatch({type: ActionType.PUT_STUDY, data: null});
+                return http.put(`/study/${studyId}`, {quizId: quiz.id});
+            }).then(res => {
+                let study = _.defaults({quiz: quiz}, res);
+                dispatch({type: ActionType.PUT_STUDY_SUCC, data: study});
+                cb(quiz)
+            })
+        })
+    }
+
+    static putStudy(studyIdx: number, cb:()=>void): Thunk {
+        return ((dispatch, getState) => {
+            let studyId = getState().user.study.id;
+            dispatch({type: ActionType.PUT_STUDY, data: null});
+            http.put(`/study/${studyId}`, {studyIdx}).then(res => {
+                dispatch({type: ActionType.PUT_STUDY_SUCC, data: res});
+                cb()
             })
         })
     }

@@ -8,6 +8,7 @@ import Question = require("./question");
 class Page {
     idx: number = 0;
     answer: string = "";
+    type: string;
     mode: string;
     quizId: number;
 }
@@ -15,6 +16,7 @@ class Page {
 class Result {
     mode: string;
     quizId: number;
+    updating: boolean = false;
 }
 
 class State {
@@ -23,7 +25,7 @@ class State {
     questions: Question[] = [];
 
     page: Page = new Page;
-    result:Result = new Result;
+    result: Result = new Result;
 }
 
 module.exports = State;

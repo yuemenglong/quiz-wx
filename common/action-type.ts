@@ -19,7 +19,7 @@ class ActionType {
     static FETCH_QUIZ: any = "FETCH_QUIZ";
     static FETCH_QUIZ_SUCC: any = "FETCH_QUIZ_SUCC";
     static MERGE_ANSWER: any = "MERGE_ANSWER";
-    static REVIEW_NEXT: any = "REVIEW_NEXT";
+    static GOTO_NEXT: any = "GOTO_NEXT";
     static CHANGE_ANSWER: any = "CHANGE_ANSWER";
     static INIT_QUIZ: any = "INIT_QUIZ";
     static INIT_RESULT: any = "INIT_RESULT";
@@ -27,6 +27,8 @@ class ActionType {
     static PUT_QUIZ_SUCC: any = "PUT_QUIZ_SUCC";
     static POST_DEBUG_INFO: any = "POST_DEBUG_INFO";
     static POST_DEBUG_INFO_SUCC: any = "POST_DEBUG_INFO_SUCC";
+    static PUT_STUDY: any = "PUT_STUDY";
+    static PUT_STUDY_SUCC: any = "PUT_STUDY_SUCC";
 }
 
 module.exports = ActionType;

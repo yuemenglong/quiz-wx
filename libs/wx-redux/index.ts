@@ -35,7 +35,7 @@ class WxRedux {
             if (_.isEqual(currentData, nextData)) {
                 return;
             }
-            debug(nextData);
+            debug("Data", nextData);
             currentData = nextData;
             component.onUpdate && component.onUpdate(currentData, dispatch);
             component.setData(currentData);

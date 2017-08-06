@@ -54,7 +54,7 @@ function go(state: State, action: Action) {
             return kit.update(state, "user.quizs[id].questions[id].answer",
                 [qzId, qtId], answer);
         }
-        case ActionType.REVIEW_NEXT: {
+        case ActionType.GOTO_NEXT: {
             let idx = action.data;
             return kit.update(state, "page.idx", [], idx);
         }
@@ -67,6 +67,10 @@ function go(state: State, action: Action) {
         case ActionType.PUT_QUIZ_SUCC: {
             let {id, corrected, answered} = action.data;
             return kit.update(state, "user.quizs[id]{}", [id], {corrected, answered});
+        }
+        case ActionType.PUT_STUDY_SUCC: {
+            let study = action.data;
+            return kit.update(state, "user.study{}", [], study);
         }
         default:
             return state;

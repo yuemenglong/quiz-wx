@@ -20,7 +20,8 @@ Page({
 
         answer: null, // answer
         idx: null, // review
-        mode: "answer",
+        type: "quiz", //quiz study
+        mode: "answer", //study answer review redo
     },
     isReview: function () {
         return this.data.mode == "review";
@@ -29,7 +30,7 @@ Page({
         return this.data.question.info.multi;
     },
     bindAnswer: function (e) {
-        if (this.isReview()) {
+        if (["review", "study"].indexOf(this.data.mode) >= 0) {
             return;
         }
         let answer = e.target.dataset.answer;
@@ -52,8 +53,8 @@ Page({
     bindSubmit: function () {
         return this.submitAnswer(this.data.answer)
     },
-    bindReviewNext: function () {
-        return store.dispatch(ActionCreator.reviewNext(this.data.question.idx));
+    bindNext: function () {
+        return store.dispatch(ActionCreator.gotoNext(this.data.question.idx));
     },
     bindDebug: function () {
         return store.dispatch(ActionCreator.postDebugInfo());
@@ -74,19 +75,20 @@ Page({
             dispatch(ActionCreator.fetchQuestion(question.infoId))
         }
         let finished = quiz.questions.length > 0 && !question;
-        if (finished && data.mode != "review") {
+        if (finished && ["answer", "redo"].indexOf(data.mode) >= 0) {
             let answered = quiz.questions.every(q => q.answer != null);
             let corrected = quiz.questions.every(q => q.correct);
             store.dispatch(ActionCreator.putQuiz(data.quizId, answered, corrected))
         }
         if (finished) {
-            wxx.redirectTo(`../result/result?id=${quiz.id}&mode=${data.mode}`)
+            wxx.redirectTo(`../result/result?id=${quiz.id}&mode=${data.mode}&type=${data.type}`)
         }
     },
     onLoad: function (query) {
         let quizId = query.id;
         let mode = query.mode || "answer";
-        store.dispatch(ActionCreator.initQuiz(quizId, mode, 0));
+        let type = query.type || "quiz";
+        store.dispatch(ActionCreator.initQuiz(quizId, type, mode, 0));
     },
     onShow: function () {
         WxRedux.connect(this, (state: State) => {
@@ -98,6 +100,8 @@ Page({
                 question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.page.idx)[0]
             } else if (state.page.mode == "redo") {
                 question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.page.idx)[0]
+            } else if (state.page.mode == "study") {
+                question = quiz.questions.filter(qt => qt.idx > state.page.idx)[0]
             }
             if (question && !question.info) {
                 let info = state.questions[question.infoId];

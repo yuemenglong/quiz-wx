@@ -1,8 +1,8 @@
-import {Action, App, Component, Store, Thunk} from "../../common/interface";
-import State = require("../../common/entity/state");
+import {Component} from "../../common/interface";
+import State = require("../../common/state/state");
 import store = require("../../reducer/store");
 import _ = require("../lodash/index");
-import debug = require("./debug");
+import debug = require("../../kit/debug");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -11,48 +11,48 @@ function noop() {
 }
 
 class WxRedux {
-    static connect(component: Component, stateMapper: (state: State) => Object) {
+    static counter = 0;
+
+    static connect(component: any, stateMapper: (state: State) => Object) {
+        component = component as Component;
         let currentGlobal = null;
         let currentData = component.data;
-        // let $setData = component.setData.bind(component);
-        //
-        // component.setData = function (data) {
-        //     component.onUpdate && component.onUpdate(data, dispatch);
-        //     $setData(data)
-        // };
-
-        function dispatch(action: Action | Thunk | Promise<any>) {
-            setTimeout(() => store.dispatch(action), 0)
-        }
 
         function go() {
             let nextGlobal = store.getState();
             if (_.isEqual(currentGlobal, nextGlobal)) {
+                debug("Global Equal");
                 return;
             }
             currentGlobal = nextGlobal;
             let nextData = stateMapper(store.getState());
             if (_.isEqual(currentData, nextData)) {
+                debug("Data Equal");
                 return;
             }
             debug("Data", nextData);
             currentData = nextData;
-            component.onUpdate && component.onUpdate(currentData, dispatch);
             component.setData(currentData);
+            // let data = stateMapper(store.getState());
+            // debug("Data", data);
+            // component.setData(data);
         }
 
         go();
-        debug("Subscribe");
+        WxRedux.counter++;
+        debug("Subscribe", WxRedux.counter);
         let unSubscribe = store.subscribe(go);
         let $onHide = (component.onHide || noop).bind(component);
         component.onHide = () => {
-            debug("Unsubscribe");
+            WxRedux.counter--;
+            debug("Unsubscribe", WxRedux.counter);
             unSubscribe();
             $onHide();
         };
         let $onUnload = (component.onUnload || noop).bind(component);
         component.onUnload = () => {
-            debug("Unsubscribe");
+            WxRedux.counter--;
+            debug("Unsubscribe", WxRedux.counter);
             unSubscribe();
             $onUnload();
         }

@@ -1,5 +1,5 @@
 import WxUser = require("../common/entity/wx-user");
-import debug = require("../libs/wx-redux/debug");
+import debug = require("./debug");
 /**
  * Created by Administrator on 2017/7/27.
  */

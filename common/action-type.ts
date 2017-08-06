@@ -19,10 +19,9 @@ class ActionType {
     static FETCH_QUIZ: any = "FETCH_QUIZ";
     static FETCH_QUIZ_SUCC: any = "FETCH_QUIZ_SUCC";
     static MERGE_ANSWER: any = "MERGE_ANSWER";
-    static GOTO_NEXT: any = "GOTO_NEXT";
     static CHANGE_ANSWER: any = "CHANGE_ANSWER";
-    static INIT_QUIZ: any = "INIT_QUIZ";
-    static INIT_RESULT: any = "INIT_RESULT";
+    static SET_QUIZ_DATA: any = "SET_QUIZ_DATA";
+    static SET_RESULT_DATA: any = "SET_RESULT_DATA";
     static PUT_QUIZ: any = "PUT_QUIZ";
     static PUT_QUIZ_SUCC: any = "PUT_QUIZ_SUCC";
     static POST_DEBUG_INFO: any = "POST_DEBUG_INFO";

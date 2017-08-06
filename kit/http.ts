@@ -1,5 +1,5 @@
 import wxx = require("./wxx");
-import debug = require("../libs/wx-redux/debug");
+import debug = require("./debug");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -22,7 +22,7 @@ class http {
 
     static request<T>(method: string, path: string, data: Object): Promise<T> {
         let url = HOST + path;
-        debug(`${method} ${url}`, data);
+        debug(`Begin ${method} ${url}`, data);
         return new Promise(function (resolve, reject) {
             wx.request({
                 url: url,
@@ -30,11 +30,11 @@ class http {
                 data: data || "",
                 header: {"Content-Type": "application/json"},
                 success: (res) => {
-                    debug(`${method} ${url} Succ`, res);
+                    debug(`Succ ${method} ${url}`, res);
                     resolve(res.data)
                 },
                 error: (err) => {
-                    debug(`${method} ${url} Fail`, err);
+                    debug(`Fail ${method} ${url}`, err);
                     wxx.showToast("网络请求异常");
                     reject(err)
                 },

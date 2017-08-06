@@ -1,5 +1,5 @@
 import ActionType = require("./action-type");
-import State = require("./entity/state");
+import State = require("./state/state");
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27.
  */
@@ -9,13 +9,8 @@ export interface Action {
     data: any,
 }
 
-export interface App {
+export interface IStore {
     dispatch(action: Action | Thunk): void
-    store: Store
-}
-
-export interface Store {
-    dispatch(action: Action | Thunk | Promise<any>): void
     getState(): State
     subscribe(fn: () => void): () => void
 }

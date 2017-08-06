@@ -1,5 +1,5 @@
 import WxRedux = require("../../libs/wx-redux/index");
-import State = require("../../common/entity/state");
+import State = require("../../common/state/state");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
 import Question = require("../../common/entity/question");
@@ -8,107 +8,224 @@ import kit = require("../../kit/kit");
 import _ = require("../../libs/lodash/index");
 import wxx = require("../../kit/wxx");
 import Quiz = require("../../common/entity/quiz");
+import QuizData = require("../../common/state/quiz");
+import ActionType = require("../../common/action-type");
 /**
- * Created by Administrator on 2017/7/27.
+ * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
-Page({
-    data: {
-        quizId: null,
-        quiz: null,
-        question: null,
+class QuizClass {
+    data: QuizData = new QuizData;
 
-        answer: null, // answer
-        idx: null, // review
-        type: "quiz", //quiz study
-        mode: "answer", //study answer review redo
-    },
-    isReview: function () {
-        return this.data.mode == "review";
-    },
-    isMulti: function () {
-        return this.data.question.info.multi;
-    },
-    bindAnswer: function (e) {
+    getQuestion(): QuizQuestion {
+        let questions = this.data.quiz.questions;
+        let mode = this.data.mode;
+        let idx = this.data.idx;
+        if (mode == "answer") {
+            return questions.filter(qt => qt.answer == null)[0]
+        } else if (mode == "review") {
+            return questions.filter(qt => qt.correct == false && qt.idx > idx)[0]
+        } else if (mode == "redo") {
+            return questions.filter(qt => qt.correct == false && qt.idx > idx)[0]
+        } else if (mode == "study") {
+            return questions.filter(qt => qt.idx > idx)[0]
+        }
+    }
+
+    //noinspection JSMethodCanBeStatic
+    ensureInfo(question: QuizQuestion): void {
+        let state = store.getState();
+        // 已经有了
+        if (question.info) {
+            store.dispatch(ActionCreator.setQuizData({question}));
+        } else if (state.questions[question.infoId]) {
+            // 缓存里有，直接拼上
+            question = _.defaults({info: state.questions[question.infoId]}, question);
+            store.dispatch(ActionCreator.setQuizData({question}))
+        } else {
+            // 缓存里也没有，先拉到缓存里
+            store.dispatch(ActionCreator.fetchQuestion(question.infoId, q => {
+                question = _.defaults({info: q}, question);
+                store.dispatch(ActionCreator.setQuizData({question}))
+            }));
+        }
+    }
+
+
+    nextOrResult() {
+        let question = this.getQuestion();
+        if (question == null) {
+            // result
+        } else {
+            this.ensureInfo(question);
+        }
+    }
+
+    submitAnswer(answer) {
+        store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
+            this.nextOrResult();
+        }));
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindAnswer(e) {
         if (["review", "study"].indexOf(this.data.mode) >= 0) {
             return;
         }
         let answer = e.target.dataset.answer;
-        if (!this.isMulti()) {
+        if (!this.data.question.multi) {
             return this.submitAnswer(answer);
         } else if (this.data.answer.indexOf(answer) >= 0) {
             // 删掉答案
             answer = this.data.answer.split("").filter(c => c != answer).join("");
-            this.changeAnswer(answer);
+            store.dispatch(ActionCreator.setQuizData({answer}));
         } else {
             // 增加答案
             answer = this.data.answer + answer;
             answer = answer.split("").sort().join("");
-            this.changeAnswer(answer);
+            store.dispatch(ActionCreator.setQuizData({answer}));
         }
-    },
-    bindSkip: function () {
-        return this.submitAnswer("")
-    },
-    bindSubmit: function () {
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindSkip() {
+        this.submitAnswer("");
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindSubmit() {
         return this.submitAnswer(this.data.answer)
-    },
-    bindNext: function () {
-        return store.dispatch(ActionCreator.gotoNext(this.data.question.idx));
-    },
-    bindDebug: function () {
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindNext() {
+        store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
+
+    }
+
+    //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
+    bindDebug() {
         return store.dispatch(ActionCreator.postDebugInfo());
-    },
-    changeAnswer: function (answer) {
-        return store.dispatch(ActionCreator.changeAnswer(answer));
-    },
-    submitAnswer: function (answer) {
-        return store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer))
-    },
-    onUpdate: function (data, dispatch) {
-        let quiz = data.quiz;
-        let question = data.question;
-        if (quiz.questions.length == 0) {
-            dispatch(ActionCreator.fetchQuiz(quiz.id))
-        }
-        if (question && question.info == null) {
-            dispatch(ActionCreator.fetchQuestion(question.infoId))
-        }
-        let finished = quiz.questions.length > 0 && !question;
-        if (finished && ["answer", "redo"].indexOf(data.mode) >= 0) {
-            let answered = quiz.questions.every(q => q.answer != null);
-            let corrected = quiz.questions.every(q => q.correct);
-            store.dispatch(ActionCreator.putQuiz(data.quizId, answered, corrected))
-        }
-        if (finished) {
-            wxx.redirectTo(`../result/result?id=${quiz.id}&mode=${data.mode}&type=${data.type}`)
-        }
-    },
-    onLoad: function (query) {
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    onShow() {
+        store.connect(this, (state: State) => {
+            // quiz是直接从store里拼接的
+            let quiz = store.getState().user.quizs.filter(q => q.id == this.data.quizId)[0];
+            return _.defaults({}, {quiz}, state.quiz)
+        });
+        let question = this.getQuestion();
+        this.ensureInfo(question);
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    onLoad(query) {
+        // quiz一定存在
         let quizId = query.id;
         let mode = query.mode || "answer";
         let type = query.type || "quiz";
-        store.dispatch(ActionCreator.initQuiz(quizId, type, mode, 0));
-    },
-    onShow: function () {
-        WxRedux.connect(this, (state: State) => {
-            let quiz = state.user.quizs.filter(quiz => quiz.id == state.page.quizId)[0];
-            let question = null;
-            if (state.page.mode == "answer") {
-                question = quiz.questions.filter(qt => qt.answer == null)[0]
-            } else if (state.page.mode == "review") {
-                question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.page.idx)[0]
-            } else if (state.page.mode == "redo") {
-                question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.page.idx)[0]
-            } else if (state.page.mode == "study") {
-                question = quiz.questions.filter(qt => qt.idx > state.page.idx)[0]
-            }
-            if (question && !question.info) {
-                let info = state.questions[question.infoId];
-                question = _.defaults({info}, question);
-            }
-            return _.merge({quiz, question}, state.page)
-        });
-    },
-});
+        let quiz = store.getState().user.quizs.filter(q => q.id == quizId)[0];
+        store.dispatch(ActionCreator.setQuizData({quizId, quiz, mode, type}));
+    }
+}
+
+Page(new QuizClass());
+
+// Page({
+//     data: {
+//         quizId: null,
+//         quiz: null,
+//         question: null,
+//
+//         answer: null, // answer
+//         idx: null, // review
+//         type: "quiz", //quiz study
+//         mode: "answer", //study answer review redo
+//     },
+//     isMulti: function () {
+//         return this.data.question.info.multi;
+//     },
+//     bindAnswer: function (e) {
+//         if (["review", "study"].indexOf(this.data.mode) >= 0) {
+//             return;
+//         }
+//         let answer = e.target.dataset.answer;
+//         if (!this.isMulti()) {
+//             return this.submitAnswer(answer);
+//         } else if (this.data.answer.indexOf(answer) >= 0) {
+//             // 删掉答案
+//             answer = this.data.answer.split("").filter(c => c != answer).join("");
+//             this.changeAnswer(answer);
+//         } else {
+//             // 增加答案
+//             answer = this.data.answer + answer;
+//             answer = answer.split("").sort().join("");
+//             this.changeAnswer(answer);
+//         }
+//     },
+//     bindSkip: function () {
+//         return this.submitAnswer("")
+//     },
+//     bindSubmit: function () {
+//         return this.submitAnswer(this.data.answer)
+//     },
+//     bindNext: function () {
+//         return store.dispatch(ActionCreator.gotoNext(this.data.question.idx));
+//     },
+//     bindDebug: function () {
+//         return store.dispatch(ActionCreator.postDebugInfo());
+//     },
+//     changeAnswer: function (answer) {
+//         return store.dispatch(ActionCreator.changeAnswer(answer));
+//     },
+//     submitAnswer: function (answer) {
+//         return store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer))
+//     },
+//     onUpdate: function (data, dispatch) {
+//         let quiz = data.quiz;
+//         let question = data.question;
+//         if (quiz.questions.length == 0) {
+//             dispatch(ActionCreator.fetchQuiz(quiz.id))
+//         }
+//         if (question && question.info == null) {
+//             dispatch(ActionCreator.fetchQuestion(question.infoId))
+//         }
+//         let finished = quiz.questions.length > 0 && !question;
+//         if (finished && ["answer", "redo"].indexOf(data.mode) >= 0) {
+//             let answered = quiz.questions.every(q => q.answer != null);
+//             let corrected = quiz.questions.every(q => q.correct);
+//             store.dispatch(ActionCreator.putQuiz(data.quizId, answered, corrected))
+//         }
+//         if (finished) {
+//             wxx.redirectTo(`../result/result?id=${quiz.id}&mode=${data.mode}&type=${data.type}`)
+//         }
+//     },
+//     onLoad: function (query) {
+//         let quizId = query.id;
+//         let mode = query.mode || "answer";
+//         let type = query.type || "quiz";
+//         store.dispatch(ActionCreator.setQuizData(quizId, type, mode, 0));
+//     },
+//     onShow: function () {
+//         WxRedux.connect(this, (state: State) => {
+//             let quiz = state.user.quizs.filter(quiz => quiz.id == state.quiz.quizId)[0];
+//             let question = null;
+//             if (state.quiz.mode == "answer") {
+//                 question = quiz.questions.filter(qt => qt.answer == null)[0]
+//             } else if (state.quiz.mode == "review") {
+//                 question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.quiz.idx)[0]
+//             } else if (state.quiz.mode == "redo") {
+//                 question = quiz.questions.filter(qt => qt.correct == false && qt.idx > state.quiz.idx)[0]
+//             } else if (state.quiz.mode == "study") {
+//                 question = quiz.questions.filter(qt => qt.idx > state.quiz.idx)[0]
+//             }
+//             if (question && !question.info) {
+//                 let info = state.questions[question.infoId];
+//                 question = _.defaults({info}, question);
+//             }
+//             return _.merge({quiz, question}, state.quiz)
+//         });
+//     },
+// });
 

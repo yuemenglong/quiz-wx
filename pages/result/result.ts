@@ -1,5 +1,5 @@
 import WxRedux = require("../../libs/wx-redux/index");
-import State = require("../../common/entity/state");
+import State = require("../../common/state/state");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
 import Question = require("../../common/entity/question");

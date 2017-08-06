@@ -6,6 +6,7 @@ import WxUser = require("../common/entity/wx-user");
 import User = require("../common/entity/user");
 import Quiz = require("../common/entity/quiz");
 import _ = require("../libs/lodash/index");
+import Question = require("../common/entity/question");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -56,47 +57,46 @@ class ActionCreator {
         }
     }
 
-    static fetchQuiz(quizId): Thunk {
+    static fetchQuiz(quizId, cb: (quiz: Quiz) => void): Thunk {
         return ((dispatch, getState) => {
             dispatch({type: ActionType.FETCH_QUIZ, data: null});
             http.get(`/quiz/${quizId}`).then(quiz => {
                 dispatch({type: ActionType.FETCH_QUIZ_SUCC, data: quiz});
+                cb(quiz as Quiz)
             })
         })
     }
 
-    static fetchQuestion(id: number): Thunk {
+    static fetchQuestion(id: number, cb: (question: Question) => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
             dispatch({type: ActionType.FETCH_QUESTION, data: null});
             http.get(`/question/${id}`).then(question => {
                 dispatch({type: ActionType.FETCH_QUESTION_SUCC, data: question})
+                cb(question as Question)
             })
         }
     }
 
-    static putAnswer(qzId: number, qtId: number, answer: string): Thunk {
+    static putAnswer(qzId: number, qtId: number, answer: string, cb: (question: Question) => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
             dispatch({type: ActionType.PUT_ANSWER, data: null});
             http.put(`/quiz/${qzId}/question/${qtId}`, {answer}).then(question => {
-                dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question})
+                dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question});
+                cb(question as Question);
             })
         }
-    }
-
-    static gotoNext(idx: number): Action {
-        return {type: ActionType.GOTO_NEXT, data: idx}
     }
 
     static changeAnswer(answer: string): Action {
         return {type: ActionType.CHANGE_ANSWER, data: answer}
     }
 
-    static initQuiz(quizId: number, type: string, mode: string, idx: number): Action {
-        return {type: ActionType.INIT_QUIZ, data: {quizId, type, mode, idx}}
+    static setQuizData(data: Object): Action {
+        return {type: ActionType.SET_QUIZ_DATA, data}
     }
 
     static setResultData(data): Action {
-        return {type: ActionType.INIT_RESULT, data}
+        return {type: ActionType.SET_RESULT_DATA, data}
     }
 
     static putQuiz(id: number, answered: boolean, corrected: boolean): Thunk {
@@ -140,7 +140,7 @@ class ActionCreator {
         })
     }
 
-    static putStudy(studyIdx: number, cb:()=>void): Thunk {
+    static putStudy(studyIdx: number, cb: () => void): Thunk {
         return ((dispatch, getState) => {
             let studyId = getState().user.study.id;
             dispatch({type: ActionType.PUT_STUDY, data: null});

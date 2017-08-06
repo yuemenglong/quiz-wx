@@ -1,4 +1,4 @@
-import wxx = require("../../kit/wxx");
+import wxx = require("./wxx");
 /**
  * Created by Administrator on 2017/7/31.
  */

@@ -8,8 +8,8 @@ import WxUser = require("../common/entity/wx-user");
 import _ = require("../libs/lodash/index");
 import QuizQuestion = require("../common/entity/quiz-question");
 import kit = require("../kit/kit");
-import State = require("../common/entity/state");
-import debug = require("../libs/wx-redux/debug");
+import State = require("../common/state/state");
+import debug = require("../kit/debug");
 
 
 function go(state: State, action: Action) {
@@ -36,7 +36,7 @@ function go(state: State, action: Action) {
         }
         case ActionType.CHANGE_ANSWER: {
             let answer = action.data;
-            return kit.update(state, "page.answer", [], answer);
+            return kit.update(state, "quiz.answer", [], answer);
         }
         case ActionType.FETCH_QUESTION_SUCC: {
             let question = action.data;
@@ -45,8 +45,8 @@ function go(state: State, action: Action) {
         case ActionType.PUT_ANSWER_SUCC: {
             let question = action.data;
             return kit.updates("user.quizs[id].questions[id]", [question.quizId, question.id], question)
-                .update("page.idx", [], question.idx)
-                .update("page.answer", [], "")
+                .update("quiz.idx", [], question.idx)
+                .update("quiz.answer", [], "")
                 .call(state);
         }
         case ActionType.MERGE_ANSWER: {
@@ -54,14 +54,10 @@ function go(state: State, action: Action) {
             return kit.update(state, "user.quizs[id].questions[id].answer",
                 [qzId, qtId], answer);
         }
-        case ActionType.GOTO_NEXT: {
-            let idx = action.data;
-            return kit.update(state, "page.idx", [], idx);
+        case ActionType.SET_QUIZ_DATA: {
+            return kit.update(state, "quiz{}", [], action.data);
         }
-        case ActionType.INIT_QUIZ: {
-            return kit.update(state, "page{}", [], action.data);
-        }
-        case ActionType.INIT_RESULT: {
+        case ActionType.SET_RESULT_DATA: {
             return kit.update(state, "result{}", [], action.data);
         }
         case ActionType.PUT_QUIZ_SUCC: {

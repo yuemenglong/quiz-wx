@@ -4,10 +4,9 @@
 
 class ResultData {
     mode: string;
+    type: string;
     quizId: number;
-    updating: boolean = false;
 }
 
 module.exports = ResultData;
 export =ResultData;
-

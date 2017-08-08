@@ -9,7 +9,7 @@ class User {
     id: number;
     wxId: string;
 
-    study:Study;
+    study: Study;
     quizs: Array<Quiz>;
 }
 

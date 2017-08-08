@@ -30,12 +30,18 @@ class http {
                 data: data || "",
                 header: {"Content-Type": "application/json"},
                 success: (res) => {
-                    debug(`Succ ${method} ${url}`, res);
-                    resolve(res.data)
+                    if (res.statusCode >= 400) {
+                        debug(`Fail ${method} ${url}`, res);
+                        wxx.showToast("请求失败");
+                        reject(res)
+                    } else {
+                        debug(`Succ ${method} ${url}`, res);
+                        resolve(res.data)
+                    }
                 },
                 error: (err) => {
                     debug(`Fail ${method} ${url}`, err);
-                    wxx.showToast("网络请求异常");
+                    wxx.showToast("请求失败");
                     reject(err)
                 },
             });

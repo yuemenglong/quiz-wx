@@ -7,6 +7,7 @@ import User = require("../common/entity/user");
 import Quiz = require("../common/entity/quiz");
 import _ = require("../libs/lodash/index");
 import Question = require("../common/entity/question");
+import Study = require("../common/entity/study");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -38,7 +39,8 @@ class ActionCreator {
                 }
                 dispatch({type: ActionType.REGIST_USER, data: null});
                 let wxId = getState().wxUser.nickName;
-                return http.post<User>(`/user`, {wxId: wxId}).then(user => {
+                let study = new Study();
+                return http.post<User>(`/user`, {wxId: wxId, study}).then(user => {
                     dispatch({type: ActionType.REGIST_USER_SUCC, data: user});
                     return user;
                 })

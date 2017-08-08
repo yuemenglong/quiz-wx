@@ -115,8 +115,7 @@ class QuizClass {
             let quiz = store.getState().user.quizs.filter(q => q.id == this.data.quizId)[0];
             return _.defaults({}, {quiz}, state.quiz)
         });
-        let question = this.getQuestion();
-        this.ensureInfo(question);
+        this.nextOrResult();
     }
 
     //noinspection JSUnusedGlobalSymbols

@@ -16,21 +16,17 @@ class ResultClass {
     data: ResultData = new ResultData;
 
     // answer / redo -> answer
-    bindCont() {
-        // let type = this.data.type;
-        // if (type == "study") {
-        //     //1. study type
-        // } else if (type == "quiz") {
-        //2. quiz type
-        let quiz = store.getState().user.quizs.find(q => !q.answered || !q.corrected);
-        if (quiz) {
-            wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
-        } else {
-            store.dispatch(ActionCreator.newQuiz(quiz => {
+    bindContQuiz() {
+        store.dispatch(ActionCreator.putQuiz(this.data.quizId, {answered: true, corrected: true}, () => {
+            let quiz = store.getState().user.quizs.find(q => !q.answered || !q.corrected);
+            if (quiz) {
                 wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
-            }))
-        }
-        // }
+            } else {
+                store.dispatch(ActionCreator.newQuiz(quiz => {
+                    wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
+                }))
+            }
+        }));
     }
 
     // answer / redo -> review

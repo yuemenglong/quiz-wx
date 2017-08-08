@@ -21,13 +21,13 @@ class WxRedux {
         function go() {
             let nextGlobal = store.getState();
             if (_.isEqual(currentGlobal, nextGlobal)) {
-                debug("Global Equal");
+                debug("Global Equal", nextGlobal);
                 return;
             }
             currentGlobal = nextGlobal;
             let nextData = stateMapper(store.getState());
             if (_.isEqual(currentData, nextData)) {
-                debug("Data Equal");
+                debug("Data Equal", nextData);
                 return;
             }
             debug("Data", nextData);

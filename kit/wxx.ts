@@ -15,12 +15,12 @@ class wxx {
     }
 
     static navigateTo(url: string) {
-        debug("Navigate:", url);
+        debug("[Navigate] => ", url);
         wx.navigateTo({url})
     }
 
     static redirectTo(url) {
-        debug("Redirect:", url);
+        debug("[Redirect] => ", url);
         wx.redirectTo({url})
     }
 

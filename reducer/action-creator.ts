@@ -52,7 +52,8 @@ class ActionCreator {
         return (dispatch: Dispatch, getState: GetState) => {
             dispatch({type: ActionType.NEW_QUIZ, data: null});
             let userId = getState().user.id;
-            http.post(`/quiz`, {userId}).then(quiz => {
+            let mode = "answer";
+            http.post(`/quiz`, {userId, mode}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 cb(quiz as Quiz);
             })
@@ -79,12 +80,12 @@ class ActionCreator {
         }
     }
 
-    static putAnswer(qzId: number, qtId: number, answer: string, cb: (question: Question) => void): Thunk {
+    static putAnswer(qzId: number, qtId: number, answer: string, cb: () => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
-            dispatch({type: ActionType.PUT_ANSWER, data: null});
+            dispatch({type: ActionType.PUT_ANSWER, data: {answer}});
             http.put(`/quiz/${qzId}/question/${qtId}`, {answer}).then(question => {
                 dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question});
-                cb(question as Question);
+                cb();
             })
         }
     }
@@ -101,11 +102,12 @@ class ActionCreator {
         return {type: ActionType.SET_RESULT_DATA, data}
     }
 
-    static putQuiz(id: number, answered: boolean, corrected: boolean): Thunk {
+    static putQuiz(id: number, quiz, cb: () => void): Thunk {
         return ((dispatch, getState) => {
-            dispatch({type: ActionType.PUT_QUIZ, data: null});
-            http.put(`/quiz/${id}`, {id, answered, corrected}).then(quiz => {
-                dispatch({type: ActionType.PUT_QUIZ_SUCC, data: quiz})
+            dispatch({type: ActionType.PUT_QUIZ, data: quiz});
+            http.put(`/quiz/${id}`, quiz).then(quiz => {
+                dispatch({type: ActionType.PUT_QUIZ_SUCC, data: quiz});
+                cb()
             })
         })
     }

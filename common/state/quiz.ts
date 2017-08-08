@@ -1,18 +1,18 @@
 import Quiz = require("../entity/quiz");
 import Question = require("../entity/question");
+import QuizQuestion = require("../entity/quiz-question");
 /**
  * Created by yml on 2017/8/6.
  */
 
 class QuizData {
-    idx: number = 0;
-    answer: string = "";
-    type: string;
+    quizId: number;
+
+    quiz: Quiz;
+    question: QuizQuestion;
     mode: string;
 
-    quizId: number;
-    quiz: Quiz;
-    question: Question;
+    answer: string = "";
 }
 
 module.exports = QuizData;

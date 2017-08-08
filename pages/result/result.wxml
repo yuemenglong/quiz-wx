@@ -1,4 +1,4 @@
-<view wx:if="{{show}}">
+<view>
     <text wx:if="{{mode=='answer'||mode=='redo'}}">正确：{{succ}}， 错误：{{fail}}</text>
     <button wx:if="{{mode=='review'}}" bindtap="bindRedo">重做错题</button>
     <button wx:if="{{fail!=0&&(mode=='answer'||mode=='redo')}}" bindtap="bindReview">查看做错题目</button>

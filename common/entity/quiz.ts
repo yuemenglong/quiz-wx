@@ -10,8 +10,14 @@ class Quiz {
     createTime: any;
     questions: Array<QuizQuestion>;
     count: number;
+
     answered: Boolean;
     corrected: Boolean;
+
+    mode: string;
+    reviewIdx: number;
+    answerIdx: number;
+
     user: User;
     userId: number;
 }

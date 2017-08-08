@@ -22,7 +22,7 @@ class http {
 
     static request<T>(method: string, path: string, data: Object): Promise<T> {
         let url = HOST + path;
-        debug(`Begin ${method} ${url}`, data);
+        debug(`Begin [${method}] ${url}`, data);
         return new Promise(function (resolve, reject) {
             wx.request({
                 url: url,
@@ -31,16 +31,16 @@ class http {
                 header: {"Content-Type": "application/json"},
                 success: (res) => {
                     if (res.statusCode >= 400) {
-                        debug(`Fail ${method} ${url}`, res);
+                        debug(`Fail [${method}] ${url}`, res);
                         wxx.showToast("请求失败");
                         reject(res)
                     } else {
-                        debug(`Succ ${method} ${url}`, res);
+                        debug(`Succ [${method}] ${url}`, res);
                         resolve(res.data)
                     }
                 },
-                error: (err) => {
-                    debug(`Fail ${method} ${url}`, err);
+                fail: (err) => {
+                    debug(`Fail [${method}] ${url}`, err);
                     wxx.showToast("请求失败");
                     reject(err)
                 },

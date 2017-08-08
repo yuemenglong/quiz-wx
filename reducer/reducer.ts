@@ -45,7 +45,7 @@ function go(state: State, action: Action) {
         case ActionType.PUT_ANSWER_SUCC: {
             let question = action.data;
             return kit.updates("user.quizs[id].questions[id]", [question.quizId, question.id], question)
-                .update("quiz.idx", [], question.idx)
+                .update("user.quizs[id].answerIdx", [question.quizId], question.idx)
                 .update("quiz.answer", [], "")
                 .call(state);
         }
@@ -61,8 +61,9 @@ function go(state: State, action: Action) {
             return kit.update(state, "result{}", [], action.data);
         }
         case ActionType.PUT_QUIZ_SUCC: {
-            let {id, corrected, answered} = action.data;
-            return kit.update(state, "user.quizs[id]{}", [id], {corrected, answered});
+            let quiz = action.data;
+            delete quiz.questions; // TODO
+            return kit.update(state, "user.quizs[id]{}", [quiz.id], quiz);
         }
         case ActionType.PUT_STUDY_SUCC: {
             let study = action.data;

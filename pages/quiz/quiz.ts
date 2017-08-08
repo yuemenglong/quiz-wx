@@ -18,17 +18,17 @@ class QuizClass {
     data: QuizData = new QuizData;
 
     getQuestion(): QuizQuestion {
-        let questions = this.data.quiz.questions;
+        let quiz = this.data.quiz;
         let mode = this.data.mode;
-        let idx = this.data.idx;
+        let questions = quiz.questions;
         if (mode == "answer") {
             return questions.filter(qt => qt.answer == null)[0]
         } else if (mode == "review") {
-            return questions.filter(qt => qt.correct == false && qt.idx > idx)[0]
+            return questions.filter(qt => qt.correct == false && qt.idx > quiz.reviewIdx)[0]
         } else if (mode == "redo") {
-            return questions.filter(qt => qt.correct == false && qt.idx > idx)[0]
+            return questions.filter(qt => qt.correct == false && qt.idx > quiz.answerIdx)[0]
         } else if (mode == "study") {
-            return questions.filter(qt => qt.idx > idx)[0]
+            return questions.filter(qt => qt.idx > quiz.reviewIdx)[0]
         }
     }
 
@@ -51,11 +51,10 @@ class QuizClass {
         }
     }
 
-
     nextOrResult() {
         let question = this.getQuestion();
         if (question == null) {
-            wxx.redirectTo(`../result/result?id=${this.data.quizId}&mode=${this.data.mode}&type=${this.data.type}`)
+            wxx.redirectTo(`../result/result?id=${this.data.quizId}`)
         } else {
             this.ensureInfo(question);
         }
@@ -73,7 +72,7 @@ class QuizClass {
             return;
         }
         let answer = e.target.dataset.answer;
-        if (!this.data.question.multi) {
+        if (!this.data.question.info.multi) {
             return this.submitAnswer(answer);
         } else if (this.data.answer.indexOf(answer) >= 0) {
             // 删掉答案
@@ -99,8 +98,10 @@ class QuizClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindNext() {
-        store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
-
+        store.dispatch(ActionCreator.putQuiz(this.data.quizId, {reviewIdx: this.data.question.idx}, () => {
+            return this.nextOrResult();
+        }));
+        // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
     }
 
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
@@ -112,8 +113,9 @@ class QuizClass {
     onShow() {
         store.connect(this, (state: State) => {
             // quiz是直接从store里拼接的
-            let quiz = store.getState().user.quizs.filter(q => q.id == this.data.quizId)[0];
-            return _.defaults({}, {quiz}, state.quiz)
+            let quiz = state.user.quizs.filter(q => q.id == state.quiz.quizId)[0];
+            let mode = quiz.mode;
+            return _.merge({}, state.quiz, {quiz, mode})
         });
         this.nextOrResult();
     }
@@ -122,10 +124,9 @@ class QuizClass {
     onLoad(query) {
         // quiz一定存在
         let quizId = query.id;
-        let mode = query.mode || "answer";
-        let type = query.type || "quiz";
         let quiz = store.getState().user.quizs.filter(q => q.id == quizId)[0];
-        store.dispatch(ActionCreator.setQuizData({quizId, quiz, mode, type}));
+        let mode = quiz.mode;
+        store.dispatch(ActionCreator.setQuizData({quizId, quiz, mode}));
     }
 }
 

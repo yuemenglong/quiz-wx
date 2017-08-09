@@ -24,8 +24,13 @@ class wxx {
         wx.redirectTo({url})
     }
 
-    static showToast(title: string, duration: number = 1000) {
+    static showToast(title: string, duration: number = 1500) {
         wx.showToast({title, duration})
+    }
+
+    static loadingToast(title: string, duration: number = 1500) {
+        let icon = "loading";
+        wx.showToast({title, duration, icon})
     }
 
     static showModal(title: string, content: string): Promise<boolean> {

@@ -28,6 +28,7 @@ class ActionType {
     static POST_DEBUG_INFO_SUCC: any = "POST_DEBUG_INFO_SUCC";
     static PUT_STUDY: any = "PUT_STUDY";
     static PUT_STUDY_SUCC: any = "PUT_STUDY_SUCC";
+    static SET_GLOBAL_DATA: any = "SET_GLOBAL_DATA";
 }
 
 module.exports = ActionType;

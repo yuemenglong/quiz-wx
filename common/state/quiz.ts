@@ -6,7 +6,7 @@ import QuizQuestion = require("../entity/quiz-question");
  */
 
 class QuizData {
-    quizId: number;
+    inStudy: boolean = false;
 
     quiz: Quiz;
     question: QuizQuestion;

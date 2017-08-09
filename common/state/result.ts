@@ -6,8 +6,9 @@ import Quiz = require("../entity/quiz");
 class ResultData {
     mode: string;
     type: string;
-    quizId: number;
     quiz: Quiz;
+
+    inStudy: boolean;
 }
 
 module.exports = ResultData;

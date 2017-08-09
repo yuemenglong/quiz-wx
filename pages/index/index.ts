@@ -31,28 +31,41 @@ Page({
         if (quiz == null) {
             // 没有则建立新quiz
             return store.dispatch(ActionCreator.newQuiz(quiz => {
-                return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+                store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
+                return wxx.navigateTo(`../quiz/quiz`)
             }))
         } else if (quiz.questions.length == 0) {
             // 拿到quiz详情
             return store.dispatch(ActionCreator.fetchQuiz(quiz.id, (quiz) => {
-                return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+                store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
+                return wxx.navigateTo(`../quiz/quiz`)
             }))
         } else {
             // quiz存在且有详情信息
-            return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+            store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
+            return wxx.navigateTo(`../quiz/quiz`)
         }
     },
     bindStudy: function () {
-        //1. 如果study里面有quiz，直接使用这个quiz进入study模式
+        store.dispatch(ActionCreator.setGlobalData({inStudy: true}));
         let quiz = this.data.user.study.quiz;
-        if (quiz != null) {
-            return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
+        if (quiz != null && quiz.questions.length > 0) {
+            // 有quiz，quiz里有questions
+            store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
+            return wxx.navigateTo(`../quiz/quiz`)
+        } else if (quiz != null && quiz.questions.length == 0) {
+            // 有quiz，quiz里没有question
+            return store.dispatch(ActionCreator.fetchQuiz(quiz.id, (quiz) => {
+                store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
+                return wxx.navigateTo(`../quiz/quiz`)
+            }))
+        } else {
+            // 没有quiz
+            return store.dispatch(ActionCreator.newStudyQuiz(quiz => {
+                store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
+                return wxx.navigateTo(`../quiz/quiz`)
+            }))
         }
-        //2. 没有则创建study quiz，然后进入study模式
-        store.dispatch(ActionCreator.newStudyQuiz(quiz => {
-            return wxx.navigateTo(`../quiz/quiz?id=${quiz.id}`)
-        }))
     },
     bindDebug: function () {
         return store.dispatch(ActionCreator.postDebugInfo());

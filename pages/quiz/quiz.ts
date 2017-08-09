@@ -29,6 +29,8 @@ class QuizClass {
             return questions.filter(qt => qt.correct == false && qt.idx > quiz.answerIdx)[0]
         } else if (mode == "study") {
             return questions.filter(qt => qt.idx > quiz.reviewIdx)[0]
+        } else {
+            throw Error("Unknown Mode");
         }
     }
 
@@ -54,7 +56,7 @@ class QuizClass {
     nextOrResult() {
         let question = this.getQuestion();
         if (question == null) {
-            wxx.redirectTo(`../result/result?id=${this.data.quizId}`)
+            wxx.redirectTo(`../result/result`)
         } else {
             this.ensureInfo(question);
         }
@@ -98,7 +100,7 @@ class QuizClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindNext() {
-        store.dispatch(ActionCreator.putQuiz(this.data.quizId, {reviewIdx: this.data.question.idx}, () => {
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {reviewIdx: this.data.question.idx}, () => {
             return this.nextOrResult();
         }));
         // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
@@ -113,20 +115,23 @@ class QuizClass {
     onShow() {
         store.connect(this, (state: State) => {
             // quiz是直接从store里拼接的
-            let quiz = state.user.quizs.filter(q => q.id == state.quiz.quizId)[0];
+            let quizId = state.global.quizId;
+            let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
             let mode = quiz.mode;
             return _.merge({}, state.quiz, {quiz, mode})
         });
         this.nextOrResult();
     }
 
-    //noinspection JSUnusedGlobalSymbols
-    onLoad(query) {
+    //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
+    onLoad() {
+        let state = store.getState();
         // quiz一定存在
-        let quizId = query.id;
-        let quiz = store.getState().user.quizs.filter(q => q.id == quizId)[0];
+        let quizId = state.global.quizId;
+        let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
         let mode = quiz.mode;
-        store.dispatch(ActionCreator.setQuizData({quizId, quiz, mode}));
+        let inStudy = state.global.inStudy; // 在学习状态
+        store.dispatch(ActionCreator.setQuizData({quiz, mode, inStudy}));
     }
 }
 

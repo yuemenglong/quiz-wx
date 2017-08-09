@@ -67,7 +67,13 @@ function go(state: State, action: Action) {
         }
         case ActionType.PUT_STUDY_SUCC: {
             let study = action.data;
+            let quiz = state.user.quizs.filter(q => q.id == study.quizId)[0];
+            study = _.merge({quiz}, study);
             return kit.update(state, "user.study{}", [], study);
+        }
+        case ActionType.SET_GLOBAL_DATA: {
+            let global = action.data;
+            return kit.update(state, "global{}", [], global);
         }
         default:
             return state;

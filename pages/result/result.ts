@@ -17,37 +17,49 @@ class ResultClass {
 
     // answer / redo -> answer
     bindContQuiz() {
-        store.dispatch(ActionCreator.putQuiz(this.data.quizId, {answered: true, corrected: true}, () => {
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {answered: true, corrected: true}, () => {
             let quiz = store.getState().user.quizs.find(q => !q.answered || !q.corrected);
             if (quiz) {
+                store.dispatch(ActionCreator.setGlobalData({quizId: quiz.id}));
                 wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
             } else {
                 store.dispatch(ActionCreator.newQuiz(quiz => {
+                    store.dispatch(ActionCreator.setGlobalData({quizId: quiz.id}));
                     wxx.redirectTo(`../quiz/quiz?id=${quiz.id}`)
                 }))
             }
         }));
     }
 
+    // answer / redo -> study
+    bindContStudy() {
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {answered: true, corrected: true}, () => {
+            store.dispatch(ActionCreator.newStudyQuiz(quiz => {
+                store.dispatch(ActionCreator.setGlobalData({quizId: quiz.id}));
+                wxx.redirectTo(`../quiz/quiz`)
+            }))
+        }));
+    }
+
     // answer / redo -> review
     bindReview() {
-        store.dispatch(ActionCreator.putQuiz(this.data.quizId, {mode: "review", reviewIdx: 0}, () => {
-            wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}`)
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {mode: "review", reviewIdx: 0}, () => {
+            wxx.redirectTo(`../quiz/quiz`)
         }));
     }
 
     // review -> redo
     bindRedo() {
-        store.dispatch(ActionCreator.putQuiz(this.data.quizId, {mode: "redo", answerIdx: 0}, () => {
-            let type = this.data.type;
-            wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}`)
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {mode: "redo", answerIdx: 0}, () => {
+            wxx.redirectTo(`../quiz/quiz`)
         }));
     }
 
     // study -> answer
     bindAnswer() {
-        let type = this.data.type;
-        wxx.redirectTo(`../quiz/quiz?id=${this.data.quiz.id}`)
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {mode: "answer", answerIdx: 0}, () => {
+            wxx.redirectTo(`../quiz/quiz`)
+        }));
     }
 
     onUpdate(data, dispatch) {
@@ -55,22 +67,35 @@ class ResultClass {
             // 更新study
             let studyIdx = data.quiz.questions.slice(-1)[0].id;
             dispatch(ActionCreator.setResultData({updating: true}));
-            dispatch(ActionCreator.putStudy(studyIdx, () => {
+            dispatch(ActionCreator.putStudy({studyIdx}, () => {
                 dispatch(ActionCreator.setResultData({updating: false}));
             }))
         }
     }
 
-    onLoad(query) {
-        let quizId = query.id;
-        let quiz = store.getState().user.quizs.filter(quiz => quiz.id == quizId)[0];
+    onLoad() {
+        let state = store.getState();
+        let quizId = state.global.quizId;
+        let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
         let mode = quiz.mode;
-        store.dispatch(ActionCreator.setResultData({quizId, quiz, mode}))
+
+        let fail = quiz.questions.filter(q => q.correct == false).length;
+        let inStudy = state.global.inStudy;
+        if (fail == 0 && inStudy) {
+            // 完成本次study
+            let studyIdx = quiz.questions.slice(-1)[0].id;
+            store.dispatch(ActionCreator.putStudy({studyIdx, quizId: null}, () => {
+                store.dispatch(ActionCreator.setResultData({quiz, mode, inStudy}))
+            }));
+        } else {
+            store.dispatch(ActionCreator.setResultData({quiz, mode, inStudy}))
+        }
     }
 
     onShow() {
         WxRedux.connect(this, (state: State) => {
-            let quiz = state.user.quizs.filter(quiz => quiz.id == state.result.quizId)[0];
+            let quizId = state.global.quizId;
+            let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
             let fail = quiz.questions.filter(q => q.correct == false).length;
             let succ = quiz.questions.filter(q => q.correct == true).length;
             return _.merge({}, state.result, {quiz, fail, succ});

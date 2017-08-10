@@ -6,6 +6,7 @@ import ResultData = require("./result");
 import GlobalData = require("./global");
 import IndexData = require("./index");
 import Quiz = require("../entity/quiz");
+import Const = require("../const");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -23,6 +24,9 @@ class State {
 
     currentQuiz(): Quiz {
         return this.user.quizs.find(q => !q.answered || !q.corrected)
+    }
+    hasMoreStudy():boolean{
+        return this.user.study.studyIdx < Const.MAX_QUESTION_ID;
     }
 }
 

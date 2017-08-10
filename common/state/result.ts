@@ -9,6 +9,7 @@ class ResultData {
     quiz: Quiz;
 
     inStudy: boolean;
+    hasMoreStudy: boolean = true;
 }
 
 module.exports = ResultData;

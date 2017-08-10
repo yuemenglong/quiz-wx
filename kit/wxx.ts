@@ -45,6 +45,19 @@ class wxx {
             })
         })
     }
+
+    static showTip(title: string, content: string, confirmText: string = "确定"): Promise<boolean> {
+        let showCancel = false;
+        return new Promise<boolean>(function (resolve, reject) {
+            wx.showModal({
+                showCancel, confirmText, title, content, success: (res) => {
+                    if (res.confirm) return resolve(true);
+                    else if (res.cancel) return resolve(false);
+                    else return reject(Error("Unreachable"))
+                }
+            })
+        })
+    }
 }
 
 module.exports = wxx;

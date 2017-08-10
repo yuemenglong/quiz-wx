@@ -67,7 +67,7 @@ function go(state: State, action: Action) {
         }
         case ActionType.PUT_STUDY_SUCC: {
             let study = action.data;
-            let quiz = state.user.quizs.filter(q => q.id == study.quizId)[0];
+            let quiz = state.user.quizs.filter(q => q.id == study.quizId)[0] || null;
             study = _.merge({quiz}, study);
             return kit.update(state, "user.study{}", [], study);
         }

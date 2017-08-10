@@ -11,8 +11,8 @@ import IndexData = require("./index");
 
 
 class State {
-    user: User;
-    wxUser: WxUser;
+    user: User = new User();
+    wxUser: WxUser = new WxUser();
     questions: Question[] = [];
 
     quiz: QuizData = new QuizData;

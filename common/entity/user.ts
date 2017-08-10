@@ -9,8 +9,8 @@ class User {
     id: number;
     wxId: string;
 
-    study: Study;
-    quizs: Array<Quiz>;
+    study: Study = new Study();
+    quizs: Array<Quiz> = [];
 }
 
 module.exports = User;

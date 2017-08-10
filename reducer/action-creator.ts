@@ -129,7 +129,7 @@ class ActionCreator {
             let state = getState();
             let userId = state.user.id;
             let start = state.user.study.studyIdx + 1;
-            let end = state.user.study.studyIdx + 3;
+            let end = state.user.study.studyIdx + 30;
             let quiz = null;
             let mode = "study";
             dispatch({type: ActionType.NEW_QUIZ, data: null});
@@ -139,12 +139,6 @@ class ActionCreator {
                 dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {
                     cb(quiz)
                 }));
-                //     dispatch({type: ActionType.PUT_STUDY, data: {quizId: quiz.id}});
-                //     return http.put(`/study/${studyId}`, {quizId: quiz.id});
-                // }).then(res => {
-                //     let study = _.defaults({quiz: quiz}, res);
-                //     dispatch({type: ActionType.PUT_STUDY_SUCC, data: study});
-                //     cb(quiz)
             })
         })
     }

@@ -13,7 +13,7 @@ import Study = require("../common/entity/study");
  */
 
 class ActionCreator {
-    static fetchUser(): Thunk {
+    static fetchUser(cb: () => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
             new Promise<WxUser>((resolve) => {
                 if (getState().wxUser != null) {
@@ -44,6 +44,8 @@ class ActionCreator {
                     dispatch({type: ActionType.REGIST_USER_SUCC, data: user});
                     return user;
                 })
+            }).then(() => {
+                cb();
             })
         }
     }

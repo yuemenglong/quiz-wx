@@ -4,8 +4,6 @@ import store = require("./reducer/store");
 
 App({
     onLaunch: function () {
-        if (!store.getState().wxUser || !store.getState().user) {
-            store.dispatch(ActionCreator.fetchUser())
-        }
+
     },
 });

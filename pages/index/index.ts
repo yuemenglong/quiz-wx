@@ -16,24 +16,9 @@ import IndexData = require("../../common/state/index");
 class IndexClass {
     data: IndexData = new IndexData();
 
-    //noinspection JSMethodCanBeStatic
-    currentQuizState() {
-        let state = store.getState();
-        let quiz = state.user.quizs.find(quiz => {
-            return quiz.answered != true || quiz.corrected != true
-        });
-        if (!quiz) {
-            return null;
-        } else if (state.user.study.quizId == quiz.id) {
-            return "study";
-        } else {
-            return "quiz";
-        }
-    }
-
     //noinspection JSUnusedGlobalSymbols
     bindQuiz() {
-        if (this.currentQuizState() == "study") {
+        if (this.data.inStudy) {
             return wxx.showToast("您当前在学习模式下还有未完成的题目，请前往学习模式", 3000);
         }
         // 找到一个没有做完的quiz
@@ -61,8 +46,8 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindStudy() {
-        if (this.currentQuizState() == "quiz") {
-            return wxx.showToast("您当前在测测验模式下还有未完成的题目，请前往测验模式", 3000)
+        if (!this.data.inStudy && this.data.quiz) {
+            return wxx.showToast("您当前在测验模式下还有未完成的题目，请前往测验模式", 3000)
         }
         store.dispatch(ActionCreator.setGlobalData({inStudy: true}));
         let quiz = this.data.user.study.quiz;
@@ -92,12 +77,34 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     onShow() {
-        store.connect(this, (state) => {
-            return {
-                wxUser: state.wxUser,
-                user: state.user,
+
+    }
+
+    //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
+    onLoad() {
+        store.dispatch(ActionCreator.fetchUser(() => {
+            store.connect(this, (state) => {
+                let user = state.user;
+                let wxUser = state.wxUser;
+                let quiz = user.quizs.filter(q => !q.answered || !q.corrected)[0];
+                let inStudy = user.study.quiz != null;
+                return {user, wxUser, quiz, inStudy};
+            });
+            // 这里已经setData过了
+            if (this.data.inStudy) {
+                wxx.showModal("提示", "还有学习未完成，是否继续").then(res => {
+                    if (res) {
+                        this.bindStudy()
+                    }
+                })
+            } else if (this.data.quiz) {
+                wxx.showModal("提示", "还有测试未完成，是否继续").then(res => {
+                    if (res) {
+                        this.bindQuiz()
+                    }
+                })
             }
-        });
+        }))
     }
 }
 

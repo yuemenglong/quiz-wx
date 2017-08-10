@@ -33,10 +33,11 @@ class wxx {
         wx.showToast({title, duration, icon})
     }
 
-    static showModal(title: string, content: string): Promise<boolean> {
+    static showModal(title: string, content: string, confirmText: string = "确定",
+                     cancelText: string = "取消"): Promise<boolean> {
         return new Promise<boolean>(function (resolve, reject) {
             wx.showModal({
-                title, content, success: (res) => {
+                confirmText, cancelText, title, content, success: (res) => {
                     if (res.confirm) return resolve(true);
                     else if (res.cancel) return resolve(false);
                     else return reject(Error("Unreachable"))

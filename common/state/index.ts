@@ -10,6 +10,8 @@ import WxUser = require("../entity/wx-user");
 class IndexData {
     user: User;
     wxUser: WxUser;
+    quiz: Quiz;
+    inStudy: boolean;
 }
 
 module.exports = IndexData;

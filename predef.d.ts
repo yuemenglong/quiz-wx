@@ -19,4 +19,6 @@ declare class wx {
     static showModal(opt: Object)
 
     static showToast(opt: Object)
+
+    static showModal(opt: Object)
 }

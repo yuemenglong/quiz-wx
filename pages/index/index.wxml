@@ -3,6 +3,6 @@
     <image src="{{wxUser.avatarUrl}}"></image>
     <button bindtap="bindStudy">开始学习</button>
     <button bindtap="bindQuiz">开始测验</button>
-    <!--<button bindtap="bind">开始测验</button>-->
+    <!--<button bindtap="bindExam">开始测验</button>-->
 </view>
 <button class="debug" bindtap="bindDebug">debug</button>

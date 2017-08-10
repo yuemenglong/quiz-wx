@@ -5,6 +5,7 @@ import QuizData = require("./quiz");
 import ResultData = require("./result");
 import GlobalData = require("./global");
 import IndexData = require("./index");
+import Quiz = require("../entity/quiz");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -19,6 +20,10 @@ class State {
     result: ResultData = new ResultData;
 
     global: GlobalData = new GlobalData;
+
+    currentQuiz(): Quiz {
+        return this.user.quizs.find(q => !q.answered || !q.corrected)
+    }
 }
 
 module.exports = State;

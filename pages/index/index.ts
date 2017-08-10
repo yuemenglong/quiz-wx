@@ -17,15 +17,47 @@ import _ = require("../../libs/lodash/index");
 class IndexClass {
     data: IndexData = new IndexData();
 
+    currentType() {
+        let current = null;
+        if (this.data.hasStudy) {
+            current = "study";
+        } else if (this.data.quiz && this.data.quiz.count > 30) {
+            current = "exam";
+        } else if (this.data.quiz && this.data.quiz.count <= 30) {
+            current = "quiz";
+        }
+        return current;
+    }
+
+    needTip(type) {
+        let current = this.currentType();
+        if (current == type || current == null) {
+            return false;
+        }
+        switch (current) {
+            case "study":
+                //noinspection JSIgnoredPromiseFromCall
+                wxx.showTip("提示", "您当前在学习模式下还有未完成的题目，请前往学习模式");
+                break;
+            case "quiz":
+                //noinspection JSIgnoredPromiseFromCall
+                wxx.showTip("提示", "您当前在测验模式下还有未完成的题目，请前往测验模式");
+                break;
+            case "exam":
+                //noinspection JSIgnoredPromiseFromCall
+                wxx.showTip("提示", "您当前在模拟考试模式下还有未完成的题目，请前往模拟考试模式");
+                break;
+        }
+        return true;
+    }
+
     //noinspection JSUnusedGlobalSymbols
     bindQuiz() {
-        if (this.data.inStudy) {
-            return wxx.showTip("提示", "您当前在学习模式下还有未完成的题目，请前往学习模式");
+        if (this.needTip("quiz")) {
+            return;
         }
         // 找到一个没有做完的quiz
-        let quiz = this.data.user.quizs.find(quiz => {
-            return quiz.answered != true || quiz.corrected != true
-        });
+        let quiz = store.getState().currentQuiz();
         if (quiz == null) {
             // 没有则建立新quiz
             return store.dispatch(ActionCreator.newQuiz(quiz => {
@@ -47,8 +79,8 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindStudy() {
-        if (!this.data.inStudy && this.data.quiz) {
-            return wxx.showTip("提示", "您当前在测验模式下还有未完成的题目，请前往测验模式")
+        if (this.needTip("study")) {
+            return;
         }
         store.dispatch(ActionCreator.setGlobalData({inStudy: true}));
         let quiz = this.data.user.study.quiz;
@@ -71,6 +103,29 @@ class IndexClass {
         }
     }
 
+    bindExam() {
+        if (this.needTip("exam")) {
+            return;
+        }
+        store.dispatch(ActionCreator.setGlobalData({inStudy: false}));
+        let quiz = store.getState().currentQuiz();
+        if (quiz) {
+            store.dispatch(ActionCreator.setGlobalData({quizId: quiz.id}));
+        }
+        if (quiz && quiz.questions.length) {
+            return wxx.navigateTo(`../quiz/quiz`)
+        } else if (quiz && !quiz.questions.length) {
+            return store.dispatch(ActionCreator.fetchQuiz(quiz.id, () => {
+                return wxx.navigateTo(`../quiz/quiz`)
+            }))
+        } else {
+            return store.dispatch(ActionCreator.newExamQuiz(quiz => {
+                store.dispatch(ActionCreator.setGlobalData({quizId: quiz.id}));
+                return wxx.navigateTo(`../quiz/quiz`)
+            }))
+        }
+    }
+
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
     bindDebug() {
         return store.dispatch(ActionCreator.postDebugInfo());
@@ -82,29 +137,31 @@ class IndexClass {
             let user = state.user;
             let wxUser = state.wxUser;
             let quiz = _.get(state, "user.quizs", []).filter(q => !q.answered || !q.corrected)[0];
-            let inStudy = _.get(state, "user.study.quiz") != null;
-            return {user, wxUser, quiz, inStudy};
+            let hasStudy = _.get(state, "user.study.quiz") != null;
+            return {user, wxUser, quiz, hasStudy};
         });
     }
 
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
     onLoad() {
         store.dispatch(ActionCreator.fetchUser(() => {
-            let state = store.getState();
-            let quiz = state.user.quizs.filter(q => !q.answered || !q.corrected)[0];
-            let inStudy = state.user.study.quiz != null;
-            if (inStudy) {
-                wxx.showModal("提示", "还有学习未完成，是否继续").then(res => {
-                    if (res) {
-                        this.bindStudy()
-                    }
-                })
-            } else if (quiz) {
-                wxx.showModal("提示", "还有测试未完成，是否继续").then(res => {
-                    if (res) {
-                        this.bindQuiz()
-                    }
-                })
+            // 已经更新过data
+            switch (this.currentType()) {
+                case "study":
+                    wxx.showModal("提示", "还有学习未完成，是否继续").then(res => {
+                        if (res) this.bindStudy()
+                    });
+                    break;
+                case "exam":
+                    wxx.showModal("提示", "还有模拟考试未完成，是否继续").then(res => {
+                        if (res) this.bindExam()
+                    });
+                    break;
+                case "quiz":
+                    wxx.showModal("提示", "还有测验未完成，是否继续").then(res => {
+                        if (res) this.bindQuiz()
+                    });
+                    break;
             }
         }))
     }

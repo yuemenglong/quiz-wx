@@ -11,7 +11,7 @@ class IndexData {
     user: User;
     wxUser: WxUser;
     quiz: Quiz;
-    inStudy: boolean;
+    hasStudy: boolean;
 }
 
 module.exports = IndexData;

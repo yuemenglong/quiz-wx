@@ -62,6 +62,18 @@ class ActionCreator {
         }
     }
 
+    static newExamQuiz(cb: (quiz: Quiz) => void): Thunk {
+        return (dispatch: Dispatch, getState: GetState) => {
+            dispatch({type: ActionType.NEW_QUIZ, data: "exam"});
+            let userId = getState().user.id;
+            let mode = "answer";
+            http.post(`/quiz?single=120&multi=30`, {userId, mode}).then(quiz => {
+                dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
+                cb(quiz as Quiz);
+            })
+        }
+    }
+
     static fetchQuiz(quizId, cb: (quiz: Quiz) => void): Thunk {
         return ((dispatch) => {
             dispatch({type: ActionType.FETCH_QUIZ, data: quizId});
@@ -100,9 +112,9 @@ class ActionCreator {
         return {type: ActionType.SET_QUIZ_DATA, data}
     }
 
-    static setResultData(data): Action {
-        return {type: ActionType.SET_RESULT_DATA, data}
-    }
+    // static setResultData(data): Action {
+    //     return {type: ActionType.SET_RESULT_DATA, data}
+    // }
 
     static putQuiz(id: number, quiz, cb: () => void): Thunk {
         return ((dispatch) => {

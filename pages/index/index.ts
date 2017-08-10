@@ -7,6 +7,7 @@ import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
 import wxx = require("../../kit/wxx");
 import IndexData = require("../../common/state/index");
+import _ = require("../../libs/lodash/index");
 
 //noinspection JSUnusedGlobalSymbols
 /**
@@ -80,8 +81,8 @@ class IndexClass {
         store.connect(this, (state) => {
             let user = state.user;
             let wxUser = state.wxUser;
-            let quiz = user.quizs.filter(q => !q.answered || !q.corrected)[0];
-            let inStudy = user.study.quiz != null;
+            let quiz = _.get(state, "user.quizs", []).filter(q => !q.answered || !q.corrected)[0];
+            let inStudy = _.get(state, "user.study.quiz") != null;
             return {user, wxUser, quiz, inStudy};
         });
     }

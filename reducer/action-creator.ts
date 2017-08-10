@@ -16,7 +16,7 @@ class ActionCreator {
     static fetchUser(cb: () => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
             new Promise<WxUser>((resolve) => {
-                if (getState().wxUser.nickName != null) {
+                if (getState().wxUser != null) {
                     return resolve(getState().wxUser)
                 }
                 dispatch({type: ActionType.FETCH_WX_USER, data: null});
@@ -25,7 +25,7 @@ class ActionCreator {
                     resolve(wxUser)
                 })
             }).then(wxUser => {
-                if (getState().user.id != null) {
+                if (getState().user != null) {
                     return getState().user;
                 }
                 dispatch({type: ActionType.FETCH_USER, data: null});
@@ -34,7 +34,7 @@ class ActionCreator {
                     return user;
                 })
             }).then(user => {
-                if (user.id != null) {
+                if (user != null) {
                     return user;
                 }
                 dispatch({type: ActionType.REGIST_USER, data: null});

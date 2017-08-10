@@ -4,6 +4,7 @@ import Question = require("../entity/question");
 import QuizData = require("./quiz");
 import ResultData = require("./result");
 import GlobalData = require("./global");
+import IndexData = require("./index");
 /**
  * Created by Administrator on 2017/7/27.
  */

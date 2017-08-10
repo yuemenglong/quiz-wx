@@ -6,24 +6,18 @@ import kit = require("../../kit/wxx");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
 import wxx = require("../../kit/wxx");
+import IndexData = require("../../common/state/index");
 
 //noinspection JSUnusedGlobalSymbols
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
-Page({
-    data: {
-        wxUser: null,
-        user: null,
-    },
-    stateMapper: function (state: State) {
-        return {
-            wxUser: state.wxUser,
-            user: state.user,
-        }
-    },
-    currentQuizState: function () {
+class IndexClass {
+    data: IndexData = new IndexData();
+
+    //noinspection JSMethodCanBeStatic
+    currentQuizState() {
         let state = store.getState();
         let quiz = state.user.quizs.find(quiz => {
             return quiz.answered != true || quiz.corrected != true
@@ -35,8 +29,10 @@ Page({
         } else {
             return "quiz";
         }
-    },
-    bindQuickStart: function () {
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindQuiz() {
         if (this.currentQuizState() == "study") {
             return wxx.showToast("您当前在学习模式下还有未完成的题目，请前往学习模式", 3000);
         }
@@ -61,8 +57,10 @@ Page({
             store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
             return wxx.navigateTo(`../quiz/quiz`)
         }
-    },
-    bindStudy: function () {
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindStudy() {
         if (this.currentQuizState() == "quiz") {
             return wxx.showToast("您当前在测测验模式下还有未完成的题目，请前往测验模式", 3000)
         }
@@ -85,11 +83,22 @@ Page({
                 return wxx.navigateTo(`../quiz/quiz`)
             }))
         }
-    },
-    bindDebug: function () {
-        return store.dispatch(ActionCreator.postDebugInfo());
-    },
-    onShow: function () {
-        store.connect(this, this.stateMapper);
     }
-});
+
+    //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
+    bindDebug() {
+        return store.dispatch(ActionCreator.postDebugInfo());
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    onShow() {
+        store.connect(this, (state) => {
+            return {
+                wxUser: state.wxUser,
+                user: state.user,
+            }
+        });
+    }
+}
+
+Page(new IndexClass());

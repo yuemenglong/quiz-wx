@@ -15,6 +15,7 @@ class Quiz {
     corrected: Boolean;
 
     mode: string;
+    tag: string;// study quiz exam mark
     reviewIdx: number;
     answerIdx: number;
 

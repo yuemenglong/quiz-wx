@@ -52,10 +52,10 @@ class ActionCreator {
 
     static newQuiz(cb: (quiz: Quiz) => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
-            dispatch({type: ActionType.NEW_QUIZ, data: null});
+            dispatch({type: ActionType.NEW_QUIZ, data: "quiz"});
             let userId = getState().user.id;
             let mode = "answer";
-            http.post(`/quiz`, {userId, mode}).then(quiz => {
+            http.post(`/quiz`, {tag: "quiz", userId, mode}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 cb(quiz as Quiz);
             })
@@ -67,7 +67,7 @@ class ActionCreator {
             dispatch({type: ActionType.NEW_QUIZ, data: "exam"});
             let userId = getState().user.id;
             let mode = "answer";
-            http.post(`/quiz?single=120&multi=30`, {userId, mode}).then(quiz => {
+            http.post(`/quiz?single=120&multi=30`, {tag: "exam", userId, mode}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 cb(quiz as Quiz);
             })
@@ -145,7 +145,7 @@ class ActionCreator {
             let quiz = null;
             let mode = "study";
             dispatch({type: ActionType.NEW_QUIZ, data: null});
-            http.post(`/quiz?start=${start}&end=${end}`, {userId, mode}).then(res => {
+            http.post(`/quiz?start=${start}&end=${end}`, {tag: "study", userId, mode}).then(res => {
                 quiz = res as Quiz;
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {

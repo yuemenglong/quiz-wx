@@ -12,6 +12,7 @@ class _ {
     static isPlainObject = require("./lodash.isPlainobject/index");
     static merge = require("./lodash.merge/index");
     static set= require("./lodash.set/index");
+    static noop = require("./lodash.noop/index");
 }
 
 module.exports = _;

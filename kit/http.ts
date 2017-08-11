@@ -20,6 +20,11 @@ class http {
         return http.request("PUT", path, data)
     }
 
+    //noinspection ReservedWordAsName
+    static delete<T>(path: string): Promise<T> {
+        return http.request("DELETE", path, null)
+    }
+
     static request<T>(method: string, path: string, data: Object): Promise<T> {
         let url = HOST + path;
         debug(`Begin [${method}] ${url}`, data);
@@ -47,6 +52,7 @@ class http {
             });
         })
     }
+
 }
 
 module.exports = http;

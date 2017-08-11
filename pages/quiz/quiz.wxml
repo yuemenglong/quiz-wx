@@ -12,5 +12,6 @@
     <text wx:if="{{mode=='review'||mode=='study'}}">正确答案：{{question.info.answer}}</text>
     <button wx:if="{{question.info.multi&&(mode=='answer'||mode=='redo')}}" bindtap="bindSubmit">确定</button>
     <button wx:if="{{mode=='review'||mode=='study'}}" bindtap="bindNext">下一题</button>
+    <button class="mark" bindtap="bindMark">加入收藏</button>
 </view>
 <button class="debug" bindtap="bindDebug">debug</button>

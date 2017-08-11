@@ -29,6 +29,10 @@ class ActionType {
     static PUT_STUDY: any = "PUT_STUDY";
     static PUT_STUDY_SUCC: any = "PUT_STUDY_SUCC";
     static SET_GLOBAL_DATA: any = "SET_GLOBAL_DATA";
+    static POST_MARK: any = "POST_MARK";
+    static POST_MARK_SUCC: any = "POST_MARK_SUCC";
+    static DELETE_MARK: any = "DELETE_MARK";
+    static DELETE_MARK_SUCC: any = "DELETE_MARK_SUCC";
 }
 
 module.exports = ActionType;

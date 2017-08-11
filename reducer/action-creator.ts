@@ -169,6 +169,28 @@ class ActionCreator {
     static setGlobalData(global: Object): Action {
         return {type: ActionType.SET_GLOBAL_DATA, data: global}
     }
+
+    static postMark(infoId: number, cb: () => void): Thunk {
+        return ((dispatch, getState) => {
+            let state = getState();
+            let userId = state.user.id;
+            dispatch({type: ActionType.POST_MARK, data: infoId});
+            http.post(`/user/${userId}/mark`, {infoId}).then(res => {
+                dispatch({type: ActionType.POST_MARK_SUCC, data: res});
+                cb()
+            })
+        })
+    }
+
+    static deleteMark(markId: number, cb: () => void): Thunk {
+        return ((dispatch) => {
+            dispatch({type: ActionType.DELETE_MARK, data: markId});
+            http.delete(`/mark/${markId}`).then(() => {
+                dispatch({type: ActionType.DELETE_MARK_SUCC, data: markId});
+                cb()
+            })
+        })
+    }
 }
 
 module.exports = ActionCreator;

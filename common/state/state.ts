@@ -25,7 +25,8 @@ class State {
     currentQuiz(): Quiz {
         return this.user.quizs.find(q => !q.answered || !q.corrected)
     }
-    hasMoreStudy():boolean{
+
+    hasMoreStudy(): boolean {
         return this.user.study.studyIdx < Const.MAX_QUESTION_ID;
     }
 }

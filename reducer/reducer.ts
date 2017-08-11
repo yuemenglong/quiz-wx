@@ -75,6 +75,14 @@ function go(state: State, action: Action) {
             let global = action.data;
             return kit.update(state, "global{}", [], global);
         }
+        case ActionType.POST_MARK_SUCC: {
+            let mark = action.data;
+            return kit.update(state, "user.marks[]", [], mark)
+        }
+        case ActionType.DELETE_MARK_SUCC: {
+            let markId = action.data;
+            return kit.update(state, "user.marks[-id]", [markId], null)
+        }
         default:
             return state;
     }

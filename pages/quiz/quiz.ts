@@ -106,6 +106,10 @@ class QuizClass {
         // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
     }
 
+    bindMark(){
+
+    }
+
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
     bindDebug() {
         return store.dispatch(ActionCreator.postDebugInfo());
@@ -118,7 +122,9 @@ class QuizClass {
             let quizId = state.global.quizId;
             let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
             let mode = quiz.mode;
-            return _.merge({}, state.quiz, {quiz, mode})
+            let question = state.quiz.question;
+            let isMarked = state.user.marks.filter(m => m.infoId == question.id).length > 0;
+            return _.merge({}, state.quiz, {quiz, mode, isMarked})
         });
         this.nextOrResult();
     }

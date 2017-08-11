@@ -6,13 +6,12 @@ import QuizQuestion = require("../entity/quiz-question");
  */
 
 class QuizData {
-    inStudy: boolean = false;
-
     quiz: Quiz;
     question: QuizQuestion;
     mode: string;
 
     answer: string = "";
+    isMarked: boolean = false;
 }
 
 module.exports = QuizData;

@@ -1,7 +1,8 @@
 <view wx:if="{{question!=null&&question.info!=null}}">
-    <text wx:if="{{question.info.multi}}">多选题</text>
-    <text wx:else>单选题</text>
-    <text>{{question.idx}}. {{question.info.title}}</text>
+    <text>{{question.info.id}}</text>
+    <text wx:if="{{question.info.multi}}">(多选题)</text>
+    <text wx:else>(单选题)</text>
+    <text>{{question.info.title}}</text>
     <button data-answer="a" bindtap="bindAnswer">A:{{question.info.a}}</button>
     <button data-answer="b" bindtap="bindAnswer">B:{{question.info.b}}</button>
     <button data-answer="c" bindtap="bindAnswer">C:{{question.info.c}}</button>

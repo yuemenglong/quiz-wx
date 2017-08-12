@@ -10,6 +10,7 @@ import QuizData = require("../../common/state/quiz");
 import ActionType = require("../../common/action-type");
 import StudyData = require("../../common/state/study");
 import kit = require("../../kit/kit");
+import Study = require("../../common/entity/study");
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
@@ -33,40 +34,60 @@ class StudyClass {
     //     }
     // }
     //
-    // nextOrResult() {
-    //     let question = this.getQuestion(this.data.quiz);
-    //     if (question == null) {
-    //         wxx.redirectTo(`../result/result`)
-    //     } else {
-    //         this.ensureInfo(question);
-    //     }
-    // }
+    nextOrResult() {
+        // 新增题目 绑定info
+        let state = store.getState();
+        let quizId = state.user.study.quizId;
+        let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
+        let question = quiz.questions.slice(-1)[0];
+        let infoId = state.user.study.studyIdx + 1;
+        let idx = null;
+        if (!question) idx = 1;
+        else idx = quiz.questions.length + 1;
+        store.dispatch(ActionCreator.newQuizQuestion(quizId, idx, infoId, (question) => {
+            kit.ensureInfo(question)
+        }))
 
-    // submitAnswer(answer) {
-    //     store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
-    //         this.nextOrResult();
-    //     }));
-    // }
-    //
-    // //noinspection JSUnusedGlobalSymbols
-    // bindAnswer(e) {
-    //     if (["review", "study"].indexOf(this.data.mode) >= 0) {
-    //         return;
-    //     }
-    //     let answer = e.target.dataset.answer;
-    //     if (!this.data.question.info.multi) {
-    //         return this.submitAnswer(answer);
-    //     } else if (this.data.answer.indexOf(answer) >= 0) {
-    //         // 删掉答案
-    //         answer = this.data.answer.split("").filter(c => c != answer).join("");
-    //         store.dispatch(ActionCreator.setQuizData({answer}));
-    //     } else {
-    //         // 增加答案
-    //         answer = this.data.answer + answer;
-    //         answer = answer.split("").sort().join("");
-    //         store.dispatch(ActionCreator.setQuizData({answer}));
-    //     }
-    // }
+        // let question = this.getQuestion(this.data.quiz);
+        // if (question == null) {
+        //     wxx.redirectTo(`../result/result`)
+        // } else {
+        //     this.ensureInfo(question);
+        // }
+    }
+
+    submitAnswer(answer) {
+        // 提交答案
+        store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
+            // 更新studyIdx
+            let study = new Study;
+            study.studyIdx = this.data.question.info.id;
+            store.dispatch(ActionCreator.putStudy(study, () => {
+                this.nextOrResult();
+
+            }));
+        }));
+    }
+
+    noinspection
+    JSUnusedGlobalSymbols
+
+    bindAnswer(e) {
+        let answer = e.target.dataset.answer;
+        if (!this.data.question.info.multi) {
+            return this.submitAnswer(answer);
+        } else if (this.data.answer.indexOf(answer) >= 0) {
+            // 删掉答案
+            answer = this.data.answer.split("").filter(c => c != answer).join("");
+            store.dispatch(ActionCreator.setQuizData({answer}));
+        } else {
+            // 增加答案
+            answer = this.data.answer + answer;
+            answer = answer.split("").sort().join("");
+            store.dispatch(ActionCreator.setQuizData({answer}));
+        }
+    }
+
     //
     // //noinspection JSUnusedGlobalSymbols
     // bindSkip() {
@@ -123,16 +144,17 @@ class StudyClass {
 
     //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
     onLoad() {
-        let state = store.getState();
-        let quizId = state.user.study.quizId;
-        let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-        let question = quiz.questions.slice(-1)[0];
-        let infoId = state.user.study.studyIdx + 1;
-        if (!question) {
-            store.dispatch(ActionCreator.newQuizQuestion(quizId, 1, infoId, (question) => {
-                kit.ensureInfo(question)
-            }))
-        }
+        this.nextOrResult();
+        // let state = store.getState();
+        // let quizId = state.user.study.quizId;
+        // let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
+        // let question = quiz.questions.slice(-1)[0];
+        // let infoId = state.user.study.studyIdx + 1;
+        // if (!question) {
+        //     store.dispatch(ActionCreator.newQuizQuestion(quizId, 1, infoId, (question) => {
+        //         kit.ensureInfo(question)
+        //     }))
+        // }
     }
 }
 

@@ -114,7 +114,7 @@ class QuizClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindUnMark() {
-        store.dispatch(ActionCreator.deleteMark(this.data.question.id, () => {
+        store.dispatch(ActionCreator.deleteMark(this.data.mark.id, () => {
             wxx.showToast("取消收藏成功");
         }))
     }
@@ -132,8 +132,8 @@ class QuizClass {
             let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
             let mode = quiz.mode;
             let question = this.getQuestion(quiz);
-            let isMarked = state.user.marks.filter(m => m.infoId == question.id).length > 0;
-            return _.merge({}, state.quiz, {quiz, mode, isMarked})
+            let mark = state.user.marks.filter(m => m.infoId == question.id)[0];
+            return _.merge({}, state.quiz, {quiz, mode, mark})
         });
         this.nextOrResult();
     }

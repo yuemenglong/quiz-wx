@@ -5,10 +5,9 @@ import Quiz = require("./quiz");
 class Study {
     id: number;
     studyIdx: number;
+    quizIdx: number;
 
-    quiz: Quiz;
     quizId: number;
-
 }
 
 module.exports = Study;

@@ -8,6 +8,7 @@ import Quiz = require("../common/entity/quiz");
 import _ = require("../libs/lodash/index");
 import Question = require("../common/entity/question");
 import Study = require("../common/entity/study");
+import QuizQuestion = require("../common/entity/quiz-question");
 /**
  * Created by Administrator on 2017/7/27
  */
@@ -52,7 +53,7 @@ class ActionCreator {
 
     static newQuiz(cb: (quiz: Quiz) => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
-            dispatch({type: ActionType.NEW_QUIZ, data: "quiz"});
+            dispatch({type: ActionType.NEW_QUIZ, data: {mode: "quiz"}});
             let userId = getState().user.id;
             let mode = "answer";
             http.post(`/quiz`, {tag: "quiz", userId, mode}).then(quiz => {
@@ -60,6 +61,19 @@ class ActionCreator {
                 cb(quiz as Quiz);
             })
         }
+    }
+
+    static newStudyQuiz(cb: (quiz: Quiz) => void): Thunk {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.NEW_STUDY_QUIZ, data: "empty"});
+            let userId = getState().user.id;
+            let mode = "study";
+            let tag = "study";
+            http.post(`/quiz?empty=true`, {tag, userId, mode}).then(quiz => {
+                dispatch({type: ActionType.NEW_STUDY_QUIZ_SUCC, data: quiz});
+                cb(quiz as Quiz)
+            })
+        })
     }
 
     static newExamQuiz(cb: (quiz: Quiz) => void): Thunk {
@@ -94,6 +108,21 @@ class ActionCreator {
         }
     }
 
+    static newQuizQuestion(quizId: number, idx: number, infoId: number, cb: (question: QuizQuestion) => void): Thunk {
+        return ((dispatch) => {
+            let question = new QuizQuestion;
+            question.quizId = quizId;
+            question.idx = idx;
+            question.infoId = infoId;
+            dispatch({type: ActionType.NEW_QUIZ_QUESTION, data: question});
+            http.post(`/quiz/${quizId}/question`, question).then(res => {
+                dispatch({type: ActionType.NEW_QUIZ_QUESTION_SUCC, data: res});
+                cb(res as QuizQuestion);
+            })
+        })
+    }
+
+
     static putAnswer(qzId: number, qtId: number, answer: string, cb: () => void): Thunk {
         return (dispatch: Dispatch) => {
             dispatch({type: ActionType.PUT_ANSWER, data: {answer}});
@@ -104,17 +133,9 @@ class ActionCreator {
         }
     }
 
-    // static changeAnswer(answer: string): Action {
-    //     return {type: ActionType.CHANGE_ANSWER, data: answer}
-    // }
-
     static setQuizData(data: Object): Action {
         return {type: ActionType.SET_QUIZ_DATA, data}
     }
-
-    // static setResultData(data): Action {
-    //     return {type: ActionType.SET_RESULT_DATA, data}
-    // }
 
     static putQuiz(id: number, quiz, cb: () => void): Thunk {
         return ((dispatch) => {
@@ -136,24 +157,24 @@ class ActionCreator {
         })
     }
 
-    static newStudyQuiz(cb: (quiz) => any): Thunk {
-        return ((dispatch, getState) => {
-            let state = getState();
-            let userId = state.user.id;
-            let start = state.user.study.studyIdx + 1;
-            let end = state.user.study.studyIdx + 30;
-            let quiz = null;
-            let mode = "study";
-            dispatch({type: ActionType.NEW_QUIZ, data: null});
-            http.post(`/quiz?start=${start}&end=${end}`, {tag: "study", userId, mode}).then(res => {
-                quiz = res as Quiz;
-                dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
-                dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {
-                    cb(quiz)
-                }));
-            })
-        })
-    }
+    // static newStudyQuiz(cb: (quiz) => any): Thunk {
+    //     return ((dispatch, getState) => {
+    //         let state = getState();
+    //         let userId = state.user.id;
+    //         let start = state.user.study.studyIdx + 1;
+    //         let end = state.user.study.studyIdx + 30;
+    //         let quiz = null;
+    //         let mode = "study";
+    //         dispatch({type: ActionType.NEW_QUIZ, data: null});
+    //         http.post(`/quiz?start=${start}&end=${end}`, {tag: "study", userId, mode}).then(res => {
+    //             quiz = res as Quiz;
+    //             dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
+    //             dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {
+    //                 cb(quiz)
+    //             }));
+    //         })
+    //     })
+    // }
 
     static putStudy(study: Object, cb: () => void): Thunk {
         return ((dispatch, getState) => {

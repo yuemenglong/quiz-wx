@@ -1,10 +1,9 @@
-import WxRedux = require("../../libs/wx-redux/index");
 import State = require("../../common/state/state");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
 import Question = require("../../common/entity/question");
 import QuizQuestion = require("../../common/entity/quiz-question");
-import kit = require("../../kit/kit");
+import kit = require("../../kit/op");
 import _ = require("../../libs/lodash/index");
 import wxx = require("../../kit/wxx");
 import ResultData = require("../../common/state/result");
@@ -77,19 +76,6 @@ class ResultClass {
             store.dispatch(ActionCreator.putStudy({studyIdx, quizId: null}, () => {
             }));
         }
-    }
-
-    onShow() {
-        WxRedux.connect(this, (state: State) => {
-            let quizId = state.global.quizId;
-            let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
-            let mode = quiz.mode;
-            let inStudy = state.global.inStudy;
-            let fail = quiz.questions.filter(q => q.correct == false).length;
-            let succ = quiz.questions.filter(q => q.correct == true).length;
-            let hasMoreStudy = state.hasMoreStudy();
-            return _.merge({}, state.result, {quiz, fail, succ, mode, inStudy, hasMoreStudy});
-        })
     }
 }
 

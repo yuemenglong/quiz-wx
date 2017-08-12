@@ -1,5 +1,4 @@
 import ActionType = require("../../common/action-type");
-import WxRedux = require("../../libs/wx-redux/index");
 import State = require("../../common/state/state");
 import WxUser = require("../../common/entity/wx-user");
 import kit = require("../../kit/wxx");
@@ -85,7 +84,7 @@ class IndexClass {
         if (!store.state.hasMoreStudy()) {
             wxx.showModal("提示", "您已完成学习，是否开始新一轮学习?").then(function (value) {
                 if (!value) return;
-                store.dispatch(ActionCreator.putStudy({studyIdx: -1}, go));
+                store.dispatch(ActionCreator.putStudy({studyIdx: 0}, go));
             })
         }
         else {
@@ -93,25 +92,37 @@ class IndexClass {
         }
 
         function go() {
-            store.dispatch(ActionCreator.setGlobalData({inStudy: true}));
-            let quiz = store.getState().user.study.quiz;
-            if (quiz != null && quiz.questions.length > 0) {
-                // 有quiz，quiz里有questions
-                store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
-                return wxx.navigateTo(`../quiz/quiz`)
-            } else if (quiz != null && quiz.questions.length == 0) {
-                // 有quiz，quiz里没有question
-                return store.dispatch(ActionCreator.fetchQuiz(quiz.id, (quiz) => {
-                    store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
-                    return wxx.navigateTo(`../quiz/quiz`)
+            let study = store.getState().user.study;
+            if (!study.quizId) {
+                // new一个quiz
+                store.dispatch(ActionCreator.newStudyQuiz(quiz => {
+                    wxx.navigateTo(`../study/study`)
                 }))
             } else {
-                // 没有quiz
-                return store.dispatch(ActionCreator.newStudyQuiz(quiz => {
-                    store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
-                    return wxx.navigateTo(`../quiz/quiz`)
-                }))
+                // 直接跳转到study页面
+                wxx.navigateTo(`../study/study`)
             }
+            // let quiz = store.getState().user.study.quiz;
+            // quiz模式：1. study 2. answer 3. review 4. redo
+            // 1. study情况下quiz是逐渐append上的
+
+            // if (quiz != null && quiz.questions.length > 0) {
+            //     // 有quiz，quiz里有questions
+            //     store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
+            //     return wxx.navigateTo(`../quiz/quiz`)
+            // } else if (quiz != null && quiz.questions.length == 0) {
+            //     // 有quiz，quiz里没有question
+            //     return store.dispatch(ActionCreator.fetchQuiz(quiz.id, (quiz) => {
+            //         store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
+            //         return wxx.navigateTo(`../quiz/quiz`)
+            //     }))
+            // } else {
+            //     // 没有quiz
+            //     return store.dispatch(ActionCreator.newStudyQuiz(quiz => {
+            //         store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
+            //         return wxx.navigateTo(`../quiz/quiz`)
+            //     }))
+            // }
         }
     }
 

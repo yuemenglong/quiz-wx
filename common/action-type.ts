@@ -33,6 +33,10 @@ class ActionType {
     static POST_MARK_SUCC: any = "POST_MARK_SUCC";
     static DELETE_MARK: any = "DELETE_MARK";
     static DELETE_MARK_SUCC: any = "DELETE_MARK_SUCC";
+    static NEW_STUDY_QUIZ: any = "NEW_STUDY_QUIZ";
+    static NEW_STUDY_QUIZ_SUCC: any = "NEW_STUDY_QUIZ_SUCC";
+    static NEW_QUIZ_QUESTION: any = "NEW_QUIZ_QUESTION";
+    static NEW_QUIZ_QUESTION_SUCC: any = "NEW_QUIZ_QUESTION_SUCC";
 }
 
 module.exports = ActionType;

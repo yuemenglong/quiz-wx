@@ -1,0 +1,16 @@
+<view wx:if="{{question!=null&&question.info!=null}}">
+    <text wx:if="{{question.info.multi}}">多选题</text>
+    <text wx:else>单选题</text>
+    <text>{{question.idx}}. {{question.info.title}}</text>
+    <button data-answer="a" bindtap="bindAnswer">A:{{question.info.a}}</button>
+    <button data-answer="b" bindtap="bindAnswer">B:{{question.info.b}}</button>
+    <button data-answer="c" bindtap="bindAnswer">C:{{question.info.c}}</button>
+    <button data-answer="d" bindtap="bindAnswer">D:{{question.info.d}}</button>
+    <text class="row" wx:if="{{question.info.multi}}">已选择：{{answer}}</text>
+    <button wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>
+    <button class="row" bindtap="bindNext">上一题</button>
+    <button bclass="row" indtap="bindNext">下一题</button>
+    <button wx:if="{{!mark}}" class="mark" bindtap="bindMark">加入收藏</button>
+    <button wx:if="{{mark}}" class="un-mark" bindtap="bindUnMark">取消收藏</button>
+</view>
+<button class="debug" bindtap="bindDebug">debug</button>

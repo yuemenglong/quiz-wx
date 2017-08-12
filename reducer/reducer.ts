@@ -1,5 +1,5 @@
 /**
- * Created by <yuemenglong@126.com> on 2017/7/27.
+ * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
 import ActionType = require("../common/action-type")
@@ -7,9 +7,10 @@ import {Action} from "../common/interface";
 import WxUser = require("../common/entity/wx-user");
 import _ = require("../libs/lodash/index");
 import QuizQuestion = require("../common/entity/quiz-question");
-import kit = require("../kit/kit");
+import op = require("../kit/op");
 import State = require("../common/state/state");
 import debug = require("../kit/debug");
+import Quiz = require("../common/entity/quiz");
 
 
 function go(state: State, action: Action) {
@@ -28,60 +29,70 @@ function go(state: State, action: Action) {
         }
         case ActionType.NEW_QUIZ_SUCC: {
             let quiz = action.data;
-            return kit.update(state, "user.quizs[]", [], quiz)
+            return op.update(state, "user.quizs[]", [], quiz)
         }
         case ActionType.FETCH_QUIZ_SUCC: {
             let quiz = action.data;
-            return kit.update(state, "user.quizs[id]", [quiz.id], quiz);
+            return op.update(state, "user.quizs[id]", [quiz.id], quiz);
         }
         case ActionType.CHANGE_ANSWER: {
             let answer = action.data;
-            return kit.update(state, "quiz.answer", [], answer);
+            return op.update(state, "quiz.answer", [], answer);
         }
         case ActionType.FETCH_QUESTION_SUCC: {
             let question = action.data;
-            return kit.update(state, "questions[$idx]", [question.id], question)
+            return op.update(state, "questions[$idx]", [question.id], question)
         }
         case ActionType.PUT_ANSWER_SUCC: {
             let question = action.data;
-            return kit.updates("user.quizs[id].questions[id]", [question.quizId, question.id], question)
+            return op.updates("user.quizs[id].questions[id]", [question.quizId, question.id], question)
                 .update("user.quizs[id].answerIdx", [question.quizId], question.idx)
                 .update("quiz.answer", [], "")
                 .call(state);
         }
         case ActionType.MERGE_ANSWER: {
             let {qzId, qtId, answer} = action.data;
-            return kit.update(state, "user.quizs[id].questions[id].answer",
+            return op.update(state, "user.quizs[id].questions[id].answer",
                 [qzId, qtId], answer);
         }
         case ActionType.SET_QUIZ_DATA: {
-            return kit.update(state, "quiz{}", [], action.data);
+            return op.update(state, "quiz{}", [], action.data);
         }
         case ActionType.SET_RESULT_DATA: {
-            return kit.update(state, "result{}", [], action.data);
+            return op.update(state, "result{}", [], action.data);
         }
         case ActionType.PUT_QUIZ_SUCC: {
             let quiz = action.data;
             delete quiz.questions; // TODO
-            return kit.update(state, "user.quizs[id]{}", [quiz.id], quiz);
+            return op.update(state, "user.quizs[id]{}", [quiz.id], quiz);
         }
         case ActionType.PUT_STUDY_SUCC: {
             let study = action.data;
             let quiz = state.user.quizs.filter(q => q.id == study.quizId)[0] || null;
             study = _.merge({quiz}, study);
-            return kit.update(state, "user.study{}", [], study);
+            return op.update(state, "user.study{}", [], study);
         }
         case ActionType.SET_GLOBAL_DATA: {
             let global = action.data;
-            return kit.update(state, "global{}", [], global);
+            return op.update(state, "global{}", [], global);
         }
         case ActionType.POST_MARK_SUCC: {
             let mark = action.data;
-            return kit.update(state, "user.marks[]", [], mark)
+            return op.update(state, "user.marks[]", [], mark)
         }
         case ActionType.DELETE_MARK_SUCC: {
             let markId = action.data;
-            return kit.update(state, "user.marks[-id]", [markId], null)
+            return op.update(state, "user.marks[-id]", [markId], null)
+        }
+        case ActionType.NEW_STUDY_QUIZ_SUCC: {
+            let quiz = action.data as Quiz;
+            return op.updates("user.quizs[]", [], quiz)
+                .update("user.study.quizId", [], quiz.id)
+                .call(state)
+        }
+        case ActionType.NEW_QUIZ_QUESTION_SUCC: {
+            let question = action.data;
+            return op.update(state, "user.quizs[id].questions[]", [question.quizId], question)
         }
         default:
             return state;

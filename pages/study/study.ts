@@ -69,9 +69,7 @@ class StudyClass {
         }));
     }
 
-    noinspection
-    JSUnusedGlobalSymbols
-
+    //noinspection JSUnusedGlobalSymbols
     bindAnswer(e) {
         let answer = e.target.dataset.answer;
         if (!this.data.question.info.multi) {
@@ -93,12 +91,12 @@ class StudyClass {
     // bindSkip() {
     //     this.submitAnswer("");
     // }
-    //
-    // //noinspection JSUnusedGlobalSymbols
-    // bindSubmit() {
-    //     return this.submitAnswer(this.data.answer)
-    // }
-    //
+
+    //noinspection JSUnusedGlobalSymbols
+    bindSubmit() {
+        return this.submitAnswer(this.data.answer)
+    }
+
     // //noinspection JSUnusedGlobalSymbols
     // bindNext() {
     //     store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {reviewIdx: this.data.question.idx}, () => {
@@ -106,21 +104,21 @@ class StudyClass {
     //     }));
     //     // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
     // }
-    //
-    // //noinspection JSUnusedGlobalSymbols
-    // bindMark() {
-    //     store.dispatch(ActionCreator.postMark(this.data.question.id, () => {
-    //         wxx.showToast("收藏成功");
-    //     }))
-    // }
-    //
-    // //noinspection JSUnusedGlobalSymbols
-    // bindUnMark() {
-    //     store.dispatch(ActionCreator.deleteMark(this.data.mark.id, () => {
-    //         wxx.showToast("取消收藏成功");
-    //     }))
-    // }
-    //
+
+    //noinspection JSUnusedGlobalSymbols
+    bindMark() {
+        store.dispatch(ActionCreator.postMark(this.data.question.id, () => {
+            wxx.showToast("收藏成功");
+        }))
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindUnMark() {
+        store.dispatch(ActionCreator.deleteMark(this.data.mark.id, () => {
+            wxx.showToast("取消收藏成功");
+        }))
+    }
+
     // //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
     // bindDebug() {
     //     return store.dispatch(ActionCreator.postDebugInfo());
@@ -137,7 +135,7 @@ class StudyClass {
             if (data.question) {
                 data.question.info = state.questions[data.question.infoId]
             }
-            data.mark = state.user.marks.filter(m => m.infoId == _.get(data, "question.id"))[0];
+            data.mark = state.user.marks.filter(m => m.infoId == _.get(data, "question.id"))[0] || null;
             return _.merge({}, this.data, data)
         });
     }

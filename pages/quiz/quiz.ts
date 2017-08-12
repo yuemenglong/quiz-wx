@@ -17,23 +17,6 @@ import ActionType = require("../../common/action-type");
 class QuizClass {
     data: QuizData = new QuizData;
 
-    getQuestion(): QuizQuestion {
-        let quiz = this.data.quiz;
-        let mode = this.data.mode;
-        let questions = quiz.questions;
-        if (mode == "answer") {
-            return questions.filter(qt => qt.answer == null)[0]
-        } else if (mode == "review") {
-            return questions.filter(qt => qt.correct == false && qt.idx > quiz.reviewIdx)[0]
-        } else if (mode == "redo") {
-            return questions.filter(qt => qt.correct == false && qt.idx > quiz.answerIdx)[0]
-        } else if (mode == "study") {
-            return questions.filter(qt => qt.idx > quiz.reviewIdx)[0]
-        } else {
-            throw Error("Unknown Mode");
-        }
-    }
-
     //noinspection JSMethodCanBeStatic
     ensureInfo(question: QuizQuestion): void {
         let state = store.getState();
@@ -53,8 +36,24 @@ class QuizClass {
         }
     }
 
+    getQuestion(quiz: Quiz): QuizQuestion {
+        let mode = quiz.mode;
+        let questions = quiz.questions;
+        if (mode == "answer") {
+            return questions.filter(qt => qt.answer == null)[0]
+        } else if (mode == "review") {
+            return questions.filter(qt => qt.correct == false && qt.idx > quiz.reviewIdx)[0]
+        } else if (mode == "redo") {
+            return questions.filter(qt => qt.correct == false && qt.idx > quiz.answerIdx)[0]
+        } else if (mode == "study") {
+            return questions.filter(qt => qt.idx > quiz.reviewIdx)[0]
+        } else {
+            throw Error("Unknown Mode");
+        }
+    }
+
     nextOrResult() {
-        let question = this.getQuestion();
+        let question = this.getQuestion(this.data.quiz);
         if (question == null) {
             wxx.redirectTo(`../result/result`)
         } else {
@@ -106,8 +105,18 @@ class QuizClass {
         // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
     }
 
-    bindMark(){
+    //noinspection JSUnusedGlobalSymbols
+    bindMark() {
+        store.dispatch(ActionCreator.postMark(this.data.question.id, () => {
+            wxx.showToast("收藏成功");
+        }))
+    }
 
+    //noinspection JSUnusedGlobalSymbols
+    bindUnMark() {
+        store.dispatch(ActionCreator.deleteMark(this.data.question.id, () => {
+            wxx.showToast("取消收藏成功");
+        }))
     }
 
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
@@ -122,7 +131,7 @@ class QuizClass {
             let quizId = state.global.quizId;
             let quiz = state.user.quizs.filter(q => q.id == quizId)[0];
             let mode = quiz.mode;
-            let question = state.quiz.question;
+            let question = this.getQuestion(quiz);
             let isMarked = state.user.marks.filter(m => m.infoId == question.id).length > 0;
             return _.merge({}, state.quiz, {quiz, mode, isMarked})
         });

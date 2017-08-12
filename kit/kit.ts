@@ -109,7 +109,7 @@ class kit {
             } else if (matchArrAppend) {
                 // 数组追加
                 if (paths.length != 1)throw Error("Append Array Item Must At End Of Path");
-                let name = matchArrReplace[1];
+                let name = matchArrAppend[1];
                 let arr = obj[name].concat([value]);
                 let merge = {};
                 merge[name] = arr;

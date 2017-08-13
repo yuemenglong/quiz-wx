@@ -46,15 +46,19 @@ abstract class StudyClass {
 
     submitAnswer(answer) {
         // 提交答案
-        store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
-            this.nextOrResult();
-            // // 更新studyIdx
-            // // let study = new Study;
-            // // study.studyIdx = this.data.question.info.id;
-            // store.dispatch(ActionCreator.putStudy(this.getPuttedStudy(this.data.quiz), () => {
-            //     this.nextOrResult();
-            // }));
-        }));
+        let question = this.data.question;
+        let info = store.getState().questions[question.infoId];
+        if (answer == info.answer) {
+            store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
+                this.nextOrResult();
+            }));
+        } else {
+            wxx.showTip("回答错误", `正确答案：${info.answer.toUpperCase()}.${info[info.answer]}`).then(() => {
+                store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
+                    this.nextOrResult();
+                }));
+            })
+        }
     }
 
     //noinspection JSUnusedGlobalSymbols

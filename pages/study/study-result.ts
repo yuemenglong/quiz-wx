@@ -21,14 +21,14 @@ class StudyClass {
 
     bindAnswer() {
         let quizId = store.getState().studyQuiz().id;
-        store.dispatch(ActionCreator.putQuiz(quizId, {answerIdx: 0}, () => {
+        store.dispatch(ActionCreator.putQuiz(quizId, {mode: "study", answerIdx: 0}, () => {
             wxx.redirectTo(`./study-answer`)
         }));
     }
 
     bindRedo() {
         let quizId = store.getState().studyQuiz().id;
-        store.dispatch(ActionCreator.putQuiz(quizId, {answerIdx: 0}, () => {
+        store.dispatch(ActionCreator.putQuiz(quizId, {mode: "redo", answerIdx: 0}, () => {
             wxx.redirectTo(`./study-redo`)
         }));
     }

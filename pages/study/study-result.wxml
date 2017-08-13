@@ -1,6 +1,6 @@
 <view>
     <text>正确：{{succ}}， 错误：{{fail}}</text>
     <button bindtap="bindAnswer">重新学习</button>
-    <button bindtap="bindRedo">重做错题</button>
+    <button wx:if="{{fail!=0}}" bindtap="bindRedo">重做错题</button>
     <button bindtap="bindFinish">完成学习</button>
 </view>

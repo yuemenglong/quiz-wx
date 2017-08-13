@@ -135,12 +135,12 @@ class ActionCreator {
         })
     }
 
-    static putAnswer(qzId: number, qtId: number, answer: string, cb: () => void): Thunk {
+    static putAnswer(qzId: number, qtId: number, answer: string, cb: (question: QuizQuestion) => void): Thunk {
         return (dispatch: Dispatch) => {
             dispatch({type: ActionType.PUT_ANSWER, data: {answer}});
             http.put(`/quiz/${qzId}/question/${qtId}`, {answer}).then(question => {
                 dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question});
-                cb();
+                cb(question as QuizQuestion);
             })
         }
     }

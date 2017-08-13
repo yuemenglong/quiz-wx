@@ -94,6 +94,10 @@ function go(state: State, action: Action) {
             let {quizId, qtId} = action.data;
             return op.update(state, "user.quizs[id].questions[-id]", [quizId, qtId], null);
         }
+        case ActionType.DELETE_QUIZ_SUCC: {
+            let quizId = action.data;
+            return op.update(state, "user.quizs[-id]", [quizId], null);
+        }
         default:
             return state;
     }

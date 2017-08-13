@@ -10,9 +10,9 @@ class QuizData {
     quiz: Quiz;
     question: QuizQuestion;
     mode: string;
+    mark: Mark = null;
 
     answer: string = "";
-    mark: Mark = null;
 }
 
 module.exports = QuizData;

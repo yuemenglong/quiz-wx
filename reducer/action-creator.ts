@@ -125,6 +125,7 @@ class ActionCreator {
         })
     }
 
+    //noinspection JSUnusedGlobalSymbols
     static deleteQuizQuestion(quizId: number, qtId: number, cb: () => void): Thunk {
         return ((dispatch) => {
             dispatch({type: ActionType.DELETE_QUIZ_QUESTION, data: {quizId, qtId}});
@@ -202,6 +203,16 @@ class ActionCreator {
             http.delete(`/mark/${markId}`).then(() => {
                 dispatch({type: ActionType.DELETE_MARK_SUCC, data: markId});
                 cb()
+            })
+        })
+    }
+
+    static deleteQuiz(quizId: number, cb: () => void): Thunk {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.DELETE_QUIZ, data: quizId});
+            http.delete(`/quiz/${quizId}`).then(() => {
+                dispatch({type: ActionType.DELETE_QUIZ_SUCC, data: quizId});
+                cb();
             })
         })
     }

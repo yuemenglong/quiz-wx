@@ -39,6 +39,8 @@ class ActionType {
     static NEW_QUIZ_QUESTION_SUCC: any = "NEW_QUIZ_QUESTION_SUCC";
     static DELETE_QUIZ_QUESTION: any = "DELETE_QUIZ_QUESTION";
     static DELETE_QUIZ_QUESTION_SUCC: any = "DELETE_QUIZ_QUESTION_SUCC";
+    static DELETE_QUIZ: any = "DELETE_QUIZ";
+    static DELETE_QUIZ_SUCC: any = "DELETE_QUIZ_SUCC";
 }
 
 module.exports = ActionType;

@@ -53,7 +53,10 @@ abstract class StudyClass {
                 this.nextOrResult();
             }));
         } else {
-            wxx.showTip("回答错误", `正确答案：${info.answer.toUpperCase()}.${info[info.answer]}`).then(() => {
+            let answerDetail = info.answer.split("").map(no => {
+                return `${no.toUpperCase()}.${info[no]}`;
+            }).join("\n");
+            wxx.showTip("回答错误", `正确答案：\n${answerDetail}`).then(() => {
                 store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
                     this.nextOrResult();
                 }));
@@ -130,6 +133,7 @@ abstract class StudyClass {
             data.mark = state.user.marks.filter(m => m.infoId == _.get(data, "question.id"))[0] || null;
             data.isFirst = data.quiz.answerIdx == 0;
             data.isLast = data.quiz.answerIdx >= data.quiz.questions.length - 1;
+            data.answer = state.quiz.answer;
             return _.merge({}, this.data, data)
         });
     }

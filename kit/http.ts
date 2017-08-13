@@ -52,7 +52,6 @@ class http {
             });
         })
     }
-
 }
 
 module.exports = http;

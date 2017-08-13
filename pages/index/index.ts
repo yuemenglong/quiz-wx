@@ -77,16 +77,25 @@ class IndexClass {
     }
 
     //noinspection JSUnusedGlobalSymbols
-    bindStudy() {
-        if (this.needTip("study")) {
-            return;
-        }
+    bindNewStudy() {
         let state = store.getState();
-        let study = state.user.study;
-        if (!study.quizId) {
-            // 通过chapter页面选择一个章节
+        if (state.user.study.quizId != null) {
+            wxx.showModal("提示", "您还有未完成的学习，是否忽略并重新开始新的学习").then((choose) => {
+                if (!choose) return;
+                store.dispatch(ActionCreator.deleteQuiz(state.user.study.quizId, () => {
+                    store.dispatch(ActionCreator.putStudy({quizId: null}, () => {
+                        return wxx.navigateTo(`../study/study-chapter`);
+                    }));
+                }))
+            })
+        } else {
             return wxx.navigateTo(`../study/study-chapter`);
         }
+    }
+
+    //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
+    bindContStudy() {
+        let state = store.getState();
         let quiz = state.studyQuiz();
         if (quiz.mode == "study") {
             wxx.navigateTo(`../study/study-answer`)
@@ -96,6 +105,27 @@ class IndexClass {
             throw new Error("Invalid Mode: " + quiz.mode)
         }
     }
+
+    // //noinspection JSUnusedGlobalSymbols
+    // bindStudy() {
+    //     if (this.needTip("study")) {
+    //         return;
+    //     }
+    //     let state = store.getState();
+    //     let study = state.user.study;
+    //     if (!study.quizId) {
+    //         // 通过chapter页面选择一个章节
+    //         return wxx.navigateTo(`../study/study-chapter`);
+    //     }
+    //     let quiz = state.studyQuiz();
+    //     if (quiz.mode == "study") {
+    //         wxx.navigateTo(`../study/study-answer`)
+    //     } else if (quiz.mode == "redo") {
+    //         wxx.navigateTo(`../study/study-redo`)
+    //     } else {
+    //         throw new Error("Invalid Mode: " + quiz.mode)
+    //     }
+    // }
 
     bindExam() {
         if (this.needTip("exam")) {
@@ -140,23 +170,23 @@ class IndexClass {
     onLoad() {
         store.dispatch(ActionCreator.fetchUser(() => {
             // 已经更新过data
-            switch (this.currentType()) {
-                case "study":
-                    wxx.showModal("提示", "还有学习未完成，是否继续").then(res => {
-                        if (res) this.bindStudy()
-                    });
-                    break;
-                case "exam":
-                    wxx.showModal("提示", "还有模拟考试未完成，是否继续").then(res => {
-                        if (res) this.bindExam()
-                    });
-                    break;
-                case "quiz":
-                    wxx.showModal("提示", "还有测验未完成，是否继续").then(res => {
-                        if (res) this.bindQuiz()
-                    });
-                    break;
-            }
+            // switch (this.currentType()) {
+            //     case "study":
+            //         wxx.showModal("提示", "还有学习未完成，是否继续").then(res => {
+            //             if (res) this.bindStudy()
+            //         });
+            //         break;
+            //     case "exam":
+            //         wxx.showModal("提示", "还有模拟考试未完成，是否继续").then(res => {
+            //             if (res) this.bindExam()
+            //         });
+            //         break;
+            //     case "quiz":
+            //         wxx.showModal("提示", "还有测验未完成，是否继续").then(res => {
+            //             if (res) this.bindQuiz()
+            //         });
+            //         break;
+            // }
         }))
     }
 }

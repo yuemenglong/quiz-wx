@@ -1,8 +1,9 @@
 <!--logs.wxml-->
 <view class="index" wx:if="{{wxUser!=null&&user!=null}}">
     <image src="{{wxUser.avatarUrl}}"></image>
-    <button bindtap="bindStudy">开始学习</button>
-    <button bindtap="bindQuiz">开始测验</button>
-    <button bindtap="bindExam">开始模拟考试</button>
+    <button bindtap="bindNewStudy">新的学习</button>
+    <button wx:if="{{user.study.quizId!=null}}" bindtap="bindContStudy">继续学习</button>
+    <!--<button bindtap="bindQuiz">开始测验</button>-->
+    <!--<button bindtap="bindExam">开始模拟考试</button>-->
 </view>
 <button class="debug" bindtap="bindDebug">debug</button>

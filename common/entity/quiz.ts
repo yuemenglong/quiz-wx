@@ -11,8 +11,7 @@ class Quiz {
     questions: Array<QuizQuestion>;
     count: number;
 
-    answered: Boolean;
-    corrected: Boolean;
+    finished: boolean;
 
     mode: string;
     tag: string;// study quiz exam mark

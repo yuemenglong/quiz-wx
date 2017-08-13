@@ -4,9 +4,6 @@ import Quiz = require("./quiz");
  */
 class Study {
     id: number;
-    studyIdx: number;
-    quizIdx: number;
-
     quizId: number;
 }
 

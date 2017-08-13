@@ -7,6 +7,7 @@ import GlobalData = require("./global");
 import IndexData = require("./index");
 import Quiz = require("../entity/quiz");
 import Const = require("../const");
+import _ = require("../../libs/lodash/index");
 /**
  * Created by Administrator on 2017/7/27.
  */
@@ -23,11 +24,7 @@ class State {
     global: GlobalData = new GlobalData;
 
     currentQuiz(): Quiz {
-        return this.user.quizs.filter(q => !q.answered || !q.corrected)[0];
-    }
-
-    hasMoreStudy(): boolean {
-        return this.user.study.studyIdx < Const.MAX_QUESTION_ID;
+        return _.get(this, "user.quizs", []).filter(q => !q.finished)[0];
     }
 
     studyQuiz(): Quiz {

@@ -81,50 +81,19 @@ class IndexClass {
         if (this.needTip("study")) {
             return;
         }
-        if (!store.state.hasMoreStudy()) {
-            wxx.showModal("提示", "您已完成学习，是否开始新一轮学习?").then(function (value) {
-                if (!value) return;
-                store.dispatch(ActionCreator.putStudy({studyIdx: 0}, go));
-            })
+        let state = store.getState();
+        let study = state.user.study;
+        if (!study.quizId) {
+            // 通过chapter页面选择一个章节
+            return wxx.navigateTo(`../study/study-chapter`);
         }
-        else {
-            go();
-        }
-
-        function go() {
-            let study = store.getState().user.study;
-            if (!study.quizId) {
-                // 通过chapter页面选择一个章节
-                wxx.navigateTo(`../chapter/chapter`);
-                // // new一个quiz
-                // store.dispatch(ActionCreator.newStudyQuiz(quiz => {
-                //     wxx.navigateTo(`../study/study`)
-                // }))
-            } else {
-                // 直接跳转到study页面
-                wxx.navigateTo(`../study/study`)
-            }
-            // let quiz = store.getState().user.study.quiz;
-            // quiz模式：1. study 2. answer 3. review 4. redo
-            // 1. study情况下quiz是逐渐append上的
-
-            // if (quiz != null && quiz.questions.length > 0) {
-            //     // 有quiz，quiz里有questions
-            //     store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
-            //     return wxx.navigateTo(`../quiz/quiz`)
-            // } else if (quiz != null && quiz.questions.length == 0) {
-            //     // 有quiz，quiz里没有question
-            //     return store.dispatch(ActionCreator.fetchQuiz(quiz.id, (quiz) => {
-            //         store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
-            //         return wxx.navigateTo(`../quiz/quiz`)
-            //     }))
-            // } else {
-            //     // 没有quiz
-            //     return store.dispatch(ActionCreator.newStudyQuiz(quiz => {
-            //         store.dispatch(ActionCreator.setGlobalData({inStudy: true, quizId: quiz.id}));
-            //         return wxx.navigateTo(`../quiz/quiz`)
-            //     }))
-            // }
+        let quiz = state.studyQuiz();
+        if (quiz.mode == "study") {
+            wxx.navigateTo(`../study/study-answer`)
+        } else if (quiz.mode == "redo") {
+            wxx.navigateTo(`../study/study-redo`)
+        } else {
+            throw new Error("Invalid Mode: " + quiz.mode)
         }
     }
 
@@ -161,7 +130,7 @@ class IndexClass {
         store.connect(this, (state) => {
             let user = state.user;
             let wxUser = state.wxUser;
-            let quiz = _.get(state, "user.quizs", []).filter(q => !q.answered || !q.corrected)[0];
+            let quiz = state.currentQuiz();
             let hasStudy = _.get(state, "user.study.quiz") != null;
             return {user, wxUser, quiz, hasStudy};
         });

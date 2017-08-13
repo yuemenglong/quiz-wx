@@ -1,17 +1,18 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
     "pages/quiz/quiz",
-    "pages/chapter/chapter",
-    "pages/study/study",
-    "pages/study/study-result",
-    "pages/result/result"
+    "pages/result/result",
+    "pages/study/study-chapter",
+    "pages/study/study-answer",
+    "pages/study/study-redo",
+    "pages/study/study-result"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
   "debug": true
 }

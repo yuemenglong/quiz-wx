@@ -19,6 +19,28 @@ import StudyResultData = require("../../common/state/study-result");
 class StudyClass {
     data: StudyResultData = new StudyResultData;
 
+    bindAnswer() {
+        let quizId = store.getState().studyQuiz().id;
+        store.dispatch(ActionCreator.putQuiz(quizId, {answerIdx: 0}, () => {
+            wxx.redirectTo(`./study-answer`)
+        }));
+    }
+
+    bindRedo() {
+        let quizId = store.getState().studyQuiz().id;
+        store.dispatch(ActionCreator.putQuiz(quizId, {answerIdx: 0}, () => {
+            wxx.redirectTo(`./study-redo`)
+        }));
+    }
+
+    bindFinish() {
+        let quizId = store.getState().studyQuiz().id;
+        store.dispatch(ActionCreator.putQuiz(quizId, {finished: true}, () => {
+            store.dispatch(ActionCreator.putStudy({quizId: null}, () => {
+                wxx.redirectTo(`../index/index`)
+            }));
+        }));
+    }
 
     //noinspection JSUnusedGlobalSymbols
     onShow() {
@@ -26,8 +48,10 @@ class StudyClass {
             // quiz是直接从store里拼接的
             let data = new StudyResultData;
             let quiz = state.studyQuiz();
-            data.succ = quiz.questions.filter(q => q.correct).length;
-            data.fail = quiz.questions.filter(q => !q.correct).length;
+            if (quiz) {
+                data.succ = quiz.questions.filter(q => q.correct).length;
+                data.fail = quiz.questions.filter(q => !q.correct).length;
+            }
             return _.merge({}, this.data, data);
         });
     }

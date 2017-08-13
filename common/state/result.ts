@@ -7,9 +7,6 @@ class ResultData {
     mode: string;
     type: string;
     quiz: Quiz;
-
-    inStudy: boolean;
-    hasMoreStudy: boolean = true;
 }
 
 module.exports = ResultData;

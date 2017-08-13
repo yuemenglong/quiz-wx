@@ -15,33 +15,45 @@ import Study = require("../../common/entity/study");
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
-class StudyClass {
+abstract class StudyClass {
     data: StudyData = new StudyData;
 
     nextOrResult() {
         let state = store.getState();
         let quizId = state.user.study.quizId;
         let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-        if (quiz.answerIdx >= quiz.questions.length) {
+        let question = this.getNextQuestion(quiz);
+        if (!question) {
             // 做完了
             wxx.redirectTo(`./study-result`)
         } else {
             // 下一题目
-            let question = quiz.questions[quiz.answerIdx];
             kit.ensureInfo(question)
         }
     }
 
+    abstract getNextQuestion(quiz: Quiz): QuizQuestion
+
+    //     if (quiz.answerIdx >= quiz.questions.length) {
+    //         // 做完了
+    //         wxx.redirectTo(`./study-result`)
+    //     } else {
+    //         // 下一题目
+    //         let question = quiz.questions[quiz.answerIdx];
+    //         kit.ensureInfo(question)
+    //     }
+    // }
+
     submitAnswer(answer) {
         // 提交答案
         store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
-            // 更新studyIdx
-            let study = new Study;
-            study.studyIdx = this.data.question.info.id;
-            store.dispatch(ActionCreator.putStudy(study, () => {
-                this.nextOrResult();
-
-            }));
+            this.nextOrResult();
+            // // 更新studyIdx
+            // // let study = new Study;
+            // // study.studyIdx = this.data.question.info.id;
+            // store.dispatch(ActionCreator.putStudy(this.getPuttedStudy(this.data.quiz), () => {
+            //     this.nextOrResult();
+            // }));
         }));
     }
 
@@ -108,7 +120,7 @@ class StudyClass {
             let data = new StudyData;
             let quizId = state.user.study.quizId;
             data.quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-            data.question = data.quiz.questions[data.quiz.answerIdx];
+            data.question = this.getNextQuestion(data.quiz);
             if (data.question)
                 data.question.info = state.questions[data.question.infoId];
             data.mark = state.user.marks.filter(m => m.infoId == _.get(data, "question.id"))[0] || null;
@@ -127,9 +139,11 @@ class StudyClass {
             store.dispatch(ActionCreator.fetchQuiz(quiz.id, () => {
                 this.nextOrResult();
             }))
+        } else {
+            this.nextOrResult();
         }
     }
 }
-
-Page(new StudyClass());
+module.exports = StudyClass;
+export =StudyClass;
 

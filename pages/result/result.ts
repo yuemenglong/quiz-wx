@@ -67,7 +67,7 @@ class ResultClass {
         let inStudy = state.global.inStudy;
         if (fail == 0) {
             // 测验完成
-            store.dispatch(ActionCreator.putQuiz(quizId, {answered: true, corrected: true}, () => {
+            store.dispatch(ActionCreator.putQuiz(quizId, {finished: true}, () => {
             }));
         }
         if (fail == 0 && inStudy) {

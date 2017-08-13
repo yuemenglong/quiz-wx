@@ -4,6 +4,7 @@
     "pages/quiz/quiz",
     "pages/chapter/chapter",
     "pages/study/study",
+    "pages/study/study-result",
     "pages/result/result"
   ],
   "window":{

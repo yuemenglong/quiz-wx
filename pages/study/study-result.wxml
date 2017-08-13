@@ -1,0 +1,3 @@
+<view>
+    <text>正确：{{succ}}， 错误：{{fail}}</text>
+</view>

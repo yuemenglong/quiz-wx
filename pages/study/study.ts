@@ -24,7 +24,7 @@ class StudyClass {
         let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
         if (quiz.answerIdx >= quiz.questions.length) {
             // 做完了
-            throw Error("Unimplement")
+            wxx.redirectTo(`./study-result`)
         } else {
             // 下一题目
             let question = quiz.questions[quiz.answerIdx];
@@ -113,7 +113,7 @@ class StudyClass {
                 data.question.info = state.questions[data.question.infoId];
             data.mark = state.user.marks.filter(m => m.infoId == _.get(data, "question.id"))[0] || null;
             data.isFirst = data.quiz.answerIdx == 0;
-            data.isLast = data.quiz.answerIdx == data.quiz.questions.length - 1;
+            data.isLast = data.quiz.answerIdx >= data.quiz.questions.length - 1;
             return _.merge({}, this.data, data)
         });
     }

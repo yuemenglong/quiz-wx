@@ -23,11 +23,15 @@ class State {
     global: GlobalData = new GlobalData;
 
     currentQuiz(): Quiz {
-        return this.user.quizs.find(q => !q.answered || !q.corrected)
+        return this.user.quizs.filter(q => !q.answered || !q.corrected)[0];
     }
 
     hasMoreStudy(): boolean {
         return this.user.study.studyIdx < Const.MAX_QUESTION_ID;
+    }
+
+    studyQuiz(): Quiz {
+        return this.user.quizs.filter(q => q.id == this.user.study.quizId)[0];
     }
 }
 

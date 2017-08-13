@@ -63,13 +63,13 @@ class ActionCreator {
         }
     }
 
-    static newStudyQuiz(cb: (quiz: Quiz) => void): Thunk {
+    static newStudyQuiz(chapter: number, cb: (quiz: Quiz) => void): Thunk {
         return ((dispatch, getState) => {
-            dispatch({type: ActionType.NEW_QUIZ, data: "study"});
+            dispatch({type: ActionType.NEW_QUIZ, data: {chapter}});
             let userId = getState().user.id;
             let mode = "study";
             let tag = "study";
-            http.post(`/quiz?empty=true`, {tag, userId, mode}).then(quiz => {
+            http.post(`/quiz?chapter=${chapter}`, {tag, userId, mode}).then(quiz => {
                 let quizId = _.get(quiz, "id");
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 dispatch(ActionCreator.putStudy({quizId: quizId}, () => {
@@ -125,6 +125,15 @@ class ActionCreator {
         })
     }
 
+    static deleteQuizQuestion(quizId: number, qtId: number, cb: () => void): Thunk {
+        return ((dispatch) => {
+            dispatch({type: ActionType.DELETE_QUIZ_QUESTION, data: {quizId, qtId}});
+            http.delete(`/quiz-question/${qtId}`).then(() => {
+                dispatch({type: ActionType.DELETE_QUIZ_QUESTION_SUCC, data: {quizId, qtId}});
+                cb();
+            })
+        })
+    }
 
     static putAnswer(qzId: number, qtId: number, answer: string, cb: () => void): Thunk {
         return (dispatch: Dispatch) => {
@@ -159,25 +168,6 @@ class ActionCreator {
             })
         })
     }
-
-    // static newStudyQuiz(cb: (quiz) => any): Thunk {
-    //     return ((dispatch, getState) => {
-    //         let state = getState();
-    //         let userId = state.user.id;
-    //         let start = state.user.study.studyIdx + 1;
-    //         let end = state.user.study.studyIdx + 30;
-    //         let quiz = null;
-    //         let mode = "study";
-    //         dispatch({type: ActionType.NEW_QUIZ, data: null});
-    //         http.post(`/quiz?start=${start}&end=${end}`, {tag: "study", userId, mode}).then(res => {
-    //             quiz = res as Quiz;
-    //             dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
-    //             dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {
-    //                 cb(quiz)
-    //             }));
-    //         })
-    //     })
-    // }
 
     static putStudy(study: Object, cb: () => void): Thunk {
         return ((dispatch, getState) => {

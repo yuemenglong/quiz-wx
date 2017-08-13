@@ -84,15 +84,15 @@ function go(state: State, action: Action) {
             let markId = action.data;
             return op.update(state, "user.marks[-id]", [markId], null)
         }
-        case ActionType.NEW_STUDY_QUIZ_SUCC: {
-            let quiz = action.data as Quiz;
-            return op.updates("user.quizs[]", [], quiz)
-                .update("user.study.quizId", [], quiz.id)
-                .call(state)
-        }
         case ActionType.NEW_QUIZ_QUESTION_SUCC: {
             let question = action.data;
-            return op.update(state, "user.quizs[id].questions[]", [question.quizId], question)
+            let count = state.user.quizs.filter(q => q.id = question.quizId)[0].count + 1;
+            return op.updates("user.quizs[id].questions[]", [question.quizId], question)
+                .update("user.quizs[id].count", [question.quizId], count)
+        }
+        case ActionType.DELETE_QUIZ_QUESTION_SUCC: {
+            let {quizId, qtId} = action.data;
+            return op.update(state, "user.quizs[id].questions[-id]", [quizId, qtId], null);
         }
         default:
             return state;

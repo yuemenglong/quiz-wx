@@ -1,0 +1,3 @@
+<view>
+    <button wx:key="{{item}}" wx:for="{{chapters}}" bindtap="bindChoose" data-no="{{item}}">{{item}}</button>
+</view>

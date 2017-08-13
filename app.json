@@ -2,6 +2,7 @@
   "pages":[
     "pages/index/index",
     "pages/quiz/quiz",
+    "pages/chapter/chapter",
     "pages/study/study",
     "pages/result/result"
   ],

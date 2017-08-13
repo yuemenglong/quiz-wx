@@ -94,10 +94,12 @@ class IndexClass {
         function go() {
             let study = store.getState().user.study;
             if (!study.quizId) {
-                // new一个quiz
-                store.dispatch(ActionCreator.newStudyQuiz(quiz => {
-                    wxx.navigateTo(`../study/study`)
-                }))
+                // 通过chapter页面选择一个章节
+                wxx.navigateTo(`../chapter/chapter`);
+                // // new一个quiz
+                // store.dispatch(ActionCreator.newStudyQuiz(quiz => {
+                //     wxx.navigateTo(`../study/study`)
+                // }))
             } else {
                 // 直接跳转到study页面
                 wxx.navigateTo(`../study/study`)

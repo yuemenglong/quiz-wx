@@ -11,6 +11,8 @@ class StudyData {
     question: QuizQuestion;
     answer: string = "";
     mark: Mark = null;
+    isFirst: boolean = false;
+    isLast: boolean = false;
 }
 
 module.exports = StudyData;

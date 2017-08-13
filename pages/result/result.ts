@@ -30,12 +30,12 @@ class ResultClass {
     }
 
     // answer / redo -> study
-    bindContStudy() {
-        store.dispatch(ActionCreator.newStudyQuiz(quiz => {
-            store.dispatch(ActionCreator.setGlobalData({quizId: quiz.id}));
-            wxx.redirectTo(`../quiz/quiz`)
-        }))
-    }
+    // bindContStudy() {
+    //     store.dispatch(ActionCreator.newStudyQuiz(quiz => {
+    //         store.dispatch(ActionCreator.setGlobalData({quizId: quiz.id}));
+    //         wxx.redirectTo(`../quiz/quiz`)
+    //     }))
+    // }
 
     // answer / redo -> review
     bindReview() {

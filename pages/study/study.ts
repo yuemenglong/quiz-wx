@@ -18,42 +18,18 @@ import Study = require("../../common/entity/study");
 class StudyClass {
     data: StudyData = new StudyData;
 
-    // getQuestion(quiz: Quiz): QuizQuestion {
-    //     let mode = quiz.mode;
-    //     let questions = quiz.questions;
-    //     if (mode == "answer") {
-    //         return questions.filter(qt => qt.answer == null)[0]
-    //     } else if (mode == "review") {
-    //         return questions.filter(qt => qt.correct == false && qt.idx > quiz.reviewIdx)[0]
-    //     } else if (mode == "redo") {
-    //         return questions.filter(qt => qt.correct == false && qt.idx > quiz.answerIdx)[0]
-    //     } else if (mode == "study") {
-    //         return questions.filter(qt => qt.idx > quiz.reviewIdx)[0]
-    //     } else {
-    //         throw Error("Unknown Mode");
-    //     }
-    // }
-    //
     nextOrResult() {
-        // 新增题目 绑定info
         let state = store.getState();
         let quizId = state.user.study.quizId;
         let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-        let question = quiz.questions.slice(-1)[0];
-        let infoId = state.user.study.studyIdx + 1;
-        let idx = null;
-        if (!question) idx = 1;
-        else idx = quiz.questions.length + 1;
-        store.dispatch(ActionCreator.newQuizQuestion(quizId, idx, infoId, (question) => {
+        if (quiz.answerIdx >= quiz.questions.length) {
+            // 做完了
+            throw Error("Unimplement")
+        } else {
+            // 下一题目
+            let question = quiz.questions[quiz.answerIdx];
             kit.ensureInfo(question)
-        }))
-
-        // let question = this.getQuestion(this.data.quiz);
-        // if (question == null) {
-        //     wxx.redirectTo(`../result/result`)
-        // } else {
-        //     this.ensureInfo(question);
-        // }
+        }
     }
 
     submitAnswer(answer) {
@@ -86,24 +62,25 @@ class StudyClass {
         }
     }
 
-    //
-    // //noinspection JSUnusedGlobalSymbols
-    // bindSkip() {
-    //     this.submitAnswer("");
-    // }
-
     //noinspection JSUnusedGlobalSymbols
     bindSubmit() {
         return this.submitAnswer(this.data.answer)
     }
 
-    // //noinspection JSUnusedGlobalSymbols
-    // bindNext() {
-    //     store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {reviewIdx: this.data.question.idx}, () => {
-    //         return this.nextOrResult();
-    //     }));
-    //     // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
-    // }
+    //noinspection JSUnusedGlobalSymbols
+    bindPrev() {
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {answerIdx: this.data.question.idx - 2}, () => {
+            return this.nextOrResult()
+        }))
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    bindNext() {
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {answerIdx: this.data.question.idx}, () => {
+            return this.nextOrResult();
+        }));
+        // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));
+    }
 
     //noinspection JSUnusedGlobalSymbols
     bindMark() {
@@ -131,28 +108,26 @@ class StudyClass {
             let data = new StudyData;
             let quizId = state.user.study.quizId;
             data.quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-            data.question = data.quiz.questions.slice(-1)[0];
-            if (data.question) {
-                data.question.info = state.questions[data.question.infoId]
-            }
+            data.question = data.quiz.questions[data.quiz.answerIdx];
+            if (data.question)
+                data.question.info = state.questions[data.question.infoId];
             data.mark = state.user.marks.filter(m => m.infoId == _.get(data, "question.id"))[0] || null;
+            data.isFirst = data.quiz.answerIdx == 0;
+            data.isLast = data.quiz.answerIdx == data.quiz.questions.length - 1;
             return _.merge({}, this.data, data)
         });
     }
 
     //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
     onLoad() {
-        this.nextOrResult();
-        // let state = store.getState();
-        // let quizId = state.user.study.quizId;
-        // let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-        // let question = quiz.questions.slice(-1)[0];
-        // let infoId = state.user.study.studyIdx + 1;
-        // if (!question) {
-        //     store.dispatch(ActionCreator.newQuizQuestion(quizId, 1, infoId, (question) => {
-        //         kit.ensureInfo(question)
-        //     }))
-        // }
+        let state = store.getState();
+        let quizId = state.user.study.quizId;
+        let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
+        if (quiz.questions.length == 0) {
+            store.dispatch(ActionCreator.fetchQuiz(quiz.id, () => {
+                this.nextOrResult();
+            }))
+        }
     }
 }
 

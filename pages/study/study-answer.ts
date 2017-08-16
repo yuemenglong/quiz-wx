@@ -10,13 +10,13 @@ import QuizData = require("../../common/state/quiz");
 import ActionType = require("../../common/action-type");
 import StudyData = require("../../common/state/study");
 import kit = require("../../kit/kit");
-import StudyClass = require("./study");
 import Study = require("../../common/entity/study");
+import QestionPage = require("../base/QuestionPage");
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
-class StudyAnswerClass extends StudyClass {
+class StudyAnswerClass extends QestionPage {
     getNextQuestion(quiz: Quiz): QuizQuestion {
         return quiz.questions[quiz.answerIdx]
     }

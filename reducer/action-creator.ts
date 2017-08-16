@@ -111,19 +111,19 @@ class ActionCreator {
         }
     }
 
-    static newQuizQuestion(quizId: number, idx: number, infoId: number, cb: (question: QuizQuestion) => void): Thunk {
-        return ((dispatch) => {
-            let question = new QuizQuestion;
-            question.quizId = quizId;
-            question.idx = idx;
-            question.infoId = infoId;
-            dispatch({type: ActionType.NEW_QUIZ_QUESTION, data: question});
-            http.post(`/quiz/${quizId}/question`, question).then(res => {
-                dispatch({type: ActionType.NEW_QUIZ_QUESTION_SUCC, data: res});
-                cb(res as QuizQuestion);
-            })
-        })
-    }
+    // static newQuizQuestion(quizId: number, idx: number, infoId: number, cb: (question: QuizQuestion) => void): Thunk {
+    //     return ((dispatch) => {
+    //         let question = new QuizQuestion;
+    //         question.quizId = quizId;
+    //         question.idx = idx;
+    //         question.infoId = infoId;
+    //         dispatch({type: ActionType.NEW_QUIZ_QUESTION, data: question});
+    //         http.post(`/quiz/${quizId}/question`, question).then(res => {
+    //             dispatch({type: ActionType.NEW_QUIZ_QUESTION_SUCC, data: res});
+    //             cb(res as QuizQuestion);
+    //         })
+    //     })
+    // }
 
     //noinspection JSUnusedGlobalSymbols
     static deleteQuizQuestion(quizId: number, qtId: number, cb: () => void): Thunk {
@@ -208,11 +208,26 @@ class ActionCreator {
     }
 
     static deleteQuiz(quizId: number, cb: () => void): Thunk {
-        return ((dispatch, getState) => {
+        return ((dispatch) => {
             dispatch({type: ActionType.DELETE_QUIZ, data: quizId});
             http.delete(`/quiz/${quizId}`).then(() => {
                 dispatch({type: ActionType.DELETE_QUIZ_SUCC, data: quizId});
                 cb();
+            })
+        })
+    }
+
+    static newMarkedQuiz(cb: () => any): Thunk {
+        return ((dispatch, getState) => {
+            let state = getState();
+            let data = {userId: state.user.id, mode: "study", tag: "study"};
+            dispatch({type: ActionType.NEW_QUIZ, data: "marked"});
+            http.post(`/quiz?marked=true`, data).then(res => {
+                let quiz = res as Quiz;
+                dispatch({type: ActionType.NEW_QUIZ_SUCC, data: res});
+                dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {
+                    cb();
+                }))
             })
         })
     }

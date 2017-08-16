@@ -127,6 +127,7 @@ class IndexClass {
     //     }
     // }
 
+    //noinspection JSUnusedGlobalSymbols
     bindExam() {
         if (this.needTip("exam")) {
             return;

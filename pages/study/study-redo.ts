@@ -11,12 +11,12 @@ import ActionType = require("../../common/action-type");
 import StudyData = require("../../common/state/study");
 import kit = require("../../kit/kit");
 import Study = require("../../common/entity/study");
-import StudyClass = require("./study");
+import QuestionPage = require("../base/QuestionPage");
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
-class StudyRedoClass extends StudyClass {
+class StudyRedoClass extends QuestionPage {
     getNextQuestion(quiz: Quiz): QuizQuestion {
         return quiz.questions.filter(q => q.idx > quiz.answerIdx && !q.correct)[0]
     }

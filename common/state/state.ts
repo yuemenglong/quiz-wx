@@ -9,7 +9,7 @@ import Quiz = require("../entity/quiz");
 import Const = require("../const");
 import _ = require("../../libs/lodash/index");
 /**
- * Created by Administrator on 2017/7/27.
+ * Created by Administrator on 2017/7/27
  */
 
 

@@ -74,7 +74,6 @@ abstract class QuestionPage {
     submitAnswer(answer) {
         // 提交答案
         let question = this.data.question;
-        let info = store.getState().questions[question.infoId];
         let correctAnswer = getCorrectAnswer(question);
         if (answer == correctAnswer) {
             store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {

@@ -8,7 +8,6 @@ import wxx = require("../../kit/wxx");
 import Quiz = require("../../common/entity/quiz");
 import QuizData = require("../../common/state/quiz");
 import ActionType = require("../../common/action-type");
-import StudyData = require("../../common/state/study");
 import kit = require("../../kit/kit");
 import Study = require("../../common/entity/study");
 import QuestionPage = require("../base/QuestionPage");

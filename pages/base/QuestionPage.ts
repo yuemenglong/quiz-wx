@@ -8,15 +8,52 @@ import wxx = require("../../kit/wxx");
 import Quiz = require("../../common/entity/quiz");
 import QuizData = require("../../common/state/quiz");
 import ActionType = require("../../common/action-type");
-import StudyData = require("../../common/state/study");
 import kit = require("../../kit/kit");
 import Study = require("../../common/entity/study");
+import Mark = require("../../common/entity/mark");
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
+class QuestionData {
+    quiz: Quiz;
+    question: QuizQuestion;
+    answer: string = "";
+    mark: Mark = null;
+    isFirst: boolean = false;
+    isLast: boolean = false;
+
+    a: String = null;
+    b: String = null;
+    c: String = null;
+    d: String = null;
+}
+
+function getCorrectAnswer(qq: QuizQuestion): string {
+    return qq.info.answer.split("").map(c => {
+        return "abcd".charAt(qq.seq.indexOf(c))
+    }).sort().join("")
+}
+
+function getQuizQuestion(qq: QuizQuestion, no: string): string {
+    if (!qq.info) {
+        return null;
+    }
+    let infoNo = qq.seq.charAt("abcd".indexOf(no));
+    switch (infoNo) {
+        case 'a' :
+            return qq.info.a;
+        case 'b' :
+            return qq.info.b;
+        case 'c' :
+            return qq.info.c;
+        case 'd' :
+            return qq.info.d;
+    }
+}
+
 abstract class QuestionPage {
-    data: StudyData = new StudyData;
+    data: QuestionData = new QuestionData;
 
     nextOrResult() {
         let state = store.getState();
@@ -38,13 +75,14 @@ abstract class QuestionPage {
         // 提交答案
         let question = this.data.question;
         let info = store.getState().questions[question.infoId];
-        if (answer == info.answer) {
+        let correctAnswer = getCorrectAnswer(question);
+        if (answer == correctAnswer) {
             store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
                 this.nextOrResult();
             }));
         } else {
-            let answerDetail = info.answer.split("").map(no => {
-                return `${no.toUpperCase()}.${info[no]}`;
+            let answerDetail = correctAnswer.split("").map(no => {
+                return `${no.toUpperCase()}.${this.data[no]}`;
             }).join("\n");
             wxx.showTip("回答错误", `正确答案：\n${answerDetail}`).then(() => {
                 store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
@@ -114,13 +152,18 @@ abstract class QuestionPage {
     onShow() {
         store.connect(this, (state: State) => {
             // quiz是直接从store里拼接的
-            let data = new StudyData;
+            let data = new QuestionData;
             let quizId = state.user.study.quizId;
             data.quiz = state.user.quizs.filter(q => q.id = quizId)[0];
             data.question = this.getNextQuestion(data.quiz);
-            if (data.question)
+            if (data.question) {
                 data.question.info = state.questions[data.question.infoId];
-            data.mark = state.user.marks.filter(m => m.infoId == _.get(data, "question.id"))[0] || null;
+                data.a = getQuizQuestion(data.question, "a");
+                data.b = getQuizQuestion(data.question, "b");
+                data.c = getQuizQuestion(data.question, "c");
+                data.d = getQuizQuestion(data.question, "d");
+                data.mark = state.user.marks.filter(m => m.infoId == data.question.infoId)[0] || null;
+            }
             data.isFirst = data.quiz.answerIdx == 0;
             data.isLast = data.quiz.answerIdx >= data.quiz.questions.length - 1;
             data.answer = state.quiz.answer;

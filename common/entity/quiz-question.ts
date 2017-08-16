@@ -8,6 +8,7 @@ class QuizQuestion {
 
     id: number;
 
+    seq: string;
     info: Question;
 
     quiz: Quiz;
@@ -19,6 +20,8 @@ class QuizQuestion {
 
     quizId: number;
     infoId: number;
+
+
 }
 
 module.exports = QuizQuestion;

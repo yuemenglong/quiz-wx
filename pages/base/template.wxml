@@ -1,0 +1,25 @@
+<!--question,a,b,c,d,bindAnswer-->
+<template name="question">
+    <text>{{question.idx}}</text>
+    <text wx:if="{{question.info.multi}}">(多选题)</text>
+    <text wx:else>(单选题)</text>
+    <text>{{question.info.title}}</text>
+    <button data-answer="a" bindtap="bindAnswer">A:{{a}}</button>
+    <button data-answer="b" bindtap="bindAnswer">B:{{b}}</button>
+    <button data-answer="c" bindtap="bindAnswer">C:{{c}}</button>
+    <button data-answer="d" bindtap="bindAnswer">D:{{d}}</button>
+    <!--<navigator url="../play/play?courseUuid={{courseUuid}}&isCompany={{isCompany}}">-->
+    <!--<view class="item mr26">-->
+    <!--<image src="{{imagePath}}" mode="aspectFill"></image>-->
+    <!--<view class="course-title">-->
+    <!--<text class="title">{{courseName}}</text>-->
+    <!--<text class="author">- {{teacherName}}</text>-->
+    <!--</view>-->
+    <!--<view class="course-info clearfix">-->
+    <!--<view class="fl"><text class="play">{{playCount}}</text></view>-->
+    <!--<view class="fr"><text class="grade">{{score}}</text></view>-->
+    <!--</view>-->
+    <!--<view wx:if="{{studyProgress}}" class="tip-completed">{{studyProgress}}</view>-->
+    <!--</view>-->
+    <!--</navigator>-->
+</template>

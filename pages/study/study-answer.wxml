@@ -1,12 +1,7 @@
+<import src="../base/template.wxml"/>
+
 <view wx:if="{{question!=null&&question.info!=null}}">
-    <text>{{question.idx}}</text>
-    <text wx:if="{{question.info.multi}}">(多选题)</text>
-    <text wx:else>(单选题)</text>
-    <text>{{question.info.title}}</text>
-    <button data-answer="a" bindtap="bindAnswer">A:{{a}}</button>
-    <button data-answer="b" bindtap="bindAnswer">B:{{b}}</button>
-    <button data-answer="c" bindtap="bindAnswer">C:{{c}}</button>
-    <button data-answer="d" bindtap="bindAnswer">D:{{d}}</button>
+    <template is="question" data="{{question,a,b,d,c,bindAnswer}}"/>
     <text class="row" wx:if="{{question.info.multi}}">已选择：{{answer}}</text>
     <button wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>
     <button wx:if="{{!isFirst}}" class="row" bindtap="bindPrev">上一题</button>

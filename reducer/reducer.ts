@@ -4,13 +4,10 @@
 
 import ActionType = require("../common/action-type")
 import {Action} from "../common/interface";
-import WxUser = require("../common/entity/wx-user-info");
 import _ = require("../libs/lodash/index");
-import QuizQuestion = require("../common/entity/quiz-question");
 import op = require("../kit/op");
 import State = require("../common/state/state");
 import debug = require("../kit/debug");
-import Quiz = require("../common/entity/quiz");
 
 
 function go(state: State, action: Action) {
@@ -30,10 +27,6 @@ function go(state: State, action: Action) {
         case ActionType.NEW_QUIZ_SUCC: {
             let quiz = action.data;
             return op.update(state, "user.quizs[]", [], quiz)
-        }
-        case ActionType.FETCH_QUIZ_SUCC: {
-            let quiz = action.data;
-            return op.update(state, "user.quizs[id]", [quiz.id], quiz);
         }
         case ActionType.CHANGE_ANSWER: {
             let answer = action.data;
@@ -58,23 +51,9 @@ function go(state: State, action: Action) {
         case ActionType.SET_QUIZ_DATA: {
             return op.update(state, "quiz{}", [], action.data);
         }
-        case ActionType.SET_RESULT_DATA: {
-            return op.update(state, "result{}", [], action.data);
-        }
         case ActionType.PUT_QUIZ_SUCC: {
             let quiz = action.data;
-            delete quiz.questions; // TODO
             return op.update(state, "user.quizs[id]{}", [quiz.id], quiz);
-        }
-        case ActionType.PUT_STUDY_SUCC: {
-            let study = action.data;
-            let quiz = state.user.quizs.filter(q => q.id == study.quizId)[0] || null;
-            study = _.merge({quiz}, study);
-            return op.update(state, "user.study{}", [], study);
-        }
-        case ActionType.SET_GLOBAL_DATA: {
-            let global = action.data;
-            return op.update(state, "global{}", [], global);
         }
         case ActionType.POST_MARK_SUCC: {
             let mark = action.data;
@@ -83,12 +62,6 @@ function go(state: State, action: Action) {
         case ActionType.DELETE_MARK_SUCC: {
             let markId = action.data;
             return op.update(state, "user.marks[-id]", [markId], null)
-        }
-        case ActionType.NEW_QUIZ_QUESTION_SUCC: {
-            let question = action.data;
-            let count = state.user.quizs.filter(q => q.id = question.quizId)[0].count + 1;
-            return op.updates("user.quizs[id].questions[]", [question.quizId], question)
-                .update("user.quizs[id].count", [question.quizId], count)
         }
         case ActionType.DELETE_QUIZ_QUESTION_SUCC: {
             let {quizId, qtId} = action.data;

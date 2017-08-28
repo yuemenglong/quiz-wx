@@ -1,23 +1,19 @@
 import State = require("../../common/state/state");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
-import Question = require("../../common/entity/question");
-import QuizQuestion = require("../../common/entity/quiz-question");
 import _ = require("../../libs/lodash/index");
 import wxx = require("../../kit/wxx");
-import Quiz = require("../../common/entity/quiz");
-import QuizData = require("../../common/state/quiz");
-import ActionType = require("../../common/action-type");
-import kit = require("../../kit/kit");
-import Study = require("../../common/entity/study");
-import StudyResultData = require("../../common/state/study-result");
+
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
-class StudyClass {
-    data: StudyResultData = new StudyResultData;
+class StudyResultData {
+    succ: number;
+    fail: number;
+}
 
+class StudyResultClass {
     bindAnswer() {
         let quizId = store.getState().studyQuiz().id;
         store.dispatch(ActionCreator.putQuiz(quizId, {mode: "study", answerIdx: 0}, () => {
@@ -51,7 +47,7 @@ class StudyClass {
                 data.succ = quiz.questions.filter(q => q.correct).length;
                 data.fail = quiz.questions.filter(q => !q.correct).length;
             }
-            return _.merge({}, this.data, data);
+            return _.merge({}, data);
         });
     }
 
@@ -61,5 +57,5 @@ class StudyClass {
     }
 }
 
-Page(new StudyClass());
+Page(new StudyResultClass());
 

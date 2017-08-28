@@ -1,5 +1,4 @@
 import Quiz = require("./quiz");
-import Study = require("./study");
 /**
  * Created by Administrator on 2017/7/27
  */

@@ -1,5 +1,6 @@
 /**
- * Created by Administrator on 2017/7/27.
+ * Created b    static SET_QUIZ_DATA: any;
+ y Administrator on 2017/7/27.
  */
 
 class ActionType {
@@ -31,6 +32,8 @@ class ActionType {
     static DELETE_QUIZ_QUESTION_SUCC: any = "DELETE_QUIZ_QUESTION_SUCC";
     static DELETE_QUIZ: any = "DELETE_QUIZ";
     static DELETE_QUIZ_SUCC: any = "DELETE_QUIZ_SUCC";
+
+    static SET_QUIZ_DATA: any = "SET_QUIZ_DATA";
 }
 
 module.exports = ActionType;

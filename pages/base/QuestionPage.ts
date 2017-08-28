@@ -1,16 +1,13 @@
 import State = require("../../common/state/state");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
-import Question = require("../../common/entity/question");
 import QuizQuestion = require("../../common/entity/quiz-question");
 import _ = require("../../libs/lodash/index");
 import wxx = require("../../kit/wxx");
 import Quiz = require("../../common/entity/quiz");
-import QuizData = require("../../common/state/quiz");
-import ActionType = require("../../common/action-type");
 import kit = require("../../kit/kit");
-import Study = require("../../common/entity/study");
 import Mark = require("../../common/entity/mark");
+
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
@@ -57,9 +54,7 @@ abstract class QuestionPage {
 
     nextOrResult() {
         let state = store.getState();
-        let quizId = state.user.study.quizId;
-        let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-        let question = this.getNextQuestion(quiz);
+        let question = this.getNextQuestion(state.user.getCurrentQuiz());
         if (!question) {
             // 做完了
             wxx.redirectTo(`./study-result`)
@@ -152,8 +147,7 @@ abstract class QuestionPage {
         store.connect(this, (state: State) => {
             // quiz是直接从store里拼接的
             let data = new QuestionData;
-            let quizId = state.user.study.quizId;
-            data.quiz = state.user.quizs.filter(q => q.id = quizId)[0];
+            data.quiz = state.user.getCurrentQuiz();
             data.question = this.getNextQuestion(data.quiz);
             if (data.question) {
                 data.question.info = state.questions[data.question.infoId];
@@ -163,27 +157,19 @@ abstract class QuestionPage {
                 data.d = getQuizQuestion(data.question, "d");
                 data.mark = state.user.marks.filter(m => m.infoId == data.question.infoId)[0] || null;
             }
-            data.isFirst = data.quiz.answerIdx == 0;
-            data.isLast = data.quiz.answerIdx >= data.quiz.questions.length - 1;
-            data.answer = state.quiz.answer;
+            data.isFirst = data.quiz.idx == 0;
+            data.isLast = data.quiz.idx >= data.quiz.questions.length - 1;
+            data.answer = state.quizData.answer;
             return _.merge({}, this.data, data)
         });
     }
 
     //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
     onLoad() {
-        let state = store.getState();
-        let quizId = state.user.study.quizId;
-        let quiz = state.user.quizs.filter(q => q.id = quizId)[0];
-        if (quiz.questions.length == 0) {
-            store.dispatch(ActionCreator.fetchQuiz(quiz.id, () => {
-                this.nextOrResult();
-            }))
-        } else {
-            this.nextOrResult();
-        }
+        this.nextOrResult();
     }
 }
+
 module.exports = QuestionPage;
-export =QuestionPage;
+export = QuestionPage;
 

@@ -16,6 +16,18 @@ class User {
     marked: Quiz;
 
     marks: Array<Mark>;
+
+    getCurrentQuiz() {
+        if (this.study) {
+            return this.study
+        } else if (this.quiz) {
+            return this.quiz
+        } else if (this.marked) {
+            return this.marked
+        } else {
+            return null
+        }
+    }
 }
 
 module.exports = User;

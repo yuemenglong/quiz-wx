@@ -195,6 +195,10 @@ class ActionCreator {
             })
         })
     }
+
+    static setQuizData(data: any) {
+        return {type: ActionType.SET_QUIZ_DATA, data}
+    }
 }
 
 module.exports = ActionCreator;

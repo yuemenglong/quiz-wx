@@ -1,52 +1,48 @@
-import {Thunk, Dispatch, GetState, Action} from "../common/interface";
+import {Thunk, Dispatch, GetState} from "../common/interface";
 import ActionType = require("../common/action-type");
 import kit = require("../kit/wxx");
 import http = require("../kit/http");
-import WxUser = require("../common/entity/wx-user-info");
 import User = require("../common/entity/user");
 import Quiz = require("../common/entity/quiz");
 import _ = require("../libs/lodash/index");
 import Question = require("../common/entity/question");
-import Study = require("../common/entity/study");
 import QuizQuestion = require("../common/entity/quiz-question");
+import WxUserInfo = require("../common/entity/wx-user-info");
+
 /**
  * Created by Administrator on 2017/7/27
  */
 
 class ActionCreator {
-    static fetchUser(cb: () => void): Thunk {
+    static getWxUserInfo(cb: (wxUserInfo: WxUserInfo) => void): Thunk {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.FETCH_WX_USER, data: null});
+            kit.getUserInfo().then(wxUserInfo => {
+                dispatch({type: ActionType.FETCH_WX_USER_SUCC, data: wxUserInfo});
+                cb(wxUserInfo)
+            })
+        })
+    }
+
+    static registUser(wxUserInfo: WxUserInfo, cb: () => void): Thunk {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.REGIST_USER, data: null});
+            http.post(`/user`, {wxUserInfo: wxUserInfo}).then(res => {
+                dispatch({type: ActionType.REGIST_USER_SUCC, data: res});
+                cb()
+            })
+        })
+    }
+
+    static fetchUser(code: string, cb: () => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
-            new Promise<WxUser>((resolve) => {
-                if (getState().wxUser != null) {
-                    return resolve(getState().wxUser)
-                }
-                dispatch({type: ActionType.FETCH_WX_USER, data: null});
-                kit.getUserInfo().then(wxUser => {
-                    dispatch({type: ActionType.FETCH_WX_USER_SUCC, data: wxUser});
-                    resolve(wxUser)
-                })
-            }).then(wxUser => {
-                if (getState().user != null) {
-                    return getState().user;
-                }
-                dispatch({type: ActionType.FETCH_USER, data: null});
-                return http.get<User>(`/user?wxId=${wxUser.nickName}`).then(user => {
-                    dispatch({type: ActionType.FETCH_USER_SUCC, data: user});
-                    return user;
-                })
-            }).then(user => {
-                if (user != null) {
-                    return user;
-                }
-                dispatch({type: ActionType.REGIST_USER, data: null});
-                let wxId = getState().wxUser.nickName;
-                let study = new Study();
-                return http.post<User>(`/user`, {wxId: wxId, study}).then(user => {
-                    dispatch({type: ActionType.REGIST_USER_SUCC, data: user});
-                    return user;
-                })
-            }).then(() => {
-                cb();
+            if (getState().user != null) {
+                return getState().user;
+            }
+            dispatch({type: ActionType.FETCH_USER, data: null});
+            return http.get<User>(`/user?code=${code}`).then(user => {
+                dispatch({type: ActionType.FETCH_USER_SUCC, data: user});
+                return user;
             })
         }
     }
@@ -91,16 +87,6 @@ class ActionCreator {
         }
     }
 
-    static fetchQuiz(quizId, cb: (quiz: Quiz) => void): Thunk {
-        return ((dispatch) => {
-            dispatch({type: ActionType.FETCH_QUIZ, data: quizId});
-            http.get(`/quiz/${quizId}`).then(quiz => {
-                dispatch({type: ActionType.FETCH_QUIZ_SUCC, data: quiz});
-                cb(quiz as Quiz)
-            })
-        })
-    }
-
     static fetchQuestion(id: number, cb: (question: Question) => void): Thunk {
         return (dispatch: Dispatch) => {
             dispatch({type: ActionType.FETCH_QUESTION, data: id});
@@ -110,20 +96,6 @@ class ActionCreator {
             })
         }
     }
-
-    // static newQuizQuestion(quizId: number, idx: number, infoId: number, cb: (question: QuizQuestion) => void): Thunk {
-    //     return ((dispatch) => {
-    //         let question = new QuizQuestion;
-    //         question.quizId = quizId;
-    //         question.idx = idx;
-    //         question.infoId = infoId;
-    //         dispatch({type: ActionType.NEW_QUIZ_QUESTION, data: question});
-    //         http.post(`/quiz/${quizId}/question`, question).then(res => {
-    //             dispatch({type: ActionType.NEW_QUIZ_QUESTION_SUCC, data: res});
-    //             cb(res as QuizQuestion);
-    //         })
-    //     })
-    // }
 
     //noinspection JSUnusedGlobalSymbols
     static deleteQuizQuestion(quizId: number, qtId: number, cb: () => void): Thunk {
@@ -138,16 +110,12 @@ class ActionCreator {
 
     static putAnswer(qzId: number, qtId: number, answer: string, cb: (question: QuizQuestion) => void): Thunk {
         return (dispatch: Dispatch) => {
-            dispatch({type: ActionType.PUT_ANSWER, data: {answer}});
+            dispatch({type: ActionType.PUT_QUIZ_QUESTION, data: {answer}});
             http.put(`/quiz/${qzId}/question/${qtId}`, {answer}).then(question => {
-                dispatch({type: ActionType.PUT_ANSWER_SUCC, data: question});
+                dispatch({type: ActionType.PUT_QUIZ_QUESTION_SUCC, data: question});
                 cb(question as QuizQuestion);
             })
         }
-    }
-
-    static setQuizData(data: Object): Action {
-        return {type: ActionType.SET_QUIZ_DATA, data}
     }
 
     static putQuiz(id: number, quiz, cb: () => void): Thunk {
@@ -179,10 +147,6 @@ class ActionCreator {
                 cb()
             })
         })
-    }
-
-    static setGlobalData(global: Object): Action {
-        return {type: ActionType.SET_GLOBAL_DATA, data: global}
     }
 
     static postMark(infoId: number, cb: () => void): Thunk {
@@ -234,4 +198,4 @@ class ActionCreator {
 }
 
 module.exports = ActionCreator;
-export  = ActionCreator;
+export = ActionCreator;

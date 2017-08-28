@@ -43,7 +43,7 @@ function go(state: State, action: Action) {
             let question = action.data;
             return op.update(state, "questions[$idx]", [question.id], question)
         }
-        case ActionType.PUT_ANSWER_SUCC: {
+        case ActionType.PUT_QUIZ_QUESTION_SUCC: {
             let question = action.data;
             return op.updates("user.quizs[id].questions[id]", [question.quizId, question.id], question)
                 .update("user.quizs[id].answerIdx", [question.quizId], question.idx)

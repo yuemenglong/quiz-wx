@@ -1,11 +1,21 @@
 import WxUser = require("../common/entity/wx-user-info");
 import debug = require("./debug");
+import WxUserInfo = require("../common/entity/wx-user-info");
+
 /**
  * Created by Administrator on 2017/7/27.
  */
 
 class wxx {
-    static getUserInfo(): Promise<WxUser> {
+    static getLocalStorage(name: string): string {
+        try {
+            return wx.getStorageSync('key');
+        } catch (e) {
+            return null
+        }
+    }
+
+    static getUserInfo(): Promise<WxUserInfo> {
         return new Promise(function (resolve, reject) {
             wx.getUserInfo({
                 success: res => resolve(res.userInfo),

@@ -1,4 +1,5 @@
 declare let require: (path: string) => any;
+
 declare class module {
     static exports: any
 }
@@ -21,4 +22,6 @@ declare class wx {
     static showToast(opt: Object)
 
     static showModal(opt: Object)
+
+    static getStorageSync(name: string)
 }

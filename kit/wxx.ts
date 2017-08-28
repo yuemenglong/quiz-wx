@@ -9,7 +9,15 @@ import WxUserInfo = require("../common/entity/wx-user-info");
 class wxx {
     static getLocalStorage(name: string): string {
         try {
-            return wx.getStorageSync('key');
+            return wx.getStorageSync(name);
+        } catch (e) {
+            return null
+        }
+    }
+
+    static setLocalStorage(name: string, value:string){
+        try {
+            return wx.setStorageSync(name, value);
         } catch (e) {
             return null
         }

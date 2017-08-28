@@ -1,8 +1,6 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/quiz/quiz",
-    "pages/result/result",
     "pages/study/study-chapter",
     "pages/study/study-answer",
     "pages/study/study-redo",

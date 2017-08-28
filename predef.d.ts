@@ -23,5 +23,7 @@ declare class wx {
 
     static showModal(opt: Object)
 
-    static getStorageSync(name: string)
+    static getStorageSync(name: string): string
+
+    static setStorageSync(name: string, value: string)
 }

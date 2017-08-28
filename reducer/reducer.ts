@@ -8,21 +8,21 @@ import _ = require("../libs/lodash/index");
 import op = require("../kit/op");
 import State = require("../common/state/state");
 import debug = require("../kit/debug");
+import kit = require("../kit/kit");
+import User = require("../common/entity/user");
+import wxx = require("../kit/wxx");
 
 
 function go(state: State, action: Action) {
     switch (action.type) {
-        case ActionType.FETCH_WX_USER_SUCC: {
-            let wxUser = action.data;
-            return _.defaults({wxUser}, state);
-        }
         case ActionType.FETCH_USER_SUCC: {
             let user = action.data;
-            return _.defaults({user}, state);
+            return op.update(state, "user", [], user);
         }
         case ActionType.REGIST_USER_SUCC: {
-            let user = action.data;
-            return _.defaults({user}, state);
+            let user = action.data as User;
+            wxx.setLocalStorage("code", user.code);
+            return op.update(state, "user", [], user);
         }
         case ActionType.NEW_QUIZ_SUCC: {
             let quiz = action.data;
@@ -85,4 +85,4 @@ function reducer(state: State, action: Action): Object {
 
 
 module.exports = reducer;
-export =reducer;
+export = reducer;

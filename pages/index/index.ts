@@ -48,30 +48,30 @@ class IndexClass {
     }
 
     //noinspection JSUnusedGlobalSymbols
-    bindQuiz() {
-        // if (this.needTip("quiz")) {
-        //     return;
-        // }
-        // // 找到一个没有做完的quiz
-        // let quiz = store.getState().currentQuiz();
-        // if (quiz == null) {
-        //     // 没有则建立新quiz
-        //     return store.dispatch(ActionCreator.newQuiz(quiz => {
-        //         store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
-        //         return wxx.navigateTo(`../quiz/quiz`)
-        //     }))
-        // } else if (quiz.questions.length == 0) {
-        //     // 拿到quiz详情
-        //     return store.dispatch(ActionCreator.fetchQuiz(quiz.id, (quiz) => {
-        //         store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
-        //         return wxx.navigateTo(`../quiz/quiz`)
-        //     }))
-        // } else {
-        //     // quiz存在且有详情信息
-        //     store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
-        //     return wxx.navigateTo(`../quiz/quiz`)
-        // }
-    }
+    // bindQuiz() {
+    // if (this.needTip("quiz")) {
+    //     return;
+    // }
+    // // 找到一个没有做完的quiz
+    // let quiz = store.getState().currentQuiz();
+    // if (quiz == null) {
+    //     // 没有则建立新quiz
+    //     return store.dispatch(ActionCreator.newQuiz(quiz => {
+    //         store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
+    //         return wxx.navigateTo(`../quiz/quiz`)
+    //     }))
+    // } else if (quiz.questions.length == 0) {
+    //     // 拿到quiz详情
+    //     return store.dispatch(ActionCreator.fetchQuiz(quiz.id, (quiz) => {
+    //         store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
+    //         return wxx.navigateTo(`../quiz/quiz`)
+    //     }))
+    // } else {
+    //     // quiz存在且有详情信息
+    //     store.dispatch(ActionCreator.setGlobalData({inStudy: false, quizId: quiz.id}));
+    //     return wxx.navigateTo(`../quiz/quiz`)
+    // }
+    // }
 
     //noinspection JSUnusedGlobalSymbols
     bindNewStudy() {
@@ -103,10 +103,13 @@ class IndexClass {
     }
 
     //noinspection JSUnusedGlobalSymbols
-    bindExam() {
-        if (this.needTip("exam")) {
-            return;
-        }
+    bindNewQuiz() {
+        // if (this.needTip("quiz")) {
+        //     return;
+        // }
+        store.dispatch(ActionCreator.newQuiz(() => {
+            return wxx.navigateTo(`../quiz/quiz-answer`);
+        }))
         // store.dispatch(ActionCreator.setGlobalData({inStudy: false}));
         // let quiz = store.getState().currentQuiz();
         // if (quiz) {

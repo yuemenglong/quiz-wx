@@ -6,25 +6,12 @@ import _ = require("../../libs/lodash/index");
 import wxx = require("../../kit/wxx");
 import Quiz = require("../../common/entity/quiz");
 import kit = require("../../kit/kit");
-import Mark = require("../../common/entity/mark");
+import QuestionData = require("./question-data");
 
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
  */
 
-class QuestionData {
-    quiz: Quiz;
-    question: QuizQuestion;
-    answer: string = "";
-    mark: Mark = null;
-    isFirst: boolean = false;
-    isLast: boolean = false;
-
-    a: String = null;
-    b: String = null;
-    c: String = null;
-    d: String = null;
-}
 
 function getCorrectAnswer(qq: QuizQuestion): string {
     return qq.info.answer.split("").map(c => {
@@ -58,39 +45,34 @@ abstract class QuestionPage {
         let question = this.getNextQuestion(kit.getCurrentQuiz(state.user));
         if (!question) {
             // 做完了
-            wxx.redirectTo(`./study-result`)
+            this.gotoResult();
         } else {
             // 下一题目
             kit.ensureInfo(question)
         }
     }
 
+    getCorrectAnswer(qq: QuizQuestion): string {
+        return qq.info.answer.split("").map(c => {
+            return "abcd".charAt(qq.seq.indexOf(c))
+        }).sort().join("")
+    }
+
+    abstract gotoResult()
+
     abstract getNextQuestion(quiz: Quiz): QuizQuestion
 
-    submitAnswer(answer) {
-        // 提交答案
-        let question = this.data.question;
-        let correctAnswer = getCorrectAnswer(question);
-        if (answer == correctAnswer) {
-            store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
-                this.nextOrResult();
-            }));
-        } else {
-            let answerDetail = correctAnswer.split("").map(no => {
-                return `${no.toUpperCase()}.${this.data[no]}`;
-            }).join("\n");
-            wxx.showTip("回答错误", `正确答案：\n${answerDetail}`).then(() => {
-                store.dispatch(ActionCreator.putAnswer(this.data.quiz.id, this.data.question.id, answer, () => {
-                    this.nextOrResult();
-                }));
-            })
-        }
+    abstract submitAnswer(answer)
+
+    dataMapper(data: QuestionData): QuestionData {
+        return data
     }
 
     //noinspection JSUnusedGlobalSymbols
     bindAnswer(e) {
         let answer = e.target.dataset.answer;
         if (!this.data.question.info.multi) {
+            store.dispatch(ActionCreator.setQuizData({answer: ""}));
             return this.submitAnswer(answer);
         } else if (this.data.answer.indexOf(answer) >= 0) {
             // 删掉答案
@@ -138,11 +120,6 @@ abstract class QuestionPage {
         }))
     }
 
-    // //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
-    // bindDebug() {
-    //     return store.dispatch(ActionCreator.postDebugInfo());
-    // }
-
     //noinspection JSUnusedGlobalSymbols
     onShow() {
         store.connect(this, (state: State) => {
@@ -161,7 +138,7 @@ abstract class QuestionPage {
             data.isFirst = data.quiz.idx == 0;
             data.isLast = data.quiz.idx >= data.quiz.questions.length - 1;
             data.answer = state.quizData.answer;
-            return _.merge({}, this.data, data)
+            return this.dataMapper(_.merge({}, this.data, data))
         });
     }
 

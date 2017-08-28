@@ -1,7 +1,5 @@
 import User = require("../entity/user");
 import Question = require("../entity/question");
-import Quiz = require("../entity/quiz");
-import _ = require("../../libs/lodash/index");
 
 /**
  * Created by Administrator on 2017/7/27
@@ -9,6 +7,7 @@ import _ = require("../../libs/lodash/index");
 
 class QuizData {
     answer: string;
+    timer: number = 0;
 }
 
 class State {

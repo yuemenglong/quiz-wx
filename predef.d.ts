@@ -4,6 +4,10 @@ declare class module {
     static exports: any
 }
 
+declare class Promise<T> {
+    constructor(fn: Function)
+}
+
 declare let App: (opt: Object) => void;
 declare let Page: (opt: Object) => void;
 declare let getApp: () => any;

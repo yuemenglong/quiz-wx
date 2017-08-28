@@ -4,11 +4,9 @@
 
 import ActionType = require("../common/action-type")
 import {Action} from "../common/interface";
-import _ = require("../libs/lodash/index");
 import op = require("../kit/op");
 import State = require("../common/state/state");
 import debug = require("../kit/debug");
-import kit = require("../kit/kit");
 import User = require("../common/entity/user");
 import wxx = require("../kit/wxx");
 

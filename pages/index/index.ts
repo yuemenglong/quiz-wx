@@ -75,6 +75,7 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindNewStudy() {
+        console.log("bindNewStudy");
         let state = store.getState();
         if (state.user.study != null) {
             wxx.showModal("提示", "您还有未完成的学习，是否忽略并重新开始新的学习").then((choose) => {

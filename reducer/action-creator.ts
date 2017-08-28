@@ -66,11 +66,8 @@ class ActionCreator {
             let mode = "study";
             let tag = "study";
             http.post(`/quiz?chapter=${chapter}`, {tag, userId, mode}).then(quiz => {
-                let quizId = _.get(quiz, "id");
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
-                dispatch(ActionCreator.putStudy({quizId: quizId}, () => {
-                    cb(quiz as Quiz)
-                }))
+                cb(quiz as Quiz)
             })
         })
     }
@@ -138,16 +135,16 @@ class ActionCreator {
         })
     }
 
-    static putStudy(study: Object, cb: () => void): Thunk {
-        return ((dispatch, getState) => {
-            let studyId = getState().user.study.id;
-            dispatch({type: ActionType.PUT_STUDY, data: study});
-            http.put(`/study/${studyId}`, study).then(res => {
-                dispatch({type: ActionType.PUT_STUDY_SUCC, data: res});
-                cb()
-            })
-        })
-    }
+    // static putStudy(study: Object, cb: () => void): Thunk {
+    //     return ((dispatch, getState) => {
+    //         let studyId = getState().user.study.id;
+    //         dispatch({type: ActionType.PUT_STUDY, data: study});
+    //         http.put(`/study/${studyId}`, study).then(res => {
+    //             dispatch({type: ActionType.PUT_STUDY_SUCC, data: res});
+    //             cb()
+    //         })
+    //     })
+    // }
 
     static postMark(infoId: number, cb: () => void): Thunk {
         return ((dispatch, getState) => {
@@ -171,30 +168,30 @@ class ActionCreator {
         })
     }
 
-    static deleteQuiz(quizId: number, cb: () => void): Thunk {
+    static deleteQuiz(quiz: Quiz, cb: () => void): Thunk {
         return ((dispatch) => {
-            dispatch({type: ActionType.DELETE_QUIZ, data: quizId});
-            http.delete(`/quiz/${quizId}`).then(() => {
-                dispatch({type: ActionType.DELETE_QUIZ_SUCC, data: quizId});
+            dispatch({type: ActionType.DELETE_QUIZ, data: quiz});
+            http.delete(`/quiz/${quiz.id}?tag=${quiz.tag}`).then(() => {
+                dispatch({type: ActionType.DELETE_QUIZ_SUCC, data: quiz});
                 cb();
             })
         })
     }
 
-    static newMarkedQuiz(cb: () => any): Thunk {
-        return ((dispatch, getState) => {
-            let state = getState();
-            let data = {userId: state.user.id, mode: "study", tag: "study"};
-            dispatch({type: ActionType.NEW_QUIZ, data: "marked"});
-            http.post(`/quiz?marked=true`, data).then(res => {
-                let quiz = res as Quiz;
-                dispatch({type: ActionType.NEW_QUIZ_SUCC, data: res});
-                dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {
-                    cb();
-                }))
-            })
-        })
-    }
+    // static newMarkedQuiz(cb: () => any): Thunk {
+    //     return ((dispatch, getState) => {
+    //         let state = getState();
+    //         let data = {userId: state.user.id, mode: "study", tag: "study"};
+    //         dispatch({type: ActionType.NEW_QUIZ, data: "marked"});
+    //         http.post(`/quiz?marked=true`, data).then(res => {
+    //             let quiz = res as Quiz;
+    //             dispatch({type: ActionType.NEW_QUIZ_SUCC, data: res});
+    //             dispatch(ActionCreator.putStudy({quizId: quiz.id}, () => {
+    //                 cb();
+    //             }))
+    //         })
+    //     })
+    // }
 
     static setQuizData(data: any) {
         return {type: ActionType.SET_QUIZ_DATA, data}

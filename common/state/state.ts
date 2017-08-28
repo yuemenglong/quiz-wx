@@ -14,15 +14,7 @@ class QuizData {
 class State {
     user: User;
     questions: Question[] = [];
-    quizData: QuizData;
-
-    currentQuiz(): Quiz {
-        return _.get(this, "user.quizs", []).filter(q => !q.finished)[0];
-    }
-
-    studyQuiz(): Quiz {
-        return this.user.study
-    }
+    quizData: QuizData = new QuizData;
 }
 
 module.exports = State;

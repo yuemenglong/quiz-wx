@@ -54,7 +54,7 @@ abstract class QuestionPage {
 
     nextOrResult() {
         let state = store.getState();
-        let question = this.getNextQuestion(state.user.getCurrentQuiz());
+        let question = this.getNextQuestion(kit.getCurrentQuiz(state.user));
         if (!question) {
             // 做完了
             wxx.redirectTo(`./study-result`)
@@ -147,7 +147,7 @@ abstract class QuestionPage {
         store.connect(this, (state: State) => {
             // quiz是直接从store里拼接的
             let data = new QuestionData;
-            data.quiz = state.user.getCurrentQuiz();
+            data.quiz = kit.getCurrentQuiz(state.user);
             data.question = this.getNextQuestion(data.quiz);
             if (data.question) {
                 data.question.info = state.questions[data.question.infoId];

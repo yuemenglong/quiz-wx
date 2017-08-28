@@ -80,10 +80,8 @@ class IndexClass {
         if (state.user.study != null) {
             wxx.showModal("提示", "您还有未完成的学习，是否忽略并重新开始新的学习").then((choose) => {
                 if (!choose) return;
-                store.dispatch(ActionCreator.deleteQuiz(state.user.study.id, () => {
-                    store.dispatch(ActionCreator.putStudy(null, () => {
-                        return wxx.navigateTo(`../study/study-chapter`);
-                    }));
+                store.dispatch(ActionCreator.deleteQuiz(state.user.study, () => {
+                    return wxx.navigateTo(`../study/study-chapter`);
                 }))
             })
         } else {
@@ -94,7 +92,7 @@ class IndexClass {
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
     bindContStudy() {
         let state = store.getState();
-        let quiz = state.studyQuiz();
+        let quiz = state.user.study;
         if (quiz.mode == "study") {
             wxx.navigateTo(`../study/study-answer`)
         } else if (quiz.mode == "redo") {

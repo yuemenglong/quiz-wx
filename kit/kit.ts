@@ -2,6 +2,9 @@ import QuizQuestion = require("../common/entity/quiz-question");
 import store = require("../reducer/store");
 import ActionCreator = require("../reducer/action-creator");
 import _ = require("../libs/lodash/index");
+import User = require("../common/entity/user");
+import Quiz = require("../common/entity/quiz");
+
 /**
  * Created by yml on 2017/8/12.
  */
@@ -22,6 +25,18 @@ class kit {
                 // question = _.defaults({info: q}, question);
                 // store.dispatch(ActionCreator.setQuizData({question}))
             }));
+        }
+    }
+
+    static getCurrentQuiz(user: User): Quiz {
+        if (user.study) {
+            return user.study;
+        } else if (user.quiz) {
+            return user.quiz;
+        } else if (user.marked) {
+            return user.marked;
+        } else {
+            return null;
         }
     }
 }

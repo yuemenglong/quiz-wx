@@ -27,7 +27,7 @@ class ActionCreator {
     static registUser(wxUserInfo: WxUserInfo, cb: () => void): Thunk {
         return ((dispatch, getState) => {
             dispatch({type: ActionType.REGIST_USER, data: null});
-            http.post(`/user`, {wxUserInfo: wxUserInfo}).then(res => {
+            http.post(`/user`, {wxUserInfo: wxUserInfo, marks: []}).then(res => {
                 dispatch({type: ActionType.REGIST_USER_SUCC, data: res});
                 cb()
             })

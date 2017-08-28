@@ -49,6 +49,7 @@ function getQuizQuestion(qq: QuizQuestion, no: string): string {
     }
 }
 
+// TODO redo模式下的上一题
 abstract class QuestionPage {
     data: QuestionData = new QuestionData;
 
@@ -110,14 +111,14 @@ abstract class QuestionPage {
 
     //noinspection JSUnusedGlobalSymbols
     bindPrev() {
-        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {answerIdx: this.data.question.idx - 2}, () => {
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {idx: this.data.question.idx - 2}, () => {
             return this.nextOrResult()
         }))
     }
 
     //noinspection JSUnusedGlobalSymbols
     bindNext() {
-        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {answerIdx: this.data.question.idx}, () => {
+        store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {idx: this.data.question.idx}, () => {
             return this.nextOrResult();
         }));
         // store.dispatch(ActionCreator.setQuizData({idx: this.data.question.idx}));

@@ -22,8 +22,6 @@ class ActionType {
     static PUT_QUIZ_SUCC: any = "PUT_QUIZ_SUCC";
     static POST_DEBUG_INFO: any = "POST_DEBUG_INFO";
     static POST_DEBUG_INFO_SUCC: any = "POST_DEBUG_INFO_SUCC";
-    static PUT_STUDY: any = "PUT_STUDY";
-    static PUT_STUDY_SUCC: any = "PUT_STUDY_SUCC";
     static POST_MARK: any = "POST_MARK";
     static POST_MARK_SUCC: any = "POST_MARK_SUCC";
     static DELETE_MARK: any = "DELETE_MARK";

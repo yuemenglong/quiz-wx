@@ -50,17 +50,17 @@ function go(state: State, action: Action) {
         case ActionType.PUT_QUIZ_QUESTION_SUCC: {
             let question = action.data;
             if (state.user.study) {
-                return op.updates("user.study.questions[id]", [question.quizId, question.id], question)
+                return op.updates("user.study.questions[id]", [question.id], question)
                     .update("user.study.idx", [question.quizId], question.idx)
                     .update("quizData.answer", [], "")
                     .call(state);
             } else if (state.user.quiz) {
-                return op.updates("user.quiz.questions[id]", [question.quizId, question.id], question)
+                return op.updates("user.quiz.questions[id]", [question.id], question)
                     .update("user.quiz.idx", [question.quizId], question.idx)
                     .update("quizData.answer", [], "")
                     .call(state);
             } else if (state.user.marked) {
-                return op.updates("user.marked.questions[id]", [question.quizId, question.id], question)
+                return op.updates("user.marked.questions[id]", [question.id], question)
                     .update("user.marked.idx", [question.quizId], question.idx)
                     .update("quizData.answer", [], "")
                     .call(state);

@@ -1,4 +1,4 @@
-import WxUser = require("../entity/wx-user");
+import WxUser = require("../entity/wx-user-info");
 import User = require("../entity/user");
 import Question = require("../entity/question");
 import QuizData = require("./quiz");

@@ -4,7 +4,7 @@
 
 import ActionType = require("../common/action-type")
 import {Action} from "../common/interface";
-import WxUser = require("../common/entity/wx-user");
+import WxUser = require("../common/entity/wx-user-info");
 import _ = require("../libs/lodash/index");
 import QuizQuestion = require("../common/entity/quiz-question");
 import op = require("../kit/op");

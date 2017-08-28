@@ -8,15 +8,14 @@ import QuizQuestion = require("./quiz-question");
 class Quiz {
     id: number;
     createTime: any;
+    timer:number;
+
     questions: Array<QuizQuestion>;
     count: number;
 
-    finished: boolean;
-
     mode: string;
     tag: string;// study quiz exam mark
-    reviewIdx: number;
-    answerIdx: number;
+    idx: number;
 
     user: User;
     userId: number;

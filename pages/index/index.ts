@@ -1,6 +1,6 @@
 import ActionType = require("../../common/action-type");
 import State = require("../../common/state/state");
-import WxUser = require("../../common/entity/wx-user");
+import WxUser = require("../../common/entity/wx-user-info");
 import kit = require("../../kit/wxx");
 import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");

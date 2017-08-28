@@ -2,7 +2,7 @@ import {Thunk, Dispatch, GetState, Action} from "../common/interface";
 import ActionType = require("../common/action-type");
 import kit = require("../kit/wxx");
 import http = require("../kit/http");
-import WxUser = require("../common/entity/wx-user");
+import WxUser = require("../common/entity/wx-user-info");
 import User = require("../common/entity/user");
 import Quiz = require("../common/entity/quiz");
 import _ = require("../libs/lodash/index");

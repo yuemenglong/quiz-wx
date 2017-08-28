@@ -1,4 +1,4 @@
-import WxUser = require("../common/entity/wx-user");
+import WxUser = require("../common/entity/wx-user-info");
 import debug = require("./debug");
 /**
  * Created by Administrator on 2017/7/27.

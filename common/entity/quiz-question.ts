@@ -5,7 +5,6 @@ import Quiz = require("./quiz");
  */
 
 class QuizQuestion {
-
     id: number;
 
     seq: string;
@@ -20,8 +19,6 @@ class QuizQuestion {
 
     quizId: number;
     infoId: number;
-
-
 }
 
 module.exports = QuizQuestion;

@@ -16,14 +16,14 @@ class StudyResultData {
 class StudyResultClass {
     bindAnswer() {
         let quizId = store.getState().user.study.id;
-        store.dispatch(ActionCreator.putQuiz(quizId, {mode: "study", answerIdx: 0}, () => {
+        store.dispatch(ActionCreator.putQuiz(quizId, {mode: "study", idx: 0}, () => {
             wxx.redirectTo(`./study-answer`)
         }));
     }
 
     bindRedo() {
         let quizId = store.getState().user.study.id;
-        store.dispatch(ActionCreator.putQuiz(quizId, {mode: "redo", answerIdx: 0}, () => {
+        store.dispatch(ActionCreator.putQuiz(quizId, {mode: "redo", idx: 0}, () => {
             wxx.redirectTo(`./study-redo`)
         }));
     }

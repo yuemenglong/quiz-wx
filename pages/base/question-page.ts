@@ -93,6 +93,7 @@ abstract class QuestionPage {
 
     //noinspection JSUnusedGlobalSymbols
     bindPrev() {
+        store.dispatch(ActionCreator.setQuizData({answer: ""}));
         store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {idx: this.data.question.idx - 2}, () => {
             return this.nextOrResult()
         }))
@@ -100,6 +101,7 @@ abstract class QuestionPage {
 
     //noinspection JSUnusedGlobalSymbols
     bindNext() {
+        store.dispatch(ActionCreator.setQuizData({answer: ""}));
         store.dispatch(ActionCreator.putQuiz(this.data.quiz.id, {idx: this.data.question.idx}, () => {
             return this.nextOrResult();
         }));
@@ -138,7 +140,7 @@ abstract class QuestionPage {
             data.isFirst = data.quiz.idx == 0;
             data.isLast = data.quiz.idx >= data.quiz.questions.length - 1;
             data.answer = state.quizData.answer;
-            return this.dataMapper(_.merge({}, this.data, data))
+            return this.dataMapper(_.merge({}, data))
         });
     }
 

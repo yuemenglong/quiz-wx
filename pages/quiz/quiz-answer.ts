@@ -5,6 +5,7 @@ import store = require("../../reducer/store");
 import ActionCreator = require("../../reducer/action-creator");
 import wxx = require("../../kit/wxx");
 import QuestionData = require("../base/question-data");
+import _ = require("../../libs/lodash/index");
 
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
@@ -26,10 +27,12 @@ class QuizAnswerClass extends QestionPage {
     }
 
     dataMapper(data: QuestionData): QuestionData {
-        if (!data.answer && data.question.answer) {
-            data.answer = data.question.answer
+        if (!data.answer && _.get(data, "question.answer")) {
+            data.answer = data.question.answer;
+            return _.merge({answer: data.question.answer}, data)
+        } else {
+            return data;
         }
-        return data;
     }
 }
 

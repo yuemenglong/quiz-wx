@@ -3,6 +3,7 @@ import State = require("../common/state/state");
 import debug = require("../kit/debug");
 import _ = require("../libs/lodash/index");
 import reducer = require("./reducer");
+
 /**
  * Created by yml on 2017/8/6
  */
@@ -53,7 +54,7 @@ class Store {
         function go() {
             let nextGlobal = that.getState();
             if (_.isEqual(currentGlobal, nextGlobal)) {
-                debug("Global Equal", nextGlobal);
+                debug("Global Equal", nextGlobal, currentData);
                 return;
             }
             currentGlobal = nextGlobal;

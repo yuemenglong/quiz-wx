@@ -52,7 +52,7 @@ class ActionCreator {
             dispatch({type: ActionType.NEW_QUIZ, data: {mode: "quiz"}});
             let userId = getState().user.id;
             let mode = "answer";
-            http.post(`/quiz`, {tag: "quiz", userId, mode}).then(quiz => {
+            http.post(`/quiz?userId=${userId}`, {tag: "quiz", userId, mode}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 cb(quiz as Quiz);
             })
@@ -65,7 +65,7 @@ class ActionCreator {
             let userId = getState().user.id;
             let mode = "study";
             let tag = "study";
-            http.post(`/quiz?chapter=${chapter}`, {tag, userId, mode}).then(quiz => {
+            http.post(`/quiz?chapter=${chapter}&userId=${userId}`, {tag, userId, mode}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 cb(quiz as Quiz)
             })

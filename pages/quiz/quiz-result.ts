@@ -21,10 +21,19 @@ class QuizResultClass {
         }));
     }
 
+    bindReview() {
+        let quizId = store.getState().user.quiz.id;
+        store.dispatch(ActionCreator.putQuiz(quizId, {mode: "review", idx: 0}, () => {
+            wxx.redirectTo(`./quiz-review`)
+        }));
+    }
+
     bindRedo() {
         let quizId = store.getState().user.quiz.id;
         store.dispatch(ActionCreator.putQuiz(quizId, {mode: "redo", idx: 0}, () => {
-            wxx.redirectTo(`./quiz-redo`)
+            store.dispatch(ActionCreator.clearUncorrectAnswer(store.getState().user.quiz, () => {
+                wxx.redirectTo(`./quiz-redo`)
+            }));
         }));
     }
 

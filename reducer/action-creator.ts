@@ -52,7 +52,7 @@ class ActionCreator {
             dispatch({type: ActionType.NEW_QUIZ, data: {mode: "quiz"}});
             let userId = getState().user.id;
             let mode = "answer";
-            http.post(`/quiz?userId=${userId}`, {tag: "quiz", userId, mode}).then(quiz => {
+            http.post(`/quiz?userId=${userId}&single=2&multi=1`, {tag: "quiz", userId, mode}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
                 cb(quiz as Quiz);
             })
@@ -120,6 +120,17 @@ class ActionCreator {
             dispatch({type: ActionType.PUT_QUIZ, data: quiz});
             http.put(`/quiz/${id}`, quiz).then(quiz => {
                 dispatch({type: ActionType.PUT_QUIZ_SUCC, data: quiz});
+                cb()
+            })
+        })
+    }
+
+    static clearUncorrectAnswer(quiz: Quiz, cb: () => void): Thunk {
+        let updater = {answer: ""};
+        return ((dispatch) => {
+            dispatch({type: ActionType.CLEAR_UNCORRECT_ANSWER, data: quiz});
+            http.put(`/quiz-question?quizId=${quiz.id}&correct=false`, updater).then(updater => {
+                dispatch({type: ActionType.CLEAR_UNCORRECT_ANSWER_SUCC, data: quiz});
                 cb()
             })
         })

@@ -6,6 +6,8 @@
     "pages/study/study-redo",
     "pages/study/study-result",
     "pages/quiz/quiz-answer",
+    "pages/quiz/quiz-review",
+    "pages/quiz/quiz-redo",
     "pages/quiz/quiz-result"
   ],
   "window": {

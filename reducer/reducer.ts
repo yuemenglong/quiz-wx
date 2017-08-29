@@ -10,6 +10,7 @@ import debug = require("../kit/debug");
 import User = require("../common/entity/user");
 import wxx = require("../kit/wxx");
 import Quiz = require("../common/entity/quiz");
+import _ = require("../libs/lodash/index");
 
 
 function go(state: State, action: Action) {
@@ -109,6 +110,23 @@ function go(state: State, action: Action) {
         case ActionType.DELETE_QUIZ_SUCC: {
             let [study, quiz, marked] = [null, null, null];
             return op.update(state, "user{}", [], {study, quiz, marked});
+        }
+        case ActionType.CLEAR_UNCORRECT_ANSWER_SUCC: {
+            let quiz = _.cloneDeep(action.data) as Quiz;
+            quiz.questions.map(q => {
+                if (q.correct == false) {
+                    q.answer = ""
+                }
+            });
+            if (state.user.study) {
+                return op.update(state, "user.study{}", [], quiz);
+            } else if (state.user.quiz) {
+                return op.update(state, "user.quiz{}", [], quiz);
+            } else if (state.user.marked) {
+                return op.update(state, "user.marked{}", [], quiz);
+            } else {
+                throw new Error("Unreachable")
+            }
         }
         default:
             return state;

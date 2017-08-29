@@ -32,6 +32,8 @@ class ActionType {
     static DELETE_QUIZ_SUCC: any = "DELETE_QUIZ_SUCC";
 
     static SET_QUIZ_DATA: any = "SET_QUIZ_DATA";
+    static CLEAR_UNCORRECT_ANSWER: any = "CLEAR_UNCORRECT_ANSWER";
+    static CLEAR_UNCORRECT_ANSWER_SUCC: any = "CLEAR_UNCORRECT_ANSWER_SUCC";
 }
 
 module.exports = ActionType;

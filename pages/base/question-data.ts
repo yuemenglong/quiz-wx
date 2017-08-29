@@ -6,6 +6,7 @@ class QuestionData {
     quiz: Quiz;
     question: QuizQuestion;
     answer: string = "";
+    correctAnswer: string;
     mark: Mark = null;
     isFirst: boolean = false;
     isLast: boolean = false;

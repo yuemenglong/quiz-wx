@@ -136,6 +136,9 @@ abstract class QuestionPage {
                 data.c = getQuizQuestion(data.question, "c");
                 data.d = getQuizQuestion(data.question, "d");
                 data.mark = state.user.marks.filter(m => m.infoId == data.question.infoId)[0] || null;
+                if (data.question.info) {
+                    data.correctAnswer = this.getCorrectAnswer(data.question);
+                }
             }
             data.isFirst = data.quiz.idx == 0;
             data.isLast = data.quiz.idx >= data.quiz.questions.length - 1;

@@ -32,7 +32,7 @@ class IndexClass {
     }
 
     // noinspection JSMethodCanBeStatic
-    stopCurrent(): Promise<boolean> {
+    needStopCurrent(): Promise<boolean> {
         function tip(): Promise<boolean> {
             let state = store.getState();
             if (state.user.study) {
@@ -58,7 +58,7 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindNewStudy() {
-        this.stopCurrent().then((choose) => {
+        this.needStopCurrent().then((choose) => {
             if (!choose) return;
             return wxx.navigateTo(`../study/study-chapter`);
         });
@@ -79,7 +79,7 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindNewQuiz() {
-        this.stopCurrent().then((choose) => {
+        this.needStopCurrent().then((choose) => {
             if (!choose) return;
             return store.dispatch(ActionCreator.newQuiz(() => {
                 return wxx.navigateTo(`../quiz/quiz-answer`);
@@ -102,9 +102,31 @@ class IndexClass {
         }
     }
 
+    //noinspection JSUnusedGlobalSymbols
+    bindNewMarked() {
+        let state = store.getState();
+        if (state.user.marks.length == 0) {
+            return wxx.showTip("提示", "您还没有标记易错题，请标记后再进行易错题回顾")
+        }
+        this.needStopCurrent().then((choose) => {
+            if (!choose) return;
+            return store.dispatch(ActionCreator.newMarkedQuiz(() => {
+                return wxx.navigateTo(`../marked/marked-answer`);
+            }))
+        });
+    }
+
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
-    bindDebug() {
-        return store.dispatch(ActionCreator.postDebugInfo());
+    bindContMarked() {
+        let state = store.getState();
+        let quiz = state.user.marked;
+        if (quiz.mode == "study") {
+            wxx.navigateTo(`../marked/marked-answer`)
+        } else if (quiz.mode == "redo") {
+            wxx.navigateTo(`../marked/marked-redo`)
+        } else {
+            throw new Error("Invalid Mode: " + quiz.mode)
+        }
     }
 
     //noinspection JSUnusedGlobalSymbols

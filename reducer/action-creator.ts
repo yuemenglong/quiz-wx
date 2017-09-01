@@ -72,16 +72,18 @@ class ActionCreator {
         })
     }
 
-    static newExamQuiz(cb: (quiz: Quiz) => void): Thunk {
-        return (dispatch: Dispatch, getState: GetState) => {
-            dispatch({type: ActionType.NEW_QUIZ, data: "exam"});
+
+    static newMarkedQuiz(cb: (quiz: Quiz) => any) {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.NEW_QUIZ, data: "marked"});
             let userId = getState().user.id;
-            let mode = "answer";
-            http.post(`/quiz?single=120&multi=30`, {tag: "exam", userId, mode}).then(quiz => {
+            let mode = "study";
+            let tag = "marked";
+            http.post(`/quiz?marked=true&userId=${userId}`, {tag, userId, mode}).then(quiz => {
                 dispatch({type: ActionType.NEW_QUIZ_SUCC, data: quiz});
-                cb(quiz as Quiz);
+                cb(quiz as Quiz)
             })
-        }
+        })
     }
 
     static fetchQuestion(id: number, cb: (question: Question) => void): Thunk {
@@ -132,16 +134,6 @@ class ActionCreator {
             http.put(`/quiz-question?quizId=${quiz.id}&correct=false`, updater).then(updater => {
                 dispatch({type: ActionType.CLEAR_UNCORRECT_ANSWER_SUCC, data: quiz});
                 cb()
-            })
-        })
-    }
-
-    static postDebugInfo(): Thunk {
-        return ((dispatch, getState) => {
-            let state = getState();
-            dispatch({type: ActionType.POST_DEBUG_INFO, data: state});
-            http.post(`/debug?userId=${state.user.id}`, state).then(() => {
-                dispatch({type: ActionType.POST_DEBUG_INFO_SUCC, data: null})
             })
         })
     }
@@ -207,6 +199,7 @@ class ActionCreator {
     static setQuizData(data: any) {
         return {type: ActionType.SET_QUIZ_DATA, data}
     }
+
 }
 
 module.exports = ActionCreator;

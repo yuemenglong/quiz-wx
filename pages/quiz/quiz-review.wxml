@@ -9,4 +9,3 @@
     <button wx:if="{{!mark}}" class="mark" bindtap="bindMark">加入收藏</button>
     <button wx:if="{{mark}}" class="un-mark" bindtap="bindUnMark">取消收藏</button>
 </view>
-<button class="debug" bindtap="bindDebug">debug</button>

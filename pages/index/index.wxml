@@ -6,5 +6,5 @@
     <button wx:if="{{current=='marked'}}" bindtap="bindContMarked">继续易错题回顾</button>
     <button bindtap="bindNewStudy">开始学习</button>
     <button bindtap="bindNewQuiz">开始模拟考试</button>
+    <button bindtap="bindNewMarked">开始易错题回顾</button>
 </view>
-<button class="debug" bindtap="bindDebug">debug</button>

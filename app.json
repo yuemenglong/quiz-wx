@@ -8,7 +8,10 @@
     "pages/quiz/quiz-answer",
     "pages/quiz/quiz-review",
     "pages/quiz/quiz-redo",
-    "pages/quiz/quiz-result"
+    "pages/quiz/quiz-result",
+    "pages/marked/marked-answer",
+    "pages/marked/marked-redo",
+    "pages/marked/marked-result"
   ],
   "window": {
     "backgroundTextStyle": "light",

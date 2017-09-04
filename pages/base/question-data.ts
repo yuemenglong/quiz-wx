@@ -10,6 +10,7 @@ class QuestionData {
     mark: Mark = null;
     isFirst: boolean = false;
     isLast: boolean = false;
+    timer: string;
 
     a: String = null;
     b: String = null;

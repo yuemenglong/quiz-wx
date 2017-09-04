@@ -64,7 +64,7 @@ abstract class QuestionPage {
 
     abstract submitAnswer(answer)
 
-    dataMapper(data: QuestionData): QuestionData {
+    dataMapper(data: QuestionData, state: State): QuestionData {
         return data
     }
 
@@ -143,7 +143,7 @@ abstract class QuestionPage {
             data.isFirst = data.quiz.idx == 0;
             data.isLast = data.quiz.idx >= data.quiz.questions.length - 1;
             data.answer = state.quizData.answer;
-            return this.dataMapper(_.merge({}, data))
+            return this.dataMapper(_.merge({}, data), state)
         });
     }
 

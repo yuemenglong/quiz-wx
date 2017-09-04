@@ -3,6 +3,7 @@ import ActionCreator = require("../../reducer/action-creator");
 import wxx = require("../../kit/wxx");
 import User = require("../../common/entity/user");
 import State = require("../../common/state/state");
+import moment = require("../../libs/moment/index");
 
 //noinspection JSUnusedGlobalSymbols
 /**
@@ -82,6 +83,7 @@ class IndexClass {
         this.needStopCurrent().then((choose) => {
             if (!choose) return;
             return store.dispatch(ActionCreator.newQuiz(() => {
+                store.dispatch(ActionCreator.setQuizData({startTime: new Date().valueOf()}));
                 return wxx.navigateTo(`../quiz/quiz-answer`);
             }))
         });

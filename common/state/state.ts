@@ -7,7 +7,7 @@ import Question = require("../entity/question");
 
 class QuizData {
     answer: string;
-    timer: number = 0;
+    startTime: number;
 }
 
 class State {

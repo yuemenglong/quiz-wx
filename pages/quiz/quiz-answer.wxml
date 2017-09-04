@@ -1,6 +1,7 @@
 <import src="../base/template.wxml"/>
 
 <view wx:if="{{question!=null&&question.info!=null}}">
+    <text class="row">{{timer}}</text>
     <template is="question" data="{{question,a,b,d,c,bindAnswer}}"/>
     <text class="row" wx:if="{{!!answer}}">已选择：{{answer}}</text>
     <button wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>

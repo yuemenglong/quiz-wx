@@ -6,6 +6,8 @@ import ActionCreator = require("../../reducer/action-creator");
 import wxx = require("../../kit/wxx");
 import QuestionData = require("../base/question-data");
 import _ = require("../../libs/lodash/index");
+import moment = require("../../libs/moment/moment");
+import State = require("../../common/state/state");
 
 /**
  * Created by <yuemenglong@126.com> on 2017/7/27
@@ -26,8 +28,12 @@ class QuizAnswerClass extends QestionPage {
         return quiz.questions[quiz.idx]
     }
 
-    dataMapper(data: QuestionData): QuestionData {
+    dataMapper(data: QuestionData, state: State): QuestionData {
+        let gap = new Date().valueOf() - state.quizData.startTime;
+        let timer = moment(gap).format("mm:ss");
+        data = _.merge({timer}, data);
         if (!data.answer && _.get(data, "question.answer")) {
+            // 为了解决上一题能够显示之前已经回答的答案
             data.answer = data.question.answer;
             return _.merge({answer: data.question.answer}, data)
         } else {

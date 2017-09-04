@@ -111,14 +111,14 @@ abstract class QuestionPage {
     //noinspection JSUnusedGlobalSymbols
     bindMark() {
         store.dispatch(ActionCreator.postMark(this.data.question.infoId, () => {
-            wxx.showToast("收藏成功");
+            wxx.toastSucc("收藏成功");
         }))
     }
 
     //noinspection JSUnusedGlobalSymbols
     bindUnMark() {
         store.dispatch(ActionCreator.deleteMark(this.data.mark.id, () => {
-            wxx.showToast("取消收藏成功");
+            wxx.toastSucc("取消收藏成功");
         }))
     }
 

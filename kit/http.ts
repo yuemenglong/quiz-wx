@@ -1,11 +1,12 @@
 import wxx = require("./wxx");
 import debug = require("./debug");
+
 /**
  * Created by Administrator on 2017/7/27
  */
 
 // const HOST = "http://211.159.173.48:8888";
-const HOST = "http://localhost:8888";
+const HOST = "https://rdpac.yuemenglong.com";
 
 class http {
     static get<T>(path: string): Promise<T> {
@@ -37,7 +38,7 @@ class http {
                 success: (res) => {
                     if (res.statusCode >= 400) {
                         debug(`Fail [${method}] ${url}`, res);
-                        wxx.showToast("请求失败");
+                        wxx.toastError("请求失败");
                         reject(res)
                     } else {
                         debug(`Succ [${method}] ${url}`, res);
@@ -46,7 +47,7 @@ class http {
                 },
                 fail: (err) => {
                     debug(`Fail [${method}] ${url}`, err);
-                    wxx.showToast("请求失败");
+                    wxx.toastError("请求失败");
                     reject(err)
                 },
             });

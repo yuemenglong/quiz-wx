@@ -34,7 +34,7 @@ class ActionCreator {
         })
     }
 
-    static fetchUser(code: string, cb: () => void): Thunk {
+    static fetchUser(code: string, cb: (user: User) => void): Thunk {
         return (dispatch: Dispatch, getState: GetState) => {
             if (getState().user != null) {
                 return getState().user;
@@ -42,7 +42,7 @@ class ActionCreator {
             dispatch({type: ActionType.FETCH_USER, data: null});
             return http.get<User>(`/user?code=${code}`).then(user => {
                 dispatch({type: ActionType.FETCH_USER_SUCC, data: user});
-                return user;
+                cb(user)
             })
         }
     }

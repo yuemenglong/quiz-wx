@@ -145,13 +145,20 @@ class IndexClass {
         let code = wxx.getLocalStorage("code");
         if (!code) {
             // 未注册，先注册
+            // 之后改成通过注册码判断是否注册 //TODO
             wxx.getUserInfo().then(wxUserInfo => {
                 store.dispatch(ActionCreator.registUser(wxUserInfo, () => {
                 }))
             })
         } else {
             // 注册过，拿用户信息
-            store.dispatch(ActionCreator.fetchUser(code, () => {
+            store.dispatch(ActionCreator.fetchUser(code, (user: User) => {
+                if (user == null) {
+                    wxx.getUserInfo().then(wxUserInfo => {
+                        store.dispatch(ActionCreator.registUser(wxUserInfo, () => {
+                        }))
+                    })
+                }
             }))
         }
     }

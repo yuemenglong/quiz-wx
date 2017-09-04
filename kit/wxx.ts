@@ -15,7 +15,7 @@ class wxx {
         }
     }
 
-    static setLocalStorage(name: string, value:string){
+    static setLocalStorage(name: string, value: string) {
         try {
             return wx.setStorageSync(name, value);
         } catch (e) {
@@ -42,11 +42,16 @@ class wxx {
         wx.redirectTo({url})
     }
 
-    static showToast(title: string, duration: number = 1500) {
+    static toastSucc(title: string, duration: number = 1500) {
         wx.showToast({title, duration})
     }
 
-    static loadingToast(title: string, duration: number = 1500) {
+
+    static toastError(title: string, duration: number = 1500) {
+        wx.showToast({title, image: "/image/error.256.png", duration})
+    }
+
+    static toastLoading(title: string, duration: number = 1500) {
         let icon = "loading";
         wx.showToast({title, duration, icon})
     }

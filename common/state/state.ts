@@ -8,6 +8,8 @@ import Question = require("../entity/question");
 class QuizData {
     answer: string;
     startTime: number;
+    ticker: number = 0;
+    interval: any = null;
 }
 
 class State {

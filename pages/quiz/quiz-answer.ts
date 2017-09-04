@@ -40,6 +40,20 @@ class QuizAnswerClass extends QestionPage {
             return data;
         }
     }
+
+    onLoadHook() {
+        let interval = setInterval(() => {
+            store.dispatch(ActionCreator.setQuizData({ticker: store.getState().quizData.ticker + 1}))
+        }, 1000);
+        store.dispatch(ActionCreator.setQuizData({interval}));
+    }
+
+    onUnloadHook() {
+        if (store.getState().quizData.interval != null) {
+            clearInterval(store.getState().quizData.interval);
+            store.dispatch(ActionCreator.setQuizData({interval: null}));
+        }
+    }
 }
 
 Page(new QuizAnswerClass());

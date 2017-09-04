@@ -64,6 +64,7 @@ abstract class QuestionPage {
 
     abstract submitAnswer(answer)
 
+    // noinspection JSMethodCanBeStatic
     dataMapper(data: QuestionData, state: State): QuestionData {
         return data
     }
@@ -147,9 +148,22 @@ abstract class QuestionPage {
         });
     }
 
+    onLoadHook() {
+
+    }
+
     //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
     onLoad() {
+        this.onLoadHook();
         this.nextOrResult();
+    }
+
+    onUnloadHook() {
+
+    }
+
+    onUnload(){
+        this.onUnloadHook();
     }
 }
 

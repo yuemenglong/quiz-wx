@@ -8,6 +8,7 @@ import _ = require("../libs/lodash/index");
 import Question = require("../common/entity/question");
 import QuizQuestion = require("../common/entity/quiz-question");
 import WxUserInfo = require("../common/entity/wx-user-info");
+import wxx = require("../kit/wxx");
 
 /**
  * Created by Administrator on 2017/7/27
@@ -24,12 +25,12 @@ class ActionCreator {
         })
     }
 
-    static registUser(wxUserInfo: WxUserInfo, cb: () => void): Thunk {
+    static registUser(code: string, wxUserInfo: WxUserInfo, cb: (user: User) => void): Thunk {
         return ((dispatch, getState) => {
-            dispatch({type: ActionType.REGIST_USER, data: null});
-            http.post(`/user`, {wxUserInfo: wxUserInfo, marks: []}).then(res => {
-                dispatch({type: ActionType.REGIST_USER_SUCC, data: res});
-                cb()
+            dispatch({type: ActionType.REGIST_USER, data: {code, wxUserInfo}});
+            http.post(`/user`, {code, wxUserInfo, marks: []}).then(user => {
+                dispatch({type: ActionType.REGIST_USER_SUCC, data: user});
+                cb(user as User)
             })
         })
     }
@@ -200,6 +201,9 @@ class ActionCreator {
         return {type: ActionType.SET_QUIZ_DATA, data}
     }
 
+    static setWxUserInfo(wxUserInfo: WxUserInfo) {
+        return {type: ActionType.SET_WX_USER_INFO, data: wxUserInfo}
+    }
 }
 
 module.exports = ActionCreator;

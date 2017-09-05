@@ -1,6 +1,7 @@
 <!--logs.wxml-->
 <view class="index" wx:if="{{user!=null}}">
-    <image src="{{user.wxUserInfo.avatarUrl}}"/>
+    <image class="avatar" src="{{user.wxUserInfo.avatarUrl}}"/>
+    <navigator wx:if="{{!registed}}" url="/pages/index/regist">注册</navigator>
     <button wx:if="{{current=='study'}}" bindtap="bindContStudy">继续学习</button>
     <button wx:if="{{current=='quiz'}}" bindtap="bindContQuiz">继续模拟考试</button>
     <button wx:if="{{current=='marked'}}" bindtap="bindContMarked">继续易错题回顾</button>

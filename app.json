@@ -11,7 +11,8 @@
     "pages/quiz/quiz-result",
     "pages/marked/marked-answer",
     "pages/marked/marked-redo",
-    "pages/marked/marked-result"
+    "pages/marked/marked-result",
+    "pages/index/regist"
   ],
   "window": {
     "backgroundTextStyle": "light",

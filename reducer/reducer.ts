@@ -15,14 +15,26 @@ import _ = require("../libs/lodash/index");
 
 function go(state: State, action: Action) {
     switch (action.type) {
+        case ActionType.SET_WX_USER_INFO: {
+            let user = {wxUserInfo: action.data};
+            return op.update(state, "user{}", [], user);
+        }
         case ActionType.FETCH_USER_SUCC: {
             let user = action.data;
-            return op.update(state, "user", [], user);
+            if (user) {
+                return op.update(state, "user", [], user);
+            } else {
+                return state;
+            }
         }
         case ActionType.REGIST_USER_SUCC: {
             let user = action.data as User;
-            wxx.setLocalStorage("code", user.code);
-            return op.update(state, "user", [], user);
+            if (user) {
+                wxx.setLocalStorage("code", user.code);
+                return op.update(state, "user", [], user);
+            } else {
+                return state;
+            }
         }
         case ActionType.NEW_QUIZ_SUCC: {
             let q = action.data as Quiz;

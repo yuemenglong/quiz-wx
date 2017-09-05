@@ -1,5 +1,6 @@
 /**
- * Created b    static SET_QUIZ_DATA: any;
+ * Created b    static SET_QUIZ_DATA: a    static SET_WX_USER_INFO: any;
+ ny;
  y Administrator on 2017/7/27.
  */
 
@@ -34,6 +35,7 @@ class ActionType {
     static SET_QUIZ_DATA: any = "SET_QUIZ_DATA";
     static CLEAR_UNCORRECT_ANSWER: any = "CLEAR_UNCORRECT_ANSWER";
     static CLEAR_UNCORRECT_ANSWER_SUCC: any = "CLEAR_UNCORRECT_ANSWER_SUCC";
+    static SET_WX_USER_INFO: any = "SET_WX_USER_INFO";
 }
 
 module.exports = ActionType;

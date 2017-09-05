@@ -3,7 +3,7 @@ import ActionCreator = require("../../reducer/action-creator");
 import wxx = require("../../kit/wxx");
 import User = require("../../common/entity/user");
 import State = require("../../common/state/state");
-import moment = require("../../libs/moment/index");
+import _ = require("../../libs/lodash/index");
 
 //noinspection JSUnusedGlobalSymbols
 /**
@@ -13,6 +13,7 @@ import moment = require("../../libs/moment/index");
 class IndexData {
     user: User;
     current: string;
+    registed: boolean;
 }
 
 class IndexClass {
@@ -36,6 +37,12 @@ class IndexClass {
     needStopCurrent(): Promise<boolean> {
         function tip(): Promise<boolean> {
             let state = store.getState();
+            if (!state.user.code) {
+                wxx.toastError("请先注册后进行使用");
+                return new Promise((resolve) => {
+                    resolve(false)
+                })
+            }
             if (state.user.study) {
                 return wxx.showModal("提示", "您还有未完成的学习，是否忽略")
             } else if (state.user.quiz) {
@@ -106,12 +113,13 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindNewMarked() {
-        let state = store.getState();
-        if (state.user.marks.length == 0) {
-            return wxx.showTip("提示", "您还没有标记易错题，请标记后再进行易错题回顾")
-        }
         this.needStopCurrent().then((choose) => {
             if (!choose) return;
+            let state = store.getState();
+            if (state.user.marks.length == 0) {
+                wxx.showTip("提示", "您还没有标记易错题，请标记后再进行易错题回顾")
+                return;
+            }
             return store.dispatch(ActionCreator.newMarkedQuiz(() => {
                 return wxx.navigateTo(`../marked/marked-answer`);
             }))
@@ -137,6 +145,7 @@ class IndexClass {
             let data = new IndexData();
             data.user = state.user;
             data.current = this.currentType(state);
+            data.registed = !!_.get(state, "user.code");
             return data;
         });
     }
@@ -145,24 +154,14 @@ class IndexClass {
     onLoad() {
         // 先拿code
         let code = wxx.getLocalStorage("code");
-        if (!code) {
-            // 未注册，先注册
-            // 之后改成通过注册码判断是否注册 //TODO
-            wxx.getUserInfo().then(wxUserInfo => {
-                store.dispatch(ActionCreator.registUser(wxUserInfo, () => {
+        wxx.getUserInfo().then(wxUserInfo => {
+            store.dispatch(ActionCreator.setWxUserInfo(wxUserInfo));
+            if (code) {
+                // 注册过，拿用户信息
+                store.dispatch(ActionCreator.fetchUser(code, (user: User) => {
                 }))
-            })
-        } else {
-            // 注册过，拿用户信息
-            store.dispatch(ActionCreator.fetchUser(code, (user: User) => {
-                if (user == null) {
-                    wxx.getUserInfo().then(wxUserInfo => {
-                        store.dispatch(ActionCreator.registUser(wxUserInfo, () => {
-                        }))
-                    })
-                }
-            }))
-        }
+            }
+        });
     }
 }
 

@@ -10,14 +10,19 @@
     box-sizing: border-box;
 }
 
+.index{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
 .row {
     display: block;
 }
 
-/*noinspection CssInvalidPropertyValue*/
-.debug {
-    display: inline-block;
-    position: fixed;
-    left: 0rpx;
-    bottom: 0rpx;
+.avatar {
+    width: 192rpx;
+    height: 192rpx;
+    border-radius: 50%;
 }
+

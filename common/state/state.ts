@@ -1,5 +1,6 @@
 import User = require("../entity/user");
 import Question = require("../entity/question");
+import Chapter = require("../entity/chapter");
 
 /**
  * Created by Administrator on 2017/7/27
@@ -15,6 +16,7 @@ class QuizData {
 class State {
     user: User;
     questions: Question[] = [];
+    chapters: Chapter[] = [];
     quizData: QuizData = new QuizData;
 }
 

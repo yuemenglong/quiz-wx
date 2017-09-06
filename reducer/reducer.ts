@@ -57,6 +57,10 @@ function go(state: State, action: Action) {
             let answer = action.data;
             return op.update(state, "quizData.answer", [], answer);
         }
+        case ActionType.FETCH_CHAPTER_SUCC: {
+            let chapters = action.data;
+            return op.update(state, "chapters", [], chapters)
+        }
         case ActionType.FETCH_QUESTION_SUCC: {
             let question = action.data;
             return op.update(state, "questions[$idx]", [question.id], question)

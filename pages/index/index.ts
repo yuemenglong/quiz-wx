@@ -76,7 +76,13 @@ class IndexClass {
     bindNewStudy() {
         this.needStopCurrent().then((choose) => {
             if (!choose) return;
-            return wxx.navigateTo(`../study/study-chapter`);
+            if(store.getState().chapters.length){
+                return wxx.navigateTo(`../study/study-chapter`);
+            }else{
+                store.dispatch(ActionCreator.fetchChapter(()=>{
+                    return wxx.navigateTo(`../study/study-chapter`);
+                }))
+            }
         });
     }
 

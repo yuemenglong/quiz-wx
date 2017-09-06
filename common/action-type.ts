@@ -34,6 +34,8 @@ class ActionType {
     static CLEAR_UNCORRECT_ANSWER: any = "CLEAR_UNCORRECT_ANSWER";
     static CLEAR_UNCORRECT_ANSWER_SUCC: any = "CLEAR_UNCORRECT_ANSWER_SUCC";
     static SET_WX_USER_INFO: any = "SET_WX_USER_INFO";
+    static FETCH_CHAPTER: any = "FETCH_CHAPTER";
+    static FETCH_CHAPTER_SUCC: any = "FETCH_CHAPTER_SUCC";
 }
 
 module.exports = ActionType;

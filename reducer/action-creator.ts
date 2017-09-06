@@ -6,6 +6,7 @@ import Quiz = require("../common/entity/quiz");
 import Question = require("../common/entity/question");
 import QuizQuestion = require("../common/entity/quiz-question");
 import WxUserInfo = require("../common/entity/wx-user-info");
+import Chapter = require("../common/entity/chapter");
 
 /**
  * Created by Administrator on 2017/7/27
@@ -187,6 +188,15 @@ class ActionCreator {
 
     static setWxUserInfo(wxUserInfo: WxUserInfo) {
         return {type: ActionType.SET_WX_USER_INFO, data: wxUserInfo}
+    }
+
+    static fetchChapter(cb: () => any): Thunk {
+        return ((dispatch, getState) => {
+            dispatch({type: ActionType.FETCH_CHAPTER, data: null});
+            http.get("/chapters").then((chapters: Chapter[]) => {
+                dispatch({type: ActionType.FETCH_CHAPTER_SUCC, data: chapters})
+            })
+        })
     }
 }
 

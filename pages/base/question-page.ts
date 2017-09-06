@@ -40,6 +40,11 @@ function getQuizQuestion(qq: QuizQuestion, no: string): string {
 abstract class QuestionPage {
     data: QuestionData = new QuestionData;
 
+    setState(state) {
+        let that = this as any;
+        that.setData(state)
+    }
+
     nextOrResult() {
         let state = store.getState();
         let question = this.getNextQuestion(kit.getCurrentQuiz(state.user));
@@ -125,6 +130,15 @@ abstract class QuestionPage {
 
     //noinspection JSUnusedGlobalSymbols
     onShow() {
+    }
+
+    onLoadHook() {
+    }
+
+    //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
+    onLoad() {
+        this.onLoadHook();
+        this.nextOrResult();
         store.connect(this, (state: State) => {
             // quiz是直接从store里拼接的
             let data = new QuestionData;
@@ -148,21 +162,11 @@ abstract class QuestionPage {
         });
     }
 
-    onLoadHook() {
-
-    }
-
-    //noinspection JSUnusedGlobalSymbols,JSMethodCanBeStatic
-    onLoad() {
-        this.onLoadHook();
-        this.nextOrResult();
-    }
-
     onUnloadHook() {
 
     }
 
-    onUnload(){
+    onUnload() {
         this.onUnloadHook();
     }
 }

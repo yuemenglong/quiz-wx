@@ -19,6 +19,11 @@ class IndexData {
 class IndexClass {
     data: IndexData;
 
+    setState(state) {
+        let that = this as any;
+        that.setData(state)
+    }
+
     // noinspection JSMethodCanBeStatic
     currentType(state: State): string {
         if (!state.user) {
@@ -30,6 +35,8 @@ class IndexClass {
             return "quiz"
         } else if (state.user.marked) {
             return "marked"
+        } else {
+            return ""
         }
     }
 
@@ -141,16 +148,9 @@ class IndexClass {
 
     //noinspection JSUnusedGlobalSymbols
     onShow() {
-        store.connect(this, (state) => {
-            let data = new IndexData();
-            data.user = state.user;
-            data.current = this.currentType(state);
-            data.registed = !!_.get(state, "user.code");
-            return data;
-        });
     }
 
-    //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
+//noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
     onLoad() {
         // 先拿code
         let code = wxx.getLocalStorage("code");
@@ -161,6 +161,13 @@ class IndexClass {
                 store.dispatch(ActionCreator.fetchUser(code, (user: User) => {
                 }))
             }
+        });
+        store.connect(this, (state) => {
+            let data = new IndexData();
+            data.user = state.user;
+            data.current = this.currentType(state);
+            data.registed = !!_.get(state, "user.code");
+            return data;
         });
     }
 }

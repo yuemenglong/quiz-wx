@@ -76,12 +76,12 @@ class Store {
         debug("Subscribe", this.counter);
         let unSubscribe = store.subscribe(go);
         let $onHide = (component.onHide || noop).bind(component);
-        component.onHide = () => {
-            this.counter--;
-            debug("Unsubscribe", this.counter);
-            unSubscribe();
-            $onHide();
-        };
+        // component.onHide = () => {
+        //     this.counter--;
+        //     debug("Unsubscribe", this.counter);
+        //     unSubscribe();
+        //     $onHide();
+        // };
         let $onUnload = (component.onUnload || noop).bind(component);
         component.onUnload = () => {
             this.counter--;

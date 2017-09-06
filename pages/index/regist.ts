@@ -42,7 +42,7 @@ class RegistClass {
         this.setState({code: e.detail.value})
     }
 
-    onShow() {
+    onLoad() {
         store.connect(this, (state) => {
             let data = new RegistData();
             data.user = state.user;

@@ -5,8 +5,6 @@
  */
 
 class ActionType {
-    static FETCH_WX_USER: any = "FETCH_WX_USER";
-    static FETCH_WX_USER_SUCC: any = "FETCH_WX_USER_SUCC";
     static FETCH_USER: any = "FETCH_USER";
     static FETCH_USER_SUCC: any = "FETCH_USER_SUCC";
     static REGIST_USER: any = "REGIST_USER";

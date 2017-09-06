@@ -5,7 +5,7 @@
     <button type="primary" wx:if="{{current=='study'}}" bindtap="bindContStudy">继续学习</button>
     <button type="primary" wx:if="{{current=='marked'}}" bindtap="bindContMarked">继续易错题学习</button>
     <button type="primary" wx:if="{{current=='quiz'}}" bindtap="bindContQuiz">继续模拟考试</button>
-    <button bindtap="bindNewStudy">开始按章节学习</button>
+    <button type="{{!!current?'default':'primary'}}" bindtap="bindNewStudy">开始按章节学习</button>
     <button bindtap="bindNewMarked">开始易错题学习</button>
     <button bindtap="bindNewQuiz">开始模拟考试</button>
 </view>

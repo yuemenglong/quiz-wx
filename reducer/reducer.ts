@@ -22,7 +22,7 @@ function go(state: State, action: Action) {
         case ActionType.FETCH_USER_SUCC: {
             let user = action.data;
             if (user) {
-                return op.update(state, "user", [], user);
+                return op.update(state, "user{}", [], user);
             } else {
                 return state;
             }

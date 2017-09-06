@@ -28,7 +28,7 @@ class IndexClass {
     // noinspection JSMethodCanBeStatic
     currentType(state: State): string {
         if (!state.user) {
-            return ""
+            return null
         }
         if (state.user.study) {
             return "study"
@@ -37,7 +37,7 @@ class IndexClass {
         } else if (state.user.marked) {
             return "marked"
         } else {
-            return ""
+            return null
         }
     }
 

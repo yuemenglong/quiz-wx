@@ -1,30 +1,17 @@
 import {Thunk, Dispatch, GetState} from "../common/interface";
 import ActionType = require("../common/action-type");
-import kit = require("../kit/wxx");
 import http = require("../kit/http");
 import User = require("../common/entity/user");
 import Quiz = require("../common/entity/quiz");
-import _ = require("../libs/lodash/index");
 import Question = require("../common/entity/question");
 import QuizQuestion = require("../common/entity/quiz-question");
 import WxUserInfo = require("../common/entity/wx-user-info");
-import wxx = require("../kit/wxx");
 
 /**
  * Created by Administrator on 2017/7/27
  */
 
 class ActionCreator {
-    static getWxUserInfo(cb: (wxUserInfo: WxUserInfo) => void): Thunk {
-        return ((dispatch, getState) => {
-            dispatch({type: ActionType.FETCH_WX_USER, data: null});
-            kit.getUserInfo().then(wxUserInfo => {
-                dispatch({type: ActionType.FETCH_WX_USER_SUCC, data: wxUserInfo});
-                cb(wxUserInfo)
-            })
-        })
-    }
-
     static registUser(code: string, wxUserInfo: WxUserInfo, cb: (user: User) => void): Thunk {
         return ((dispatch, getState) => {
             dispatch({type: ActionType.REGIST_USER, data: {code, wxUserInfo}});

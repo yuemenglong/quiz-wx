@@ -14,6 +14,10 @@ button {
     margin: 20rpx 20rpx;
 }
 
+.index{
+    text-align: center;
+}
+
 .index .avatar {
     width: 256rpx;
     height: 256rpx;
@@ -23,7 +27,7 @@ button {
 }
 
 .index .regist-text {
-    text-align: center;
+    display: inline-block;
     font-size: 28rpx;
     color: #576b95;
     margin-bottom: 30rpx;

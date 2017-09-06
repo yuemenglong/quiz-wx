@@ -1,21 +1,25 @@
 <!--question,a,b,c,d,bindAnswer-->
 <template name="question">
-    <text>{{question.idx}}</text>
-    <text wx:if="{{question.info.multi}}">(多选题)</text>
-    <text wx:else>(单选题)</text>
-    <text>{{question.info.title}}</text>
-    <button data-answer="a" bindtap="bindAnswer">A:{{a}}</button>
-    <button data-answer="b" bindtap="bindAnswer">B:{{b}}</button>
-    <button data-answer="c" bindtap="bindAnswer">C:{{c}}</button>
-    <button data-answer="d" bindtap="bindAnswer">D:{{d}}</button>
+    <view class="question-title">
+        <text>{{question.idx}}</text>
+        <text wx:if="{{question.info.multi}}">(多选题)</text>
+        <text wx:else>(单选题)</text>
+        <text>{{question.info.title}}</text>
+    </view>
+    <view class="question-select">
+        <button data-answer="a" bindtap="bindAnswer">A:{{a}}</button>
+        <button data-answer="b" bindtap="bindAnswer">B:{{b}}</button>
+        <button data-answer="c" bindtap="bindAnswer">C:{{c}}</button>
+        <button data-answer="d" bindtap="bindAnswer">D:{{d}}</button>
+    </view>
 </template>
 
 <!--isFirst,isLast,mark,bindPrev,bindNext,bindMark,bindUnMark-->
 <template name="operate">
     <view class="operate">
         <button disabled="{{isFirst}}" class="row" bindtap="bindPrev">上一题</button>
-        <button wx:if="{{!mark}}" class="mark" bindtap="bindMark">加入收藏</button>
-        <button wx:if="{{mark}}" class="un-mark" bindtap="bindUnMark">取消收藏</button>
+        <button wx:if="{{!mark}}" class="mark" bindtap="bindMark">标记易错</button>
+        <button wx:if="{{mark}}" class="unmark" bindtap="bindUnMark">取消标记</button>
         <button class="row" bindtap="bindNext">下一题</button>
     </view>
 </template>

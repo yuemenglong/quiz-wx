@@ -43,3 +43,17 @@ button {
 .operate button{
     flex: 1;
 }
+
+.question-title {
+    text-align: left;
+    margin: 20rpx;
+}
+
+.question-select button{
+   text-align: left;
+}
+
+button.unmark {
+    background-color: #e64340;
+    color: white;
+}

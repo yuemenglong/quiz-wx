@@ -30,7 +30,7 @@ class MarkedResultClass {
 
     bindFinish() {
         store.dispatch(ActionCreator.deleteQuiz(store.getState().user.marked, () => {
-            wxx.redirectTo(`../index/index`)
+            wxx.navigateBack()
         }));
     }
 

@@ -32,7 +32,7 @@ class RegistClass {
                 wxx.toastError("注册失败，请填写正确的验证码")
             } else {
                 wxx.toastSucc("注册成功");
-                wxx.redirectTo("/pages/index/index")
+                wxx.navigateBack();
             }
         }))
     }

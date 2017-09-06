@@ -42,6 +42,11 @@ class wxx {
         wx.redirectTo({url})
     }
 
+    static navigateBack(n: number = 1) {
+        debug("[NavigateBack] => ", n);
+        wx.navigateBack({delta: n});
+    }
+
     static toastSucc(title: string, duration: number = 1500) {
         wx.showToast({title, duration})
     }

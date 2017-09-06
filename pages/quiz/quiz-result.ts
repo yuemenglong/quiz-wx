@@ -39,7 +39,7 @@ class QuizResultClass {
 
     bindFinish() {
         store.dispatch(ActionCreator.deleteQuiz(store.getState().user.quiz, () => {
-            wxx.redirectTo(`../index/index`)
+            wxx.navigateBack()
         }));
     }
 

@@ -1,8 +1,10 @@
 <import src="../base/template.wxml"/>
 
-<view wx:if="{{question!=null&&question.info!=null}}">
+<view class="quiz" wx:if="{{question!=null&&question.info!=null}}">
     <template is="question" data="{{question,a,b,c,d}}"/>
-    <text class="row">你的答案：{{question.answer}}</text>
-    <text class="row" wx:if="{{!question.correct}}">正确答案：{{correctAnswer}}</text>
+    <view class="review">
+        <text>正确答案：<text class="green">{{correctAnswer}}</text></text>
+        <text>你的答案：<text class="red">{{question.answer}}</text></text>
+    </view>
     <template is="operate" data="{{isFirst,isLast,mark,bindPrev,bindNext,bindMark,bindUnMark}}"/>
 </view>

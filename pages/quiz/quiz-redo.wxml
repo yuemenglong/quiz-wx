@@ -2,7 +2,7 @@
 
 <view wx:if="{{question!=null&&question.info!=null}}">
     <template is="question" data="{{question,a,b,d,c,bindAnswer}}"/>
-    <text class="row" wx:if="{{!!answer}}">已选择：{{answer}}</text>
+    <text class="row" wx:if="{{question.info.multi}}">已选择：{{answer}}</text>
     <button type="primary" wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>
     <template is="operate" data="{{isFirst,isLast,mark,bindPrev,bindNext,bindMark,bindUnMark}}"/>
 </view>

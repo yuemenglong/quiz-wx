@@ -24,6 +24,7 @@ function go(state: State, action: Action) {
             if (user) {
                 return op.update(state, "user{}", [], user);
             } else {
+                wxx.setLocalStorage("code", null);
                 return state;
             }
         }

@@ -8,18 +8,13 @@
     <button data-answer="b" bindtap="bindAnswer">B:{{b}}</button>
     <button data-answer="c" bindtap="bindAnswer">C:{{c}}</button>
     <button data-answer="d" bindtap="bindAnswer">D:{{d}}</button>
-    <!--<navigator url="../play/play?courseUuid={{courseUuid}}&isCompany={{isCompany}}">-->
-    <!--<view class="item mr26">-->
-    <!--<image src="{{imagePath}}" mode="aspectFill"></image>-->
-    <!--<view class="course-title">-->
-    <!--<text class="title">{{courseName}}</text>-->
-    <!--<text class="author">- {{teacherName}}</text>-->
-    <!--</view>-->
-    <!--<view class="course-info clearfix">-->
-    <!--<view class="fl"><text class="play">{{playCount}}</text></view>-->
-    <!--<view class="fr"><text class="grade">{{score}}</text></view>-->
-    <!--</view>-->
-    <!--<view wx:if="{{studyProgress}}" class="tip-completed">{{studyProgress}}</view>-->
-    <!--</view>-->
-    <!--</navigator>-->
+</template>
+
+<!--question,isFirst,isLast,mark,bindPrev,bindNext,bindMark,bindUnMark-->
+<template name="operate">
+    <button wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>
+    <button wx:if="{{!isFirst}}" class="row" bindtap="bindPrev">上一题</button>
+    <button wx:if="{{!isLast}}" class="row" bindtap="bindNext">下一题</button>
+    <button wx:if="{{!mark}}" class="mark" bindtap="bindMark">加入收藏</button>
+    <button wx:if="{{mark}}" class="un-mark" bindtap="bindUnMark">取消收藏</button>
 </template>

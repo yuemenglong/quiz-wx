@@ -165,8 +165,4 @@ class IndexClass {
     }
 }
 
-Page(
-    new
-
-    IndexClass()
-);
+Page(new IndexClass());

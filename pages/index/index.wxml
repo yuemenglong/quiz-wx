@@ -1,10 +1,10 @@
 <!--logs.wxml-->
 <view class="index" wx:if="{{user!=null}}">
-    <image class="avatar" src="{{user.wxUserInfo.avatarUrl}}"/>
-    <navigator wx:if="{{!registed}}" url="/pages/index/regist">注册</navigator>
-    <button wx:if="{{current=='study'}}" bindtap="bindContStudy">继续学习</button>
-    <button wx:if="{{current=='quiz'}}" bindtap="bindContQuiz">继续模拟考试</button>
-    <button wx:if="{{current=='marked'}}" bindtap="bindContMarked">继续易错题回顾</button>
+    <image class="avatar center" src="{{user.wxUserInfo.avatarUrl}}"/>
+    <navigator class="regist-text" wx:if="{{!registed}}" url="/pages/index/regist">注册</navigator>
+    <button type="primary" wx:if="{{current=='study'}}" bindtap="bindContStudy">继续学习</button>
+    <button type="primary" wx:if="{{current=='quiz'}}" bindtap="bindContQuiz">继续模拟考试</button>
+    <button type="primary" wx:if="{{current=='marked'}}" bindtap="bindContMarked">继续易错题回顾</button>
     <button bindtap="bindNewStudy">开始学习</button>
     <button bindtap="bindNewQuiz">开始模拟考试</button>
     <button bindtap="bindNewMarked">开始易错题回顾</button>

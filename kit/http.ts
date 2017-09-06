@@ -5,8 +5,8 @@ import debug = require("./debug");
  * Created by Administrator on 2017/7/27
  */
 
-const HOST = "http://localhost:8888";
-// const HOST = "https://rdpac.yuemenglong.com";
+// const HOST = "http://localhost:8888";
+const HOST = "https://rdpac.yuemenglong.com";
 
 class http {
     static get<T>(path: string): Promise<T> {
@@ -29,6 +29,7 @@ class http {
     static request<T>(method: string, path: string, data: Object): Promise<T> {
         let url = HOST + path;
         debug(`Begin [${method}] ${url}`, data);
+        wxx.showLoading("加载中");
         return new Promise(function (resolve, reject) {
             wx.request({
                 url: url,
@@ -36,9 +37,14 @@ class http {
                 data: data || "",
                 header: {"Content-Type": "application/json"},
                 success: (res) => {
-                    if (res.statusCode >= 400) {
+                    wxx.hideLoading()
+                    if (res.statusCode == 500) {
                         debug(`Fail [${method}] ${url}`, res);
                         wxx.toastError(res.data);
+                        reject(res)
+                    } else if (res.statusCode >= 400) {
+                        debug(`Fail [${method}] ${url}`, res);
+                        wxx.toastError("请求失败");
                         reject(res)
                     } else {
                         debug(`Succ [${method}] ${url}`, res);
@@ -46,6 +52,7 @@ class http {
                     }
                 },
                 fail: (err) => {
+                    wxx.hideLoading()
                     debug(`Fail [${method}] ${url}`, err);
                     wxx.toastError("请求失败");
                     reject(err)

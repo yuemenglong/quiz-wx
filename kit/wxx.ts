@@ -23,6 +23,14 @@ class wxx {
         }
     }
 
+    static showLoading(title: string) {
+        wx.showLoading({title, mast: true})
+    }
+
+    static hideLoading() {
+        wx.hideLoading()
+    }
+
     static getUserInfo(): Promise<WxUserInfo> {
         return new Promise(function (resolve, reject) {
             wx.getUserInfo({

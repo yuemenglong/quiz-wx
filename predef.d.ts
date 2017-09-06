@@ -29,6 +29,10 @@ declare class wx {
 
     static showModal(opt: Object)
 
+    static showLoading(opt: Object)
+
+    static hideLoading()
+
     static getStorageSync(name: string): string
 
     static setStorageSync(name: string, value: string)

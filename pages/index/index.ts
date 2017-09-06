@@ -46,7 +46,7 @@ class IndexClass {
         function tip(): Promise<boolean> {
             let state = store.getState();
             if (!state.user.code) {
-                wxx.toastError("请先注册后进行使用");
+                wxx.showTip("提示", "请先注册后再进行使用");
                 return new Promise((resolve) => {
                     resolve(false)
                 })
@@ -98,6 +98,7 @@ class IndexClass {
         this.needStopCurrent().then((choose) => {
             if (!choose) return;
             return store.dispatch(ActionCreator.newQuiz(() => {
+                wxx.setLocalStorage("startTime", new Date().valueOf().toString());
                 store.dispatch(ActionCreator.setQuizData({startTime: new Date().valueOf()}));
                 return wxx.navigateTo(`../quiz/quiz-answer`);
             }))
@@ -106,6 +107,13 @@ class IndexClass {
 
     //noinspection JSMethodCanBeStatic,JSUnusedGlobalSymbols
     bindContQuiz() {
+        // 取出时间
+        let startTimeStr = wxx.getLocalStorage("startTime");
+        if (!startTimeStr) {
+            store.dispatch(ActionCreator.setQuizData({startTime: new Date().valueOf()}));
+        } else {
+            store.dispatch(ActionCreator.setQuizData({startTime: parseInt(startTimeStr)}));
+        }
         let state = store.getState();
         let quiz = state.user.quiz;
         if (quiz.mode == "answer") {

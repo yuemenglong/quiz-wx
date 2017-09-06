@@ -61,3 +61,11 @@ button.unmark {
     background-color: #e64340;
     color: white;
 }
+
+.quiz {
+    text-align: center;
+}
+
+.quiz .timer{
+    display: inline-block;
+}

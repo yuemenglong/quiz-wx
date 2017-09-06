@@ -10,7 +10,7 @@
     margin-right: auto;
 }
 
-.index button {
+button {
     margin: 20rpx 20rpx;
 }
 
@@ -33,4 +33,13 @@
     margin: 20rpx;
     padding:12rpx;
     border: 1px solid;
+}
+
+.operate{
+    display: flex;
+    justify-content: space-between;
+}
+
+.operate button{
+    flex: 1;
 }

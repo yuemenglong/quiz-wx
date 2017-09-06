@@ -10,11 +10,12 @@
     <button data-answer="d" bindtap="bindAnswer">D:{{d}}</button>
 </template>
 
-<!--question,isFirst,isLast,mark,bindPrev,bindNext,bindMark,bindUnMark-->
+<!--isFirst,isLast,mark,bindPrev,bindNext,bindMark,bindUnMark-->
 <template name="operate">
-    <button wx:if="{{question.info.multi}}" bindtap="bindSubmit">确定</button>
-    <button wx:if="{{!isFirst}}" class="row" bindtap="bindPrev">上一题</button>
-    <button wx:if="{{!isLast}}" class="row" bindtap="bindNext">下一题</button>
-    <button wx:if="{{!mark}}" class="mark" bindtap="bindMark">加入收藏</button>
-    <button wx:if="{{mark}}" class="un-mark" bindtap="bindUnMark">取消收藏</button>
+    <view class="operate">
+        <button disabled="{{isFirst}}" class="row" bindtap="bindPrev">上一题</button>
+        <button wx:if="{{!mark}}" class="mark" bindtap="bindMark">加入收藏</button>
+        <button wx:if="{{mark}}" class="un-mark" bindtap="bindUnMark">取消收藏</button>
+        <button class="row" bindtap="bindNext">下一题</button>
+    </view>
 </template>

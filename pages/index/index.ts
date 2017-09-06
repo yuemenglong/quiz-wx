@@ -14,6 +14,7 @@ class IndexData {
     user: User;
     current: string;
     registed: boolean;
+    studyType: string = "default";
 }
 
 class IndexClass {
@@ -124,7 +125,8 @@ class IndexClass {
             if (!choose) return;
             let state = store.getState();
             if (state.user.marks.length == 0) {
-                wxx.showTip("提示", "您还没有标记易错题，请标记后再进行易错题回顾")
+                // noinspection JSIgnoredPromiseFromCall
+                wxx.showTip("提示", "您还没有标记易错题，请标记后再进行易错题回顾");
                 return;
             }
             return store.dispatch(ActionCreator.newMarkedQuiz(() => {

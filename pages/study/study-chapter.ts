@@ -8,7 +8,7 @@ import wxx = require("../../kit/wxx");
  */
 
 class ChapterData {
-    chapters: { name: String, no: String }[] = [];
+    chapters: { name: String, id: number }[] = [];
 }
 
 class ChapterClass {
@@ -16,8 +16,8 @@ class ChapterClass {
 
     //noinspection JSUnusedGlobalSymbols
     bindChoose(e) {
-        let no = e.target.dataset.no;
-        store.dispatch(ActionCreator.newStudyQuiz(no, () => {
+        let id = e.target.dataset.id;
+        store.dispatch(ActionCreator.newStudyQuiz(id, () => {
             wxx.redirectTo(`./study-answer`)
         }))
     }
@@ -26,8 +26,8 @@ class ChapterClass {
     onShow() {
         store.connect(this, (state: State) => {
             let data = new ChapterData();
-            data.chapters = Array(40).join(" ").split(" ").map((v, i) => {
-                return {name: `第${i + 1}章`, no: (i + 1).toString()};
+            data.chapters = state.chapters.map((chapter) => {
+                return {name: chapter.name, id: chapter.id};
             });
             return data;
         })

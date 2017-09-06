@@ -194,7 +194,8 @@ class ActionCreator {
         return ((dispatch, getState) => {
             dispatch({type: ActionType.FETCH_CHAPTER, data: null});
             http.get("/chapters").then((chapters: Chapter[]) => {
-                dispatch({type: ActionType.FETCH_CHAPTER_SUCC, data: chapters})
+                dispatch({type: ActionType.FETCH_CHAPTER_SUCC, data: chapters});
+                cb()
             })
         })
     }

@@ -5,8 +5,8 @@ import debug = require("./debug");
  * Created by Administrator on 2017/7/27
  */
 
-// const HOST = "http://localhost:8888";
-const HOST = "https://rdpac.yuemenglong.com";
+const HOST = "http://localhost:8888";
+// const HOST = "https://rdpac.yuemenglong.com";
 
 class http {
     static get<T>(path: string): Promise<T> {

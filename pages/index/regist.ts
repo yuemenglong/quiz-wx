@@ -29,7 +29,7 @@ class RegistClass {
         store.dispatch(ActionCreator.registUser(this.data.code, this.data.user.wxUserInfo, (user) => {
             this.setState({code: ""});
             if (user == null) {
-                wxx.toastError("注册失败，请填写正确的验证码")
+                wxx.toastError("注册失败，请填写正确的注册码")
             } else {
                 wxx.toastSucc("注册成功");
                 wxx.navigateBack();
